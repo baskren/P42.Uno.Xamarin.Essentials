@@ -1,15 +1,18 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
   <PropertyGroup>
+    <!--
     <TargetFrameworks>netstandard1.0;netstandard2.0;Xamarin.iOS10;Xamarin.TVOS10;Xamarin.WatchOS10;MonoAndroid80;MonoAndroid81;MonoAndroid90;MonoAndroid10.0;tizen40;Xamarin.Mac20;</TargetFrameworks>
+    -->
+    <TargetFrameworks>netstandard2.0;Xamarin.iOS10;MonoAndroid10.0;Xamarin.Mac20;</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.16299;</TargetFrameworks>
-    <AssemblyName>Xamarin.Essentials</AssemblyName>
+    <AssemblyName>P42.Uno.Xamarin.Essentials</AssemblyName>
     <RootNamespace>Xamarin.Essentials</RootNamespace>
     <PackageId>Xamarin.Essentials</PackageId>
     <PackageIcon>icon.png</PackageIcon>
     <!-- <PackageIconUrl>https://raw.githubusercontent.com/xamarin/Essentials/master/Assets/xamarin.essentials_128x128.png</PackageIconUrl> -->
     <Summary>Xamarin.Essentials: a kit of essential API's for your apps</Summary>
     <PackageTags>xamarin, windows, uwp, ios, android, watchos, tvos, tizen, toolkit, xamarin.forms, Xamarin.Essentials, kit</PackageTags>
-    <Title>Xamarin.Essentials</Title>
+    <Title>P42.Uno.Xamarin.Essentials</Title>
     <Description>Xamarin.Essentials: a kit of essential API's for your apps</Description>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
@@ -55,13 +58,21 @@
     <Compile Include="**\*.shared.cs" />
     <Compile Include="**\*.shared.*.cs" />
   </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard2.')) ">
+    <PackageReference Include="Uno.UI" Version="3.3.0" />
+    <PackageReference Include="Uno.UI.WebAssembly" Version="3.3.0" />
+    <Compile Include="**\*.unowasm.cs" />
+    <Compile Include="**\*.unowasm.*.cs" />
+  </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard1.')) ">
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <!-- NOT FOR UNO
     <Compile Include="**\*.netstandard.cs" />
     <Compile Include="**\*.netstandard.*.cs" />
+    -->
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.9" PrivateAssets="all" />
@@ -123,6 +134,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="mdoc.targets" />
+    <None Remove="WasmScripts\html2canvas-1.0.0-rc7.min.js" />
+    <None Remove="WasmScripts\jquery-3.5.1.slim.min.js" />
+    <None Remove="WasmScripts\UnoTextToSpeech.js" />
+    <None Remove="WasmScripts\UnoVibration.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WasmScripts\html2canvas-1.0.0-rc7.min.js" />
+    <EmbeddedResource Include="WasmScripts\jquery-3.5.1.slim.min.js" />
+    <EmbeddedResource Include="WasmScripts\UnoTextToSpeech.js" />
+    <EmbeddedResource Include="WasmScripts\UnoVibration.js" />
   </ItemGroup>
   <Import Project="$(MSBuildThisFileDirectory)mdoc.targets" />
 </Project>

@@ -22,6 +22,8 @@ namespace Xamarin.Essentials
 
         public static DevicePlatform Unknown { get; } = new DevicePlatform(nameof(Unknown));
 
+        public static DevicePlatform WASM { get; } = new DevicePlatform(nameof(WASM));
+
         DevicePlatform(string devicePlatform)
         {
             if (devicePlatform == null)

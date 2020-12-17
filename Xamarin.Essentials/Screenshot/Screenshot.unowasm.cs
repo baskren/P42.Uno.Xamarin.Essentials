@@ -1,16 +1,20 @@
-﻿#if !__WASM__
+﻿#if __WASM__
 using System.IO;
 using System.Threading.Tasks;
+using Uno.Foundation;
 
 namespace Xamarin.Essentials
 {
     public static partial class Screenshot
     {
         static bool PlatformIsCaptureSupported =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            true;
 
-        static Task<ScreenshotResult> PlatformCaptureAsync() =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+        static async Task<ScreenshotResult> PlatformCaptureAsync()
+        {
+            var url = await WebAssemblyRuntime.InvokeAsync("UnoScreenshot_GeneratePromise()");
+            return null;
+        }
     }
 
     public partial class ScreenshotResult
