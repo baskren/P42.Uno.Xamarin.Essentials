@@ -1,5 +1,4 @@
-﻿#if __WASM__
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Uno.Foundation;
 
@@ -27,4 +26,3 @@ namespace Xamarin.Essentials
             throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }
-#endif

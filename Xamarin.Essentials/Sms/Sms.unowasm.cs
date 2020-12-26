@@ -1,12 +1,11 @@
-﻿#if __WASM__
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Uno.Foundation;
 
-namespace Xamarin.Essentials.Sms
+namespace Xamarin.Essentials
 {
     public static partial class Sms
     {
@@ -19,4 +18,3 @@ namespace Xamarin.Essentials.Sms
         }
     }
 }
-#endif

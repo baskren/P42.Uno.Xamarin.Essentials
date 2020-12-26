@@ -1,31 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Uno.Foundation;
+using Windows.Phone.Devices.Notification;
 
-#if __WASM__
-namespace Xamarin.Essentials.Vibration
+namespace Xamarin.Essentials
 {
-    public partial class Vibration
+    public static partial class Vibration
     {
         internal static bool IsSupported
-        {
-            get
-            {
-                var result = WebAssemblyRuntime.InvokeJS("UnoVibrationIsSupported()");
-                return result == "true";
-            }
-        }
+            => Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.Devices.Notification.VibrationDevice") && DefaultDevice != null;
 
-        static void PlatformVibrate(TimeSpan duration)
-        {
-            WebAssemblyRuntime.InvokeJS($"UnoVibration_Vibrate({duration.TotalMilliseconds})");
-        }
+        static VibrationDevice DefaultDevice => VibrationDevice.GetDefault();
 
-        static void PlatformCancel()
-        {
-            WebAssemblyRuntime.InvokeJS("UnoVibration_Cancel()");
-        }
+        static void PlatformVibrate(TimeSpan duration) =>
+            DefaultDevice.Vibrate(duration);
+
+        static void PlatformCancel() =>
+            DefaultDevice.Cancel();
     }
 }
-#endif

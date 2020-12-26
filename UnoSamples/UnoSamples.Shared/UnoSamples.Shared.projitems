@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>6279c845-92f8-4333-ab99-3d213163593c</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Samples</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="$(MSBuildThisFileDirectory)App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NegativeConverter.cs" />
+    <!-- HELPERS -->
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\Samples\Samples\Helpers\CommonConstants.cs">
+      <Link>Helpers\%(Filename).cs</Link>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\ViewHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\WeakEventManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Command.cs" />
+    <!-- MODEL -->
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\Samples\Samples\Model\*.cs">
+      <Link>Model\%(Filename).cs</Link>
+    </Compile>
+    <!-- VIEWMODEL -->
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\Samples\Samples\ViewModel\*.cs">
+      <Link>ViewModel\%(Filename).cs</Link>
+    </Compile>
+    <!-- VIEW -->
+    <Compile Include="$(MSBuildThisFileDirectory)View\AppInfo.xaml.cs">
+      <DependentUpon>AppInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)View\BasePage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)View\AppInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Assets\SharedAssets.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\en\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)ViewModel\" />
+  </ItemGroup>
+</Project>

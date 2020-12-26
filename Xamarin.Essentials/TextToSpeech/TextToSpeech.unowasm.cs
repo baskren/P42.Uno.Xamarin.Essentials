@@ -1,12 +1,11 @@
-﻿#if __WASM__
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Uno.Foundation;
 
-namespace Xamarin.Essentials.TextToSpeech
+namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
@@ -56,4 +55,3 @@ namespace Xamarin.Essentials.TextToSpeech
         }
     }
 }
-#endif

@@ -22,10 +22,10 @@ function UnoTextToSpeech_GetVoices() {
     if (typeof speechSynthesis === 'undefined') {
         return 'NONE';
     }
-    var result = '';
-    var voices = speechSynthesis.getVoices();
+    let result = '';
+    let voices = speechSynthesis.getVoices();
 
-    for (var i = 0; i < voices.length; i++) {
+    for (let i = 0; i < voices.length; i++) {
         result += voices[i].name + ':' + voices[i].lang;
         if (voices[i].default)
             result += '-DEFAULT';
@@ -38,9 +38,9 @@ function UnoTextToSpeech_PerformSpeekPromise(text, name, lang, volume, pitch) {
     return new Promise(
         function (resolve, reject) {
             if ('speechSynthesis' in window) {
-                var synth = window.speechSynthesis;
-                var utterance = new SpeechSynthesisUtterance(text);
-                var found = false;
+                let synth = window.speechSynthesis;
+                let utterance = new SpeechSynthesisUtterance(text);
+                let found = false;
                 if (!IsNullEmptyOrWhiteSpace(name)) {
                     for (i = 0; i < voices.length; i++) {
                         if (voices[i].name === name) {

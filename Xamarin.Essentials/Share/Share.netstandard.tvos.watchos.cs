@@ -1,5 +1,4 @@
-﻿#if !__WASM__
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
@@ -12,5 +11,4 @@ namespace Xamarin.Essentials
             throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }
-#endif
 
