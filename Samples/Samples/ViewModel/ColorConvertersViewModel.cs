@@ -2,6 +2,9 @@
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+#if UNO_PLATFORM
+using System.Drawing;
+#endif
 
 namespace Samples.ViewModel
 {

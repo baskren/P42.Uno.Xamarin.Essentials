@@ -1,16 +1,10 @@
-﻿function UnoTextToSpeech_GetVoicesPromise() {
+﻿let voices = speechSynthesis.getVoices();
+
+function UnoTextToSpeech_GetVoicesPromise() {
     return new Promise(
         function (resolve, reject) {
             if ('speechSynthesis' in window) {
-                let synth = window.speechSynthesis;
-                let id;
-
-                id = setInterval(() => {
-                    if (synth.getVoices().length !== 0) {
-                        resolve(GetVoices());
-                        clearInterval(id);
-                    }
-                }, 10);
+                resolve(GetVoices());
             }
             else
                 resolve('NOT_AVAILABLE');
@@ -31,42 +25,53 @@ function UnoTextToSpeech_GetVoices() {
             result += '-DEFAULT';
         result += ';';
     }
+    console.log('result:' + result);
     return result;
 }
 
 function UnoTextToSpeech_PerformSpeekPromise(text, name, lang, volume, pitch) {
+    //console.log('1');
     return new Promise(
         function (resolve, reject) {
+            //console.log('2');
             if ('speechSynthesis' in window) {
+                //console.log('3');
                 let synth = window.speechSynthesis;
                 let utterance = new SpeechSynthesisUtterance(text);
+                let voices = speechSynthesis.getVoices();
+
                 let found = false;
-                if (!IsNullEmptyOrWhiteSpace(name)) {
-                    for (i = 0; i < voices.length; i++) {
-                        if (voices[i].name === name) {
-                            utterance.voice = voices[i];
-                            found = true;
-                        }
+                for (i = 0; i < voices.length; i++) {
+                    console.log('name=' + voices[i].name);
+                    if (voices[i].name === name) {
+                        utterance.voice = voices[i];
+                        //console.log('found A');
+                        found = true;
+                        break;
                     }
                 }
                 if (!found) {
                     for (i = 0; i < voices.length; i++) {
+                        console.log('lang=' + voices[i].lang);
                         if (voices[i].lang === lang) {
                             utterance.voice = voices[i];
+                            //console.log('found B');
                             found = true;
+                            break;
                         }
                     }
                 }
-                if (!IsNullEmptyOrWhiteSpace(volume)) {
-                    utterance.volume = volume;
-                }
-                if (!IsNullEmptyOrWhiteSpace(pitch)) {
-                    utterance.pitch = pitch;
-                }
+                
+                utterance.volume = volume;
+                utterance.pitch = pitch;
+                //console.log('4');
                 synth.speak(utterance);
+                //console.log('5');
+                resolve("DONE");
             }
             else
-                resolve('NOT_AVAILABLE');
+                resolve("NOT_AVAILABLE");
+            //console.log('6');
         }
     );
 }

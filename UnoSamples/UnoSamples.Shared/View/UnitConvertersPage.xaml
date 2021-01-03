@@ -1,0 +1,82 @@
+﻿<views:BasePage
+    x:Class="Samples.View.UnitConvertersPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:Samples.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:Samples.ViewModel"
+    xmlns:views="using:Samples.View"
+    Title="Unit Converters"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+    <views:BasePage.DataContext>
+        <viewmodels:UnitConvertersViewModel />
+    </views:BasePage.DataContext>
+
+    <StackPanel>
+        <StackPanel.Children>
+            <TextBlock
+                Margin="12"
+                FontWeight="Bold"
+                Text="Easily convert units." />
+            <ScrollViewer>
+                <ScrollViewer.Content>
+                    <StackPanel>
+                        <StackPanel.Children>
+                            <TextBlock Text="Temperature" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width=".25*" />
+                                    <ColumnDefinition Width=".5*" />
+                                    <ColumnDefinition Width=".25*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.Children>
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Center"
+                                        Text="{Binding Fahrenheit, Converter={StaticResource StringFormatConverter}, ConverterParameter=' {0:N}F'}" />
+                                    <Slider
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Stretch"
+                                        Maximum="100"
+                                        Minimum="0"
+                                        Value="{Binding Fahrenheit, Mode=TwoWay}" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Center"
+                                        Text="{Binding Celsius, Converter={StaticResource StringFormatConverter}, ConverterParameter=' {0:N}C'}" />
+                                </Grid.Children>
+                            </Grid>
+
+                            <TextBlock Text="Distance" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width=".25*" />
+                                    <ColumnDefinition Width=".5*" />
+                                    <ColumnDefinition Width=".25*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Grid.Column="0"
+                                    HorizontalAlignment="Center"
+                                    Text="{Binding Miles, Converter={StaticResource StringFormatConverter}, ConverterParameter=' {0:N} mi'}" />
+                                <Slider
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Stretch"
+                                    Maximum="100"
+                                    Minimum="0"
+                                    Value="{Binding Miles, Mode=TwoWay}" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Center"
+                                    Text="{Binding Kilometers, Converter={StaticResource StringFormatConverter}, ConverterParameter=' {0:N} km'}" />
+
+                            </Grid>
+                        </StackPanel.Children>
+                    </StackPanel>
+                </ScrollViewer.Content>
+            </ScrollViewer>
+        </StackPanel.Children>
+
+    </StackPanel>
+</views:BasePage>

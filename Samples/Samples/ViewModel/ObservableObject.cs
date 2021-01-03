@@ -36,7 +36,14 @@ namespace Samples.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "") =>
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+#if __WASM__
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+#else
+            Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
+#endif
+        }
     }
 }

@@ -24,6 +24,7 @@ namespace Samples.ViewModel
                     typeof(AccelerometerPage),
                     "Retrieve acceleration data of the device in 3D space.",
                     new[] { "accelerometer", "sensors", "hardware", "device" }),
+                /*
                 new SampleItem(
                     "📏",
                     "All Sensors",
@@ -204,6 +205,7 @@ namespace Samples.ViewModel
                     typeof(SharePage),
                     "Send text, website uris and files to other apps.",
                     new[] { "data", "transfer", "share", "communication" }),
+                */
                 new SampleItem(
                     "💬",
                     "SMS",

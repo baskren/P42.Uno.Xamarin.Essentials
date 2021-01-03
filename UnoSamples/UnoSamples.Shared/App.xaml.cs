@@ -87,7 +87,8 @@ namespace UnoSamples
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    //rootFrame.Navigate(typeof(Samples.View.HomePage), e.Arguments);
+                    rootFrame.Navigate(typeof(P42.Uno.AsyncNavigation.NavigationPage), typeof(Samples.View.HomePage));
                 }
                 // Ensure the current window is active
                 window.Activate();

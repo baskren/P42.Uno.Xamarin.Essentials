@@ -1,32 +1,47 @@
 ﻿using System;
 using System.Threading.Tasks;
+using P42.Uno.AsyncNavigation;
 using Samples.ViewModel;
+using Windows.UI.Popups;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Xamarin.Forms;
+using Xamarin.Essentials;
 
 namespace Samples.View
 {
-    public class BasePage : Page
+    public partial class BasePage : Page
     {
+        public string Title { get; set; }
+
         public BasePage()
         {
-            NavigationPage.SetBackButtonTitle(this, "Back");
-            if (Device.Idiom == TargetIdiom.Watch)
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
+
+            NavigationPage.SetBackButtonTitle(this,"Back");
+            if (DeviceInfo.Idiom == DeviceIdiom.Watch)
                 NavigationPage.SetHasNavigationBar(this, false);
         }
 
-        protected override void OnAppearing()
+        void OnLoaded(object sender, RoutedEventArgs e)
         {
-            base.OnAppearing();
-
-            SetupBinding(BindingContext);
+            OnAppearing();
         }
 
-        protected override void OnDisappearing()
+        void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            TearDownBinding(BindingContext);
+            OnDisappearing();
+        }
 
-            base.OnDisappearing();
+        protected virtual void OnAppearing()
+        {
+            SetupBinding(DataContext);
+        }
+
+
+        protected virtual void OnDisappearing()
+        {
+            TearDownBinding(DataContext);
         }
 
         protected void SetupBinding(object bindingContext)
@@ -49,12 +64,17 @@ namespace Samples.View
             }
         }
 
-        Task OnDisplayAlert(string message)
+        async Task OnDisplayAlert(string message)
         {
-            return DisplayAlert(Title, message, "OK");
+            var dialog = new MessageDialog(message)
+            {
+                Title = Title
+            };
+            await dialog.ShowAsync();
+            await Task.Delay(2000);
         }
 
-        Task OnNavigate(BaseViewModel vm, bool showModal)
+        async Task OnNavigate(BaseViewModel vm, bool showModal)
         {
             var name = vm.GetType().Name;
             name = name.Replace("ViewModel", "Page");
@@ -62,12 +82,15 @@ namespace Samples.View
             var ns = GetType().Namespace;
             var pageType = Type.GetType($"{ns}.{name}");
 
-            var page = (BasePage)Activator.CreateInstance(pageType);
-            page.BindingContext = vm;
+            var page = (Page)Activator.CreateInstance(pageType);
+            page.DataContext = vm;
 
+            /*
             return showModal
                 ? Navigation.PushModalAsync(page)
                 : Navigation.PushAsync(page);
+            */
+            await this.PushAsync(page);
         }
     }
 }

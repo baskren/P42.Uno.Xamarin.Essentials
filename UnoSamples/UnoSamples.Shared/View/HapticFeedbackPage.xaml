@@ -1,0 +1,46 @@
+﻿<views:BasePage
+    x:Class="Samples.View.HapticFeedbackPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:Samples.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:Samples.ViewModel"
+    xmlns:views="using:Samples.View"
+    Title="Vibration"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+
+    <views:BasePage.DataContext>
+        <viewmodels:HapticFeedbackViewModel />
+    </views:BasePage.DataContext>
+
+    <views:BasePage.Content>
+        <StackPanel>
+            <StackPanel.Children>
+                <TextBlock
+                    Margin="12"
+                    FontWeight="Bold"
+                    Text="Quickly and easily make the device provide haptic feedback." />
+
+                <ScrollViewer>
+                    <ScrollViewer.Content>
+                        <StackPanel>
+                            <StackPanel.Children>
+                                <Button Command="{Binding ClickCommand}" Content="Click" />
+                                <Button Command="{Binding LongPressCommand}" Content="LongPress" />
+                                <TextBlock
+                                    FontStyle="Italic"
+                                    Foreground="Red"
+                                    Text="HapticFeadback is not supported."
+                                    Visibility="{Binding IsSupported, Converter={StaticResource InverseVisibilityConverter}}" />
+
+                            </StackPanel.Children>
+                        </StackPanel>
+                    </ScrollViewer.Content>
+                </ScrollViewer>
+            </StackPanel.Children>
+
+        </StackPanel>
+    </views:BasePage.Content>
+</views:BasePage>

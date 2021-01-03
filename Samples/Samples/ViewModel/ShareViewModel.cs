@@ -4,6 +4,11 @@ using System.Windows.Input;
 using Samples.Helpers;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+#if UNO_PLATFORM
+using Windows.UI.Xaml;
+#else
+using FrameworkElement = Xamarin.Forms.View;
+#endif
 
 namespace Samples.ViewModel
 {
@@ -32,9 +37,9 @@ namespace Samples.ViewModel
 
         public ShareViewModel()
         {
-            RequestCommand = new Command<Xamarin.Forms.View>(OnRequest);
-            RequestFileCommand = new Command<Xamarin.Forms.View>(OnFileRequest);
-            RequestFilesCommand = new Command<Xamarin.Forms.View>(OnFilesRequest);
+            RequestCommand = new Command<FrameworkElement>(OnRequest);
+            RequestFileCommand = new Command<FrameworkElement>(OnFileRequest);
+            RequestFilesCommand = new Command<FrameworkElement>(OnFilesRequest);
         }
 
         public bool ShareText
@@ -121,7 +126,7 @@ namespace Samples.ViewModel
             set => SetProperty(ref shareFile2AttachmentName, value);
         }
 
-        async void OnRequest(Xamarin.Forms.View element)
+        async void OnRequest(FrameworkElement element)
             => await Share.RequestAsync(new ShareTextRequest
             {
                 Subject = Subject,
@@ -131,7 +136,7 @@ namespace Samples.ViewModel
                 PresentationSourceBounds = GetRectangle(element)
             });
 
-        async void OnFileRequest(Xamarin.Forms.View element)
+        async void OnFileRequest(FrameworkElement element)
         {
             if (string.IsNullOrWhiteSpace(ShareFileAttachmentContents))
                 return;
@@ -146,7 +151,7 @@ namespace Samples.ViewModel
             });
         }
 
-        async void OnFilesRequest(Xamarin.Forms.View element)
+        async void OnFilesRequest(FrameworkElement element)
         {
             if (string.IsNullOrWhiteSpace(ShareFile1AttachmentContents) ||
                 string.IsNullOrWhiteSpace(ShareFile2AttachmentContents))
@@ -171,6 +176,6 @@ namespace Samples.ViewModel
             return file;
         }
 
-        System.Drawing.Rectangle GetRectangle(Xamarin.Forms.View element) => element.GetAbsoluteBounds().ToSystemRectangle();
+        System.Drawing.Rectangle GetRectangle(FrameworkElement element) => ViewHelpers.ToSystemRectangle(element.GetAbsoluteBounds());
     }
 }

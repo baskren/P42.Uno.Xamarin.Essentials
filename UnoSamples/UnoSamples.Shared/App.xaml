@@ -2,6 +2,15 @@
     x:Class="UnoSamples.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:UnoSamples">
+    xmlns:converters="using:Samples.Converters"
+    xmlns:local="using:Samples">
+    <Application.Resources>
+        <ResourceDictionary>
+            <converters:NegativeConverter x:Key="NegativeConverter" />
+            <converters:InverseVisibilityConverter x:Key="InverseVisibilityConverter" />
+            <converters:StringFormatConverter x:Key="StringFormatConverter" />
+            <converters:VisibilityConverter x:Key="VisibilityConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
 
 </Application>

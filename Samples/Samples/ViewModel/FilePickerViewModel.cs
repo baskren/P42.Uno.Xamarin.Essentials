@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+#if UNO_PLATFORM
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
+using ImageSource = Windows.UI.Xaml.Media.Imaging.BitmapImage;
+#endif
 
 namespace Samples.ViewModel
 {
@@ -143,10 +148,20 @@ namespace Samples.ViewModel
                     var ext = Path.GetExtension(result.FileName).ToLowerInvariant();
                     if (ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".gif")
                     {
+#if UNO_PLATFORM
+                        if (await result.OpenReadAsync() is IRandomAccessStream stream)
+                        {
+                            var imageResult = new ImageSource();
+                            await imageResult.SetSourceAsync(stream);
+                            Image = imageResult;
+                            IsImageVisible = true;
+                        }
+#else
                         var stream = await result.OpenReadAsync();
 
                         Image = ImageSource.FromStream(() => stream);
                         IsImageVisible = true;
+#endif
                     }
                     else
                     {
@@ -197,9 +212,19 @@ namespace Samples.ViewModel
                     if (firstResult.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
                         firstResult.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
                     {
+#if UNO_PLATFORM
+                        if (await firstResult.OpenReadAsync() is IRandomAccessStream stream)
+                        {
+                            var imageResult = new BitmapImage();
+                            await imageResult.SetSourceAsync(stream);
+                            Image = imageResult;
+                            IsImageVisible = true;
+                        }
+#else
                         var stream = await firstResult.OpenReadAsync();
                         Image = ImageSource.FromStream(() => stream);
                         IsImageVisible = true;
+#endif
                     }
                     else
                     {

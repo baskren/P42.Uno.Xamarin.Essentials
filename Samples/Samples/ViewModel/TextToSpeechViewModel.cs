@@ -12,7 +12,7 @@ namespace Samples.ViewModel
         CancellationTokenSource cts;
 
         string text;
-        bool advancedOptions;
+        bool advancedOptions = true;
         float volume;
         float pitch;
         string locale = "Default";
@@ -90,7 +90,11 @@ namespace Samples.ViewModel
             var locales = await TextToSpeech.GetLocalesAsync();
             var names = locales.Select(i => i.Name).ToArray();
 
+#if UNO_PLATFORM
+            var result = await Helpers.ActionSheet.Display("Pick", "OK", null, names);
+#else
             var result = await Application.Current.MainPage.DisplayActionSheet("Pick", "OK", null, names);
+#endif
 
             selectedLocale = locales.FirstOrDefault(i => i.Name == result);
             Locale = (result == "OK" || string.IsNullOrEmpty(result)) ? "Default" : result;

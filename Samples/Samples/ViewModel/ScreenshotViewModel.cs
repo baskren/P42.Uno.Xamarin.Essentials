@@ -3,6 +3,11 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+#if UNO_PLATFORM
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
+using ImageSource = Windows.UI.Xaml.Media.Imaging.BitmapImage;
+#endif
 
 namespace Samples.ViewModel
 {
@@ -29,9 +34,18 @@ namespace Samples.ViewModel
         async Task CaptureScreenshot()
         {
             var mediaFile = await Screenshot.CaptureAsync();
+#if UNO_PLATFORM
+            if (await mediaFile.OpenReadAsync(ScreenshotFormat.Png) is IRandomAccessStream stream)
+            {
+                var imageResult = new BitmapImage();
+                await (Task)imageResult.SetSourceAsync(stream);
+                Image = imageResult;
+            }
+#else
             var stream = await mediaFile.OpenReadAsync(ScreenshotFormat.Png);
 
             Image = ImageSource.FromStream(() => stream);
+#endif
         }
 
         async Task EmailScreenshot()

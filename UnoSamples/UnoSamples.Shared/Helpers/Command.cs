@@ -5,6 +5,71 @@ using System.Windows.Input;
 
 namespace Xamarin.Forms
 {
+    //
+    // Summary:
+    //     Defines an System.Windows.Input.ICommand implementation wrapping a generic Action<T>.
+    //
+    // Type parameters:
+    //   T:
+    //     The Type of the parameter,
+    //
+    // Remarks:
+    //     The following example creates a new Command and sets it to a button.
+    public sealed class Command<T> : Command
+    {
+        public Command(Action<T> execute)
+            : base(delegate (object o)
+            {
+                if (IsValidParameter(o))
+                {
+                    execute((T)o);
+                }
+            })
+        {
+            if (execute == null)
+            {
+                throw new ArgumentNullException(nameof(execute));
+            }
+        }
+
+        public Command(Action<T> execute, Func<T, bool> canExecute)
+            : base(
+                delegate (object o)
+            {
+                if (IsValidParameter(o))
+                {
+                    execute((T)o);
+                }
+            }, (object o) => IsValidParameter(o) && canExecute((T)o))
+        {
+            if (execute == null)
+            {
+                throw new ArgumentNullException(nameof(execute));
+            }
+
+            if (canExecute == null)
+            {
+                throw new ArgumentNullException(nameof(canExecute));
+            }
+        }
+
+        private static bool IsValidParameter(object o)
+        {
+            if (o != null)
+            {
+                return o is T;
+            }
+
+            var typeFromHandle = typeof(T);
+            if (Nullable.GetUnderlyingType(typeFromHandle) != null)
+            {
+                return true;
+            }
+
+            return !typeFromHandle.GetType().IsValueType;
+        }
+    }
+
     public class Command : ICommand
     {
         private readonly Func<object, bool> _canExecute;
@@ -13,7 +78,6 @@ namespace Xamarin.Forms
 
         private readonly WeakEventManager _weakEventManager = new WeakEventManager();
 
-        //
         // Summary:
         //     Occurs when the target of the Command should reevaluate whether or not the Command
         //     can be executed.
