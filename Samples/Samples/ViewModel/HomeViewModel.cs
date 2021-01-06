@@ -187,6 +187,7 @@ namespace Samples.ViewModel
                     typeof(PreferencesPage),
                     "Quickly and easily add persistent preferences.",
                     new[] { "settings", "preferences", "prefs", "storage" }),
+                */
                 new SampleItem(
                     "📷",
                     "Screenshot",
@@ -205,7 +206,6 @@ namespace Samples.ViewModel
                     typeof(SharePage),
                     "Send text, website uris and files to other apps.",
                     new[] { "data", "transfer", "share", "communication" }),
-                */
                 new SampleItem(
                     "💬",
                     "SMS",

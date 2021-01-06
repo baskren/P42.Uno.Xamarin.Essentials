@@ -9,7 +9,15 @@ namespace Xamarin.Essentials
     public static partial class FileSystem
     {
         static string PlatformCacheDirectory
-            => ApplicationData.Current.LocalCacheFolder.Path;
+        {
+            get
+            {
+                var folder = ApplicationData.Current.LocalCacheFolder.Path;
+                if (!Directory.Exists(folder))
+                    Directory.CreateDirectory(folder);
+                return folder;
+            }
+        }
 
         static string PlatformAppDataDirectory
             => ApplicationData.Current.LocalFolder.Path;

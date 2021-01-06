@@ -18,7 +18,7 @@ namespace Samples.View
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
 
-            NavigationPage.SetBackButtonTitle(this,"Back");
+            NavigationPage.SetBackButtonTitle(this, "Back");
             if (DeviceInfo.Idiom == DeviceIdiom.Watch)
                 NavigationPage.SetHasNavigationBar(this, false);
         }
@@ -37,7 +37,6 @@ namespace Samples.View
         {
             SetupBinding(DataContext);
         }
-
 
         protected virtual void OnDisappearing()
         {
@@ -77,7 +76,7 @@ namespace Samples.View
         async Task OnNavigate(BaseViewModel vm, bool showModal)
         {
             var name = vm.GetType().Name;
-            name = name.Replace("ViewModel", "Page");
+            name = name.Replace(nameof(ViewModel), "Page");
 
             var ns = GetType().Namespace;
             var pageType = Type.GetType($"{ns}.{name}");

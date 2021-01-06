@@ -18,6 +18,8 @@ namespace Samples.ViewModel
             RemoveAllCommand = new Command(OnRemoveAll);
         }
 
+        public bool IsAvailable => SecureStorage.IsAvailable;
+
         public string Key
         {
             get => key;

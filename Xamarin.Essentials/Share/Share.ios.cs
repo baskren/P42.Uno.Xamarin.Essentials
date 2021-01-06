@@ -64,6 +64,9 @@ namespace Xamarin.Essentials
 
             return vc.PresentViewControllerAsync(activityController, true);
         }
+
+        static bool PlatformCanShareFile() => true;
+
     }
 
     class ShareActivityItemSource : UIActivityItemSource

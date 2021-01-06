@@ -60,5 +60,8 @@ namespace Xamarin.Essentials
                 dataTransferManager.DataRequested -= ShareTextHandler;
             }
         }
+
+        static bool PlatformCanShareFile() => true;
+
     }
 }

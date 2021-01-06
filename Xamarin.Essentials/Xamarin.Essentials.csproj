@@ -153,9 +153,13 @@
 
   <ItemGroup>
     <None Remove="mdoc.targets" />
-    <None Remove="WasmScripts\html2canvas-1.0.0-rc7.min.js" />
+    <None Remove="WasmScripts\html2canvas.min.js" />
     <None Remove="WasmScripts\jquery-3.5.1.slim.min.js" />
+    <None Remove="WasmScripts\UnoScreenshot.js" />
+    <None Remove="WasmScripts\UnoShare.js" />
+    <None Remove="WasmScripts\UnoSms.js" />
     <None Remove="WasmScripts\UnoTextToSpeech.js" />
+    <None Remove="WasmScripts\UnoUtils.js" />
     <None Remove="WasmScripts\UnoVibration.js" />
   </ItemGroup>
 
@@ -165,9 +169,13 @@
 
   <!-- JAVASCRIPT FOR WASM -->
   <ItemGroup>
-    <EmbeddedResource Include="WasmScripts\html2canvas-1.0.0-rc7.min.js" />
+    <EmbeddedResource Include="WasmScripts\html2canvas.min.js" />
     <EmbeddedResource Include="WasmScripts\jquery-3.5.1.slim.min.js" />
+    <EmbeddedResource Include="WasmScripts\UnoScreenshot.js" />
+    <EmbeddedResource Include="WasmScripts\UnoShare.js" />
+    <EmbeddedResource Include="WasmScripts\UnoSms.js" />
     <EmbeddedResource Include="WasmScripts\UnoTextToSpeech.js" />
+    <EmbeddedResource Include="WasmScripts\UnoUtils.js" />
     <EmbeddedResource Include="WasmScripts\UnoVibration.js" />
   </ItemGroup>
   

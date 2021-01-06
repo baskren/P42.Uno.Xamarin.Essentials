@@ -27,6 +27,9 @@ namespace Xamarin.Essentials
             return PlatformRequestAsync(request);
         }
 
+        public static bool CanShareFile() =>
+            PlatformCanShareFile();
+
         public static Task RequestAsync(ShareFileRequest request)
         {
             if (request == null)

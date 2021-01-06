@@ -22,18 +22,23 @@ namespace Xamarin.Essentials
 
         static async Task PlatformRequestAsync(ShareMultipleFilesRequest request)
         {
-            var filesArray = "['" + string.Join("', '", request.Files.Select(f => f.FullPath)) + "']";
-
-            var canShare = WebAssemblyRuntime.InvokeJS("navigator.canShare({ files: " + filesArray + " })");
+            System.Diagnostics.Debug.WriteLine("Share.PlatformRequestAsync ShareMultipleFilesRequest A");
+            var canShare = WebAssemblyRuntime.InvokeJS($"UnoShare_CanShareFiles([ '{string.Join("', '", request.Files.Select(f => f.FullPath))}' ])");
+            System.Diagnostics.Debug.WriteLine("Share. B");
             if (canShare == "true")
             {
-                var shareData = "{ ";
-                shareData += string.IsNullOrEmpty(request.Title) ? null : $"title: '{request.Title}',";
-                shareData += $"files: '{filesArray}' ";
-                shareData += "}";
-                var script = $"navigator.share({shareData})";
-                await WebAssemblyRuntime.InvokeAsync(script);
+                System.Diagnostics.Debug.WriteLine("Share. C");
+                await WebAssemblyRuntime.InvokeAsync($"UnoShare_ShareFiles({request.Title}, [ '{string.Join("', '", request.Files.Select(f => f.FullPath))}' ])");
+                System.Diagnostics.Debug.WriteLine("Share. DONE");
             }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Share. Can't share! EXIT");
+            }
+
         }
+
+        static bool PlatformCanShareFile() => false;
+
     }
 }

@@ -18,6 +18,8 @@ namespace Xamarin.Essentials
 
         static readonly object locker = new object();
 
+        static bool PlatformIsAvailable => true;
+
         static Task<string> PlatformGetAsync(string key)
         {
             var context = Platform.AppContext;

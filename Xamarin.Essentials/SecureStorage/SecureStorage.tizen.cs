@@ -6,6 +6,8 @@ namespace Xamarin.Essentials
 {
     public partial class SecureStorage
     {
+        static bool PlatformIsAvailable => true;
+
         static Task<string> PlatformGetAsync(string key)
         {
             try

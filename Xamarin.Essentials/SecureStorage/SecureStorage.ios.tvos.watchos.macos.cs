@@ -12,6 +12,8 @@ namespace Xamarin.Essentials
         public static SecAccessible DefaultAccessible { get; set; } =
             SecAccessible.AfterFirstUnlock;
 
+        static bool PlatformIsAvailable => true;
+
         public static Task SetAsync(string key, string value, SecAccessible accessible)
         {
             if (string.IsNullOrWhiteSpace(key))

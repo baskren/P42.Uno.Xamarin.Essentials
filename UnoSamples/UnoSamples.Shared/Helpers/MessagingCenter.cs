@@ -253,7 +253,7 @@ namespace Xamarin.Forms
 
         // This is a bit gross; it only exists to support the unit tests in PageTests
         // because the implementations of ActionSheet, Alert, and IsBusy are all very
-        // tightly coupled to the MessagingCenter singleton 
+        // tightly coupled to the MessagingCenter singleton
         internal static void ClearSubscribers()
         {
             (Instance as MessagingCenter)?._subscriptions.Clear();

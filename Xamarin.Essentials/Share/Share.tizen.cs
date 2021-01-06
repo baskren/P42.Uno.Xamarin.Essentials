@@ -48,5 +48,8 @@ namespace Xamarin.Essentials
 
             return Task.CompletedTask;
         }
+
+        static bool PlatformCanShareFile() => true;
+
     }
 }

@@ -14,6 +14,23 @@ namespace Samples.ViewModel
 {
     class ShareViewModel : BaseViewModel
     {
+        static System.Drawing.Rectangle GetRectangle(FrameworkElement element) => ViewHelpers.ToSystemRectangle(element.GetAbsoluteBounds());
+
+        static string CreateFile(string fileName, string fileContents, string emptyName)
+        {
+            System.Diagnostics.Debug.WriteLine("ShareViewModel.CreateFile ENTER");
+            var fn = string.IsNullOrWhiteSpace(fileName) ? emptyName : fileName.Trim();
+            System.Diagnostics.Debug.WriteLine("ShareViewModel. A");
+            var file = Path.Combine(FileSystem.CacheDirectory, fn);
+            System.Diagnostics.Debug.WriteLine("ShareViewModel. B");
+            File.WriteAllText(file, fileContents);
+            System.Diagnostics.Debug.WriteLine("ShareViewModel. C");
+            var text = File.ReadAllText(file);
+            System.Diagnostics.Debug.WriteLine("ShareViewModel. text=[" + text + "]");
+            System.Diagnostics.Debug.WriteLine("ShareViewModel. path=[" + file + "]");
+            return file;
+        }
+
         bool shareText = true;
         bool shareUri;
         string text;
@@ -37,9 +54,9 @@ namespace Samples.ViewModel
 
         public ShareViewModel()
         {
-            RequestCommand = new Command<FrameworkElement>(OnRequest);
-            RequestFileCommand = new Command<FrameworkElement>(OnFileRequest);
-            RequestFilesCommand = new Command<FrameworkElement>(OnFilesRequest);
+            RequestCommand = new Command<FrameworkElement>(OnRequestAsync);
+            RequestFileCommand = new Command<FrameworkElement>(OnFileRequestAsync);
+            RequestFilesCommand = new Command<FrameworkElement>(OnFilesRequestAsync);
         }
 
         public bool ShareText
@@ -126,7 +143,9 @@ namespace Samples.ViewModel
             set => SetProperty(ref shareFile2AttachmentName, value);
         }
 
-        async void OnRequest(FrameworkElement element)
+        public bool CanShareFile => Share.CanShareFile();
+
+        async void OnRequestAsync(FrameworkElement element)
             => await Share.RequestAsync(new ShareTextRequest
             {
                 Subject = Subject,
@@ -136,7 +155,7 @@ namespace Samples.ViewModel
                 PresentationSourceBounds = GetRectangle(element)
             });
 
-        async void OnFileRequest(FrameworkElement element)
+        async void OnFileRequestAsync(FrameworkElement element)
         {
             if (string.IsNullOrWhiteSpace(ShareFileAttachmentContents))
                 return;
@@ -151,7 +170,7 @@ namespace Samples.ViewModel
             });
         }
 
-        async void OnFilesRequest(FrameworkElement element)
+        async void OnFilesRequestAsync(FrameworkElement element)
         {
             if (string.IsNullOrWhiteSpace(ShareFile1AttachmentContents) ||
                 string.IsNullOrWhiteSpace(ShareFile2AttachmentContents))
@@ -167,15 +186,5 @@ namespace Samples.ViewModel
                 PresentationSourceBounds = GetRectangle(element)
             });
         }
-
-        string CreateFile(string fileName, string fileContents, string emptyName)
-        {
-            var fn = string.IsNullOrWhiteSpace(fileName) ? emptyName : fileName.Trim();
-            var file = Path.Combine(FileSystem.CacheDirectory, fn);
-            File.WriteAllText(file, fileContents);
-            return file;
-        }
-
-        System.Drawing.Rectangle GetRectangle(FrameworkElement element) => ViewHelpers.ToSystemRectangle(element.GetAbsoluteBounds());
     }
 }
