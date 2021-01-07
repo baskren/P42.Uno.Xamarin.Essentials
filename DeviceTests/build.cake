@@ -1,7 +1,7 @@
 #addin nuget:?package=Cake.AppleSimulator&version=0.2.0
 #addin nuget:?package=Cake.Android.Adb&version=3.2.0
 #addin nuget:?package=Cake.Android.AvdManager&version=2.2.0
-#addin nuget:?package=Cake.FileHelpers&version=3.3.0
+#addin nuget:?package=Cake.FileHelpers&version=3.4.0
 
 var TARGET = Argument("target", "Default");
 

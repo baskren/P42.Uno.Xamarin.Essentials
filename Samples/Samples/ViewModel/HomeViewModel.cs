@@ -175,6 +175,7 @@ namespace Samples.ViewModel
                     typeof(PermissionsPage),
                     "Request various permissions.",
                     new[] { "permissions" }),
+                */
                 new SampleItem(
                     "📞",
                     "Phone Dialer",
@@ -187,7 +188,6 @@ namespace Samples.ViewModel
                     typeof(PreferencesPage),
                     "Quickly and easily add persistent preferences.",
                     new[] { "settings", "preferences", "prefs", "storage" }),
-                */
                 new SampleItem(
                     "📷",
                     "Screenshot",

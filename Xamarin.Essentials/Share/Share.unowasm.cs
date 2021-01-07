@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
         {
             System.Diagnostics.Debug.WriteLine("Share.PlatformRequestAsync ShareMultipleFilesRequest A");
             var canShare = WebAssemblyRuntime.InvokeJS($"UnoShare_CanShareFiles([ '{string.Join("', '", request.Files.Select(f => f.FullPath))}' ])");
-            System.Diagnostics.Debug.WriteLine("Share. B");
+            System.Diagnostics.Debug.WriteLine("Share. B canShare=[" + canShare + "]");
             if (canShare == "true")
             {
                 System.Diagnostics.Debug.WriteLine("Share. C");

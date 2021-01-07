@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Xamarin.Essentials;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -26,5 +27,38 @@ namespace Samples.View
         {
             this.InitializeComponent();
         }
+
+        private void OnShareFileFocusLost(Control sender, FocusDisengagedEventArgs args)
+        {
+            if (sender is FrameworkElement element)
+            {
+                var fileName = _shareFileNameTextBox.Text;
+                var fileContent = _shareFileContentTextBox.Text;
+
+                if (!string.IsNullOrWhiteSpace(fileContent))
+                {
+                    var shareFile = CreateFile(_shareFileNameTextBox.Text, _shareFileContentTextBox.Text, "fileShareDemoFile.txt");
+                    var request = new Xamarin.Essentials.ShareFileRequest
+                    {
+                        Title = _shareFileTitleTextBox.Text,
+                        File = shareFile
+                    };
+                    element.SetShareRequestPayload(request);
+                }
+                else
+                {
+                    element.SetShareRequestPayload(null);
+                }
+            }
+        }
+
+        static ShareFile CreateShareFile(string fileName, string fileContents, string emptyName)
+        {
+            fileName = string.IsNullOrWhiteSpace(fileName) ? emptyName : fileName.Trim();
+            var path = Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, fileName);
+            File.WriteAllText(path, fileContents);
+            return new ShareFile(path, "text/plain");
+        }
+
     }
 }

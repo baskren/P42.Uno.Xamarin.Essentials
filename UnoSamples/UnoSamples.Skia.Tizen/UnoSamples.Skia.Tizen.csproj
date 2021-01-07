@@ -23,7 +23,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Filter" Version="1.1.1" />
     <PackageReference Include="P42.Uno.AsyncNavigation" Version="0.3.0" />
     <PackageReference Include="SkiaSharp.Views" Version="2.80.2" />
-    <PackageReference Include="Uno.UI.Skia.Tizen" Version="3.3.0" />
+    <PackageReference Include="Uno.UI.Skia.Tizen" Version="3.4.0" />
     <PackageReference Include="Uno.UI.RemoteControl" Version="3.4.0" Condition="'$(Configuration)'=='Debug'" />
   </ItemGroup>
   <ItemGroup>

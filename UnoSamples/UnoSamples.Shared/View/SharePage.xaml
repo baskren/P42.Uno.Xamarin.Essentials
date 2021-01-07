@@ -84,10 +84,12 @@
                         Fill="Gray" />
                 </StackPanel>
 
+                <!--
+                    views:PanelExtensions.IsEnabled="{Binding CanShareFile}"
+                -->
                 <StackPanel
                     Grid.Row="1"
                     Padding="12,0,12,12"
-                    views:PanelExtensions.IsEnabled="{Binding CanShareFile}"
                     Spacing="6">
 
                     <TextBlock
@@ -102,17 +104,20 @@
                         Visibility="{Binding CanShareFile, Converter={StaticResource InverseVisibilityConverter}}" />
 
                     <TextBlock Text="Title (Optional)" />
-                    <TextBox Text="{Binding ShareFileTitle, Mode=TwoWay}" />
+                    <TextBox x:Name="_shareFileTitleTextBox" Text="{Binding ShareFileTitle, Mode=TwoWay}" />
 
                     <TextBlock Text="File Name:" />
-                    <TextBox Text="{Binding ShareFileAttachmentName, Mode=TwoWay}" />
+                    <TextBox x:Name="_shareFileNameTextBox" Text="{Binding ShareFileAttachmentName, Mode=TwoWay}" />
                     <TextBlock Text="File Contents:" />
-                    <TextBox Text="{Binding ShareFileAttachmentContents, Mode=TwoWay}" />
+                    <TextBox x:Name="_shareFileContentTextBox" Text="{Binding ShareFileAttachmentContents, Mode=TwoWay}" />
 
+                    <!--
                     <Button
                         Command="{Binding RequestFileCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                         Content="Share File" />
+                    -->
+                    <Button x:Name="_shareFileButton" Content="Share File" />
 
                     <Rectangle
                         Height="1"

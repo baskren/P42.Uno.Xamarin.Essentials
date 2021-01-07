@@ -57,6 +57,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)View\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)View\PhoneDialerPage.xaml.cs">
+      <DependentUpon>PhoneDialerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)View\PreferencesPage.xaml.cs">
+      <DependentUpon>PreferencesPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)View\ScreenshotPage.xaml.cs">
       <DependentUpon>ScreenshotPage.xaml</DependentUpon>
     </Compile>
@@ -100,6 +106,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="$(MSBuildThisFileDirectory)View\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)View\PhoneDialerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)View\PreferencesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
