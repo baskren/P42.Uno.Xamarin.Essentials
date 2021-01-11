@@ -32,6 +32,7 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
+
                 <StackPanel Padding="12,0,12,12" Spacing="6">
                     <TextBlock
                         Margin="0,6,0,0"
@@ -39,10 +40,10 @@
                         Text="Share Text" />
 
                     <TextBlock Text="Title (Optional)" />
-                    <TextBox Text="{Binding Title, Mode=TwoWay}" />
+                    <TextBox Text="{Binding Title, Mode=TwoWay, FallbackValue='Share Text Title'}" />
 
                     <TextBlock Text="Subject (Optional)" />
-                    <TextBox Text="{Binding Subject, Mode=TwoWay}" />
+                    <TextBox Text="{Binding Subject, Mode=TwoWay, FallbackValue='Share File Subject'}" />
 
                     <StackPanel Orientation="Horizontal">
                         <TextBlock
@@ -56,7 +57,7 @@
                             IsOn="{Binding ShareText, Mode=TwoWay}" />
                     </StackPanel>
 
-                    <TextBox PlaceholderText="Enter text to share here." Text="{Binding Text, Mode=TwoWay}" />
+                    <TextBox PlaceholderText="Enter text to share here." Text="{Binding Text, Mode=TwoWay, FallbackValue='This is the text to be shared.'}" />
 
                     <StackPanel Orientation="Horizontal">
                         <TextBlock
@@ -70,7 +71,7 @@
                             IsOn="{Binding ShareUri, Mode=TwoWay}" />
                     </StackPanel>
 
-                    <TextBox PlaceholderText="Enter URI to share here." Text="{Binding Uri, Mode=TwoWay}" />
+                    <TextBox PlaceholderText="Enter URI to share here." Text="{Binding Uri, Mode=TwoWay, FallbackValue='http://platform.uno'}" />
 
                     <Button
                         Command="{Binding RequestCommand}"
@@ -104,12 +105,21 @@
                         Visibility="{Binding CanShareFile, Converter={StaticResource InverseVisibilityConverter}}" />
 
                     <TextBlock Text="Title (Optional)" />
-                    <TextBox x:Name="_shareFileTitleTextBox" Text="{Binding ShareFileTitle, Mode=TwoWay}" />
+                    <TextBox
+                        x:Name="_shareFileTitleTextBox"
+                        LostFocus="OnShareFileInputLostFocus"
+                        Text="{Binding ShareFileTitle, Mode=TwoWay, FallbackValue='Share File Title'}" />
 
                     <TextBlock Text="File Name:" />
-                    <TextBox x:Name="_shareFileNameTextBox" Text="{Binding ShareFileAttachmentName, Mode=TwoWay}" />
+                    <TextBox
+                        x:Name="_shareFileNameTextBox"
+                        LostFocus="OnShareFileInputLostFocus"
+                        Text="{Binding ShareFileAttachmentName, Mode=TwoWay, FallbackValue='file.txt'}" />
                     <TextBlock Text="File Contents:" />
-                    <TextBox x:Name="_shareFileContentTextBox" Text="{Binding ShareFileAttachmentContents, Mode=TwoWay}" />
+                    <TextBox
+                        x:Name="_shareFileContentTextBox"
+                        LostFocus="OnShareFileInputLostFocus"
+                        Text="{Binding ShareFileAttachmentContents, Mode=TwoWay, FallbackValue='This is the file content'}" />
 
                     <!--
                     <Button
@@ -144,22 +154,41 @@
                         Visibility="{Binding CanShareFile, Converter={StaticResource InverseVisibilityConverter}}" />
 
                     <TextBlock Text="Title (Optional)" />
-                    <TextBox Text="{Binding ShareFilesTitle, Mode=TwoWay}" />
+                    <TextBox
+                        x:Name="_shareFilesTitle"
+                        LostFocus="OnShareFilesInputLostFocus"
+                        Text="{Binding ShareFilesTitle, Mode=TwoWay, FallbackValue='Share Multiple Files Title'}" />
 
                     <TextBlock Text="File1 Name:" />
-                    <TextBox Text="{Binding ShareFile1AttachmentName, Mode=TwoWay}" />
+                    <TextBox
+                        x:Name="_shareFile1Name"
+                        LostFocus="OnShareFilesInputLostFocus"
+                        Text="{Binding ShareFile1AttachmentName, Mode=TwoWay, FallbackValue='f1.txt'}" />
                     <TextBlock Text="File1 Contents:" />
-                    <TextBox Text="{Binding ShareFile1AttachmentContents, Mode=TwoWay}" />
+                    <TextBox
+                        x:Name="_shareFile1Content"
+                        LostFocus="OnShareFilesInputLostFocus"
+                        Text="{Binding ShareFile1AttachmentContents, Mode=TwoWay, FallbackValue='This is file 1 content'}" />
 
                     <TextBlock Margin="0,20,0,0" Text="File2 Name:" />
-                    <TextBox Text="{Binding ShareFile2AttachmentName, Mode=TwoWay}" />
+                    <TextBox
+                        x:Name="_shareFile2Name"
+                        LostFocus="OnShareFilesInputLostFocus"
+                        Text="{Binding ShareFile2AttachmentName, Mode=TwoWay, FallbackValue='f2.txt'}" />
                     <TextBlock Text="File2 Contents:" />
-                    <TextBox Text="{Binding ShareFile2AttachmentContents, Mode=TwoWay}" />
+                    <TextBox
+                        x:Name="_shareFile2Content"
+                        LostFocus="OnShareFilesInputLostFocus"
+                        Text="{Binding ShareFile2AttachmentContents, Mode=TwoWay, FallbackValue='This is file 2 content.'}" />
 
+                    <!--
                     <Button
+                        x:Name="_shareFilesButton"
                         Command="{Binding RequestFilesCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                         Content="Share Files" />
+                    -->
+                    <Button x:Name="_shareFilesButton" Content="Share Files" />
 
                 </StackPanel>
 

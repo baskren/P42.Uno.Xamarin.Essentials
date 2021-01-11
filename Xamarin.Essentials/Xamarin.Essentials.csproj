@@ -7,13 +7,13 @@
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.16299;</TargetFrameworks>
     <AssemblyName>P42.Uno.Xamarin.Essentials</AssemblyName>
     <RootNamespace>Xamarin.Essentials</RootNamespace>
-    <PackageId>Xamarin.Essentials</PackageId>
+    <PackageId>P42.Uno.Xamarin.Essentials</PackageId>
     <PackageIcon>icon.png</PackageIcon>
     <!-- <PackageIconUrl>https://raw.githubusercontent.com/xamarin/Essentials/master/Assets/xamarin.essentials_128x128.png</PackageIconUrl> -->
-    <Summary>Xamarin.Essentials: a kit of essential API's for your apps</Summary>
-    <PackageTags>xamarin, windows, uwp, ios, android, watchos, tvos, tizen, toolkit, xamarin.forms, Xamarin.Essentials, kit</PackageTags>
+    <Summary>P42.Uno.Xamarin.Essentials: a kit of essential API's for your Uno apps</Summary>
+    <PackageTags>Uno-Platform, xamarin, windows, uwp, ios, android, watchos, tvos, tizen, toolkit, Xamarin.Essentials, kit</PackageTags>
     <Title>P42.Uno.Xamarin.Essentials</Title>
-    <Description>Xamarin.Essentials: a kit of essential API's for your apps</Description>
+    <Description>P42.Uno.Xamarin.Essentials: a kit of essential API's for your Uno-Platform apps</Description>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
@@ -78,6 +78,11 @@
     <Compile Include="**\*.netstandard.cs" />
     <Compile Include="**\*.netstandard.*.cs" />
     -->
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="LinkerDefinition.Wasm.xml">
+      <LogicalName>$(AssemblyName).xml</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
   <!-- UWP -->
@@ -163,6 +168,8 @@
     <None Remove="mdoc.targets" />
     <None Remove="WasmScripts\html2canvas.min.js" />
     <None Remove="WasmScripts\jquery-3.5.1.slim.min.js" />
+    <None Remove="WasmScripts\UnoMimeTypes.js" />
+    <None Remove="WasmScripts\UnoPathExtentions.js" />
     <None Remove="WasmScripts\UnoScreenshot.js" />
     <None Remove="WasmScripts\UnoShare.js" />
     <None Remove="WasmScripts\UnoSms.js" />
@@ -179,6 +186,8 @@
   <ItemGroup>
     <EmbeddedResource Include="WasmScripts\html2canvas.min.js" />
     <EmbeddedResource Include="WasmScripts\jquery-3.5.1.slim.min.js" />
+    <EmbeddedResource Include="WasmScripts\UnoMimeTypes.js" />
+    <EmbeddedResource Include="WasmScripts\UnoPathExtentions.js" />
     <EmbeddedResource Include="WasmScripts\UnoScreenshot.js" />
     <EmbeddedResource Include="WasmScripts\UnoShare.js" />
     <EmbeddedResource Include="WasmScripts\UnoSms.js" />
@@ -188,8 +197,4 @@
   </ItemGroup>
   
   <Import Project="$(MSBuildThisFileDirectory)mdoc.targets" />
-  
-  <ItemGroup>
-    <Compile Include="UnoExtensions\SharingExtensions.cs" />
-  </ItemGroup>
 </Project>

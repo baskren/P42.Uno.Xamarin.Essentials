@@ -1,0 +1,7 @@
+﻿<linker>
+  <assembly fullname="P42.Uno.Xamarin.Essentials">
+    <type fullname="Xamarin.Essentials.SharingExtensions">
+      <method name="GetShareRequestJsonForHtmlElement" />
+    </type>
+  </assembly>
+</linker>

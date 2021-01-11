@@ -20,7 +20,15 @@ namespace Xamarin.Essentials
         }
 
         static string PlatformAppDataDirectory
-            => ApplicationData.Current.LocalFolder.Path;
+        {
+            get
+            {
+                var folder = ApplicationData.Current.LocalFolder.Path;
+                if (!Directory.Exists(folder))
+                    Directory.CreateDirectory(folder);
+                return folder;
+            }
+        }
 
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
         {

@@ -10,6 +10,8 @@ namespace Xamarin.Essentials
 {
     public static partial class Share
     {
+        public static event EventHandler<ShareFailEventArgs> ShareFailed;
+
         public static Task RequestAsync(string text) =>
             RequestAsync(new ShareTextRequest(text));
 
@@ -57,6 +59,7 @@ namespace Xamarin.Essentials
 
         static string FileNullExeption(string file)
             => $"The {file} parameter in the request files is invalid";
+
     }
 
     public abstract class ShareRequestBase
@@ -127,10 +130,20 @@ namespace Xamarin.Essentials
         {
         }
 
+        public ShareMultipleFilesRequest(IEnumerable<Windows.Storage.IStorageFile> files)
+            : this(ConvertList(files))
+        {
+        }
+
         public ShareMultipleFilesRequest(string title, IEnumerable<ShareFile> files)
             : this(files) => Title = title;
 
         public ShareMultipleFilesRequest(string title, IEnumerable<FileBase> files)
+            : this(title, ConvertList(files))
+        {
+        }
+
+        public ShareMultipleFilesRequest(string title, IEnumerable<Windows.Storage.IStorageFile> files)
             : this(title, ConvertList(files))
         {
         }
@@ -147,6 +160,9 @@ namespace Xamarin.Essentials
         }
 
         static IEnumerable<ShareFile> ConvertList(IEnumerable<FileBase> files)
+            => files?.Select(file => new ShareFile(file));
+
+        static IEnumerable<ShareFile> ConvertList(IEnumerable<Windows.Storage.IStorageFile> files)
             => files?.Select(file => new ShareFile(file));
     }
 
@@ -166,5 +182,13 @@ namespace Xamarin.Essentials
             : base(file)
         {
         }
+
+        public ShareFile(Windows.Storage.IStorageFile storageFile)
+            : base(storageFile.Path, storageFile.ContentType)
+        {
+        }
+
+        public static explicit operator ShareFile(Windows.Storage.StorageFile storageFile)
+            => new ShareFile(storageFile.Path, storageFile.ContentType);
     }
 }

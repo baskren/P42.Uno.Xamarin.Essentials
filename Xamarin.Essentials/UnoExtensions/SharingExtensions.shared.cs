@@ -44,17 +44,38 @@ namespace Xamarin.Essentials
 #if __WASM__
         static readonly Dictionary<string, WeakReference<FrameworkElement>> shareRequestElements = new Dictionary<string, WeakReference<FrameworkElement>>();
 
-        public static string GetShareRequestForHtmlId(string id)
+        public static string GetShareRequestJsonForHtmlElement(string id)
+        {
+            System.Diagnostics.Debug.WriteLine("SharingExtensions.GetShareRequestJsonForHtmlElement ENTER");
+            if (GetShareRequestForHtmlElement(id) is ShareRequestBase request)
+            {
+                var json = JsonConvert.SerializeObject(request);
+                System.Diagnostics.Debug.WriteLine("SharingExtensions.GetShareRequestJsonForHtmlElement EXIT");
+                return json;
+            }
+            System.Diagnostics.Debug.WriteLine("SharingExtensions.GetShareRequestJsonForHtmlElement EXIT");
+            return null;
+        }
+
+        internal static ShareRequestBase GetShareRequestForHtmlElement(string id)
+        {
+            if (GetShareRequestElementForHtmlElement(id) is FrameworkElement element)
+            {
+                if (element.GetShareRequestPayload() is ShareRequestBase request)
+                {
+                    return request;
+                }
+            }
+            return null;
+        }
+
+        internal static FrameworkElement GetShareRequestElementForHtmlElement(string id)
         {
             if (shareRequestElements.TryGetValue(id, out var weakRef))
             {
                 if (weakRef.TryGetTarget(out var element))
                 {
-                    if (element.GetShareRequestPayload() is ShareRequestBase request)
-                    {
-                        var json = JsonConvert.SerializeObject(request);
-                        return json;
-                    }
+                    return element;
                 }
             }
             return null;
@@ -93,7 +114,8 @@ namespace Xamarin.Essentials
             shareRequestElements[id] = new WeakReference<FrameworkElement>(element);
             System.Diagnostics.Debug.WriteLine("ButtonExtensions.EnableShareOnTapped id:[" + id + "]");
 
-            var javascript = $"$('#{id}')[0].onclick = function() {{ alert('pizza'); }} ";
+            //var javascript = $"$('#{id}')[0].onclick = function() {{ alert('pizza'); }} ";
+            var javascript = $"$('#{id}')[0].onclick = function() {{ UnoShare_ShareFromElement('{id}'); }} ";
             System.Diagnostics.Debug.WriteLine("ButtonExtensions.EnableShareOnTapped javascript: [" + javascript + "]");
 
             WebAssemblyRuntime.InvokeJS(javascript);

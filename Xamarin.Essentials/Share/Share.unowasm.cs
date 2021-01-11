@@ -38,7 +38,15 @@ namespace Xamarin.Essentials
 
         }
 
-        static bool PlatformCanShareFile() => false;
+        static bool PlatformCanShareFile() => true;
+
+        public static void OnPlatformShareMultipleFilesFailed(string id)
+        {
+            if (SharingExtensions.GetShareRequestForHtmlElement(id) is ShareRequestBase request)
+            {
+                ShareFailed?.Invoke(SharingExtensions.GetShareRequestElementForHtmlElement(id), new ShareFailEventArgs(request));
+            }
+        }
 
     }
 }
