@@ -61,7 +61,8 @@ namespace Xamarin.Essentials
             }
         }
 
-        static bool PlatformCanShareFile() => true;
+        static bool PlatformCanShare(ShareRequestBase request) => true;
 
+        static bool PlatformIsAvailable() => true;
     }
 }

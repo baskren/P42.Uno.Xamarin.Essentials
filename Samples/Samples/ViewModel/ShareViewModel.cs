@@ -59,6 +59,8 @@ namespace Samples.ViewModel
             RequestFilesCommand = new Command<FrameworkElement>(OnFilesRequestAsync);
         }
 
+        public bool CanShare => Share.IsAvailable;
+
         public bool ShareText
         {
             get => shareText;
@@ -142,8 +144,6 @@ namespace Samples.ViewModel
             get => shareFile2AttachmentName;
             set => SetProperty(ref shareFile2AttachmentName, value);
         }
-
-        public bool CanShareFile => Share.CanShareFile();
 
         async void OnRequestAsync(FrameworkElement element)
             => await Share.RequestAsync(new ShareTextRequest

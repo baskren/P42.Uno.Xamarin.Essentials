@@ -10,8 +10,6 @@ namespace Xamarin.Essentials
 {
     public static partial class Share
     {
-        public static event EventHandler<ShareFailEventArgs> ShareFailed;
-
         public static Task RequestAsync(string text) =>
             RequestAsync(new ShareTextRequest(text));
 
@@ -29,8 +27,11 @@ namespace Xamarin.Essentials
             return PlatformRequestAsync(request);
         }
 
-        public static bool CanShareFile() =>
-            PlatformCanShareFile();
+        public static bool CanShare(ShareRequestBase request) =>
+            PlatformCanShare(request);
+
+        public static bool IsAvailable
+            => PlatformIsAvailable();
 
         public static Task RequestAsync(ShareFileRequest request)
         {
@@ -59,7 +60,6 @@ namespace Xamarin.Essentials
 
         static string FileNullExeption(string file)
             => $"The {file} parameter in the request files is invalid";
-
     }
 
     public abstract class ShareRequestBase

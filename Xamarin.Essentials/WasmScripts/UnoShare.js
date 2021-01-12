@@ -1,40 +1,4 @@
-﻿function UnoShare_ShareFiles(title, nodeFilePaths) {
-    const extractFilename = (path) => {
-        const pathArray = path.split("/");
-        const lastIndex = pathArray.length - 1;
-        return pathArray[lastIndex];
-    };
-
-    const files = [];
-    for (i = 0; i < nodeFilePaths.length; i++) {
-        var file = new File(FS.readFile(nodeFilePaths[i]), extractFilename(nodeFilePaths[i]));
-        files.push(file);
-    }
-
-    var share = { files: files, title: title };
-
-    return navigator.share(share);
-}
-
-function UnoShare_CanShareFiles(nodeFilePaths) {
-    const extractFilename = (path) => {
-        const pathArray = path.split("/");
-        const lastIndex = pathArray.length - 1;
-        return pathArray[lastIndex];
-    };
-
-    const files = [];
-    for (i = 0; i < nodeFilePaths.length; i++) {
-        var file = new File(FS.readFile(nodeFilePaths[i]), extractFilename(nodeFilePaths[i]));
-        files.push(file);
-    }
-
-    var share = { files: files };
-
-    var result = navigator.canShare(share);
-    console.log('can share: ' + result);
-    return result;
-}
+﻿
 
 String.prototype.isEmpty = function () {
     return (this.length === 0 || !this.trim());
@@ -46,11 +10,9 @@ function UnoShare_GetFileName(path) {
     return pathArray[lastIndex];
 }
 
-//var UnoShare_MimeType = require('mime-types')
-
 function UnoShare_GetShareFileType(shareFile, isUtf8) {
 
-    if (shareFile.Type && !shareFile.Type.isEmpty()) 
+    if (shareFile.Type && !isEmpty(shareFile.Type)) 
         return shareFile.Type;
     
     let mimeType = UnoMime_Lookup(shareFile.FullPath);
@@ -90,38 +52,80 @@ function UnoShare_ShareFilesToJsFiles(shareFile) {
     return files;
 }
 
+function isEmpty(obj) {
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
+
 function UnoShare_BuildRequest(json) {
     const obj = JSON.parse(json);
+    var result = new Object();
+    if ('Title' in obj && !IsNullEmptyOrWhiteSpace(obj.Title))
+        result.title = obj.Title;
+    if ('Uri' in obj && !IsNullEmptyOrWhiteSpace(obj.Uri))
+        result.url = obj.Uri;
+    if ('Text' in obj && !IsNullEmptyOrWhiteSpace(obj.Text))
+        result.text = obj.Text;
     if ('File' in obj) {
-        let files = UnoShare_ShareFilesToJsFiles([obj.File]);
-        return { title: obj.Title, files: files, text: obj.Text, url: obj.Uri };
+        result.files = UnoShare_ShareFilesToJsFiles([obj.File]);
+        //var result = { title: obj.Title, files: files, text: obj.Text, url: obj.Uri };
     }
-    if ('Files' in obj) {
-        files = UnoShare_ShareFilesToJsFiles(obj.Files);
-        return { title: obj.Title, files: files, text: obj.Text, url: obj.Uri };
+    else if ('Files' in obj) {
+        result.files = UnoShare_ShareFilesToJsFiles(obj.Files);
+        //var result = { title: obj.Title, files: files, text: obj.Text, url: obj.Uri };
     }
-    return { title: obj.Title, text: obj.Text, url: obj.Uri };
+    //var result = { title: obj.Title, text: obj.Text, url: obj.Uri };
+    return result;
 }
 
 function UnoShare_ShareFromElement(id) {
     const getShareRequestJsonForHtmlElement = Module.mono_bind_static_method("[P42.Uno.Xamarin.Essentials] Xamarin.Essentials.SharingExtensions:GetShareRequestJsonForHtmlElement");
-    //const onPlatformShareMultipleFilesFailed = Module.mono_bind_static_method("[P42.Uno.Xamarin.Essentials] Xamarin.Essentials.Share:OnPlatformShareMultipleFilesFailed");
-
-    console.log('UnoShare_ShareFromElement(' + id + ') ENTER');
     const json = getShareRequestJsonForHtmlElement(id);
-    console.log("json= " + json);
     var share = UnoShare_BuildRequest(json);
     //getConfirmation(share);
     if ('files' in share && navigator.canShare && !navigator.canShare(share))
-        alert('Sharing of files may not yet be supported on this browser.');
+        alert('Sharing of files not yet supported on this browser.');
     else {
         navigator.share(share).catch((reason) => {
-            console.log('D failure: ' + reason);
-            alert('Sharing may not yet be supported on this browser.  Error code: ' + reason);
+            alert('Sharing may not yet be supported on this browser or sharing may not be permitted with a file.  Error code: ' + reason);
         });
     }
 }
 
+function UnoShare_Share(json) {
+    if (navigator.share) {
+        var share = UnoShare_BuildRequest(json);
+        navigator.share(share).catch((reason) => {
+            alert('Sharing may not yet be supported on this browser or sharing may not be permitted with a file.  Error code: ' + reason);
+        });
+    }
+    else
+        alert('Sharing not yet supported on this browser.');
+
+}
+
+function UnoShare_CanShare(json) {
+    //getConfirmation(share);
+    if (navigator.share) {
+        var share = UnoShare_BuildRequest(json);
+        if (navigator.canShare)
+            return navigator.canShare(share);
+        else
+            return true;
+    }
+    else
+        return false;
+}
+
+function UnoShare_IsAvailable() {
+    if (navigator.share) {
+        return true;
+    }
+    return false;
+}
 
 // http://www.onicos.com/staff/iz/amuse/javascript/expert/utf.txt
 

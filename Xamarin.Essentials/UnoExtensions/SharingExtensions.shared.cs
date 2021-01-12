@@ -46,14 +46,8 @@ namespace Xamarin.Essentials
 
         public static string GetShareRequestJsonForHtmlElement(string id)
         {
-            System.Diagnostics.Debug.WriteLine("SharingExtensions.GetShareRequestJsonForHtmlElement ENTER");
             if (GetShareRequestForHtmlElement(id) is ShareRequestBase request)
-            {
-                var json = JsonConvert.SerializeObject(request);
-                System.Diagnostics.Debug.WriteLine("SharingExtensions.GetShareRequestJsonForHtmlElement EXIT");
-                return json;
-            }
-            System.Diagnostics.Debug.WriteLine("SharingExtensions.GetShareRequestJsonForHtmlElement EXIT");
+                return JsonConvert.SerializeObject(request);
             return null;
         }
 
@@ -62,9 +56,7 @@ namespace Xamarin.Essentials
             if (GetShareRequestElementForHtmlElement(id) is FrameworkElement element)
             {
                 if (element.GetShareRequestPayload() is ShareRequestBase request)
-                {
                     return request;
-                }
             }
             return null;
         }
@@ -74,9 +66,7 @@ namespace Xamarin.Essentials
             if (shareRequestElements.TryGetValue(id, out var weakRef))
             {
                 if (weakRef.TryGetTarget(out var element))
-                {
                     return element;
-                }
             }
             return null;
         }
@@ -112,12 +102,7 @@ namespace Xamarin.Essentials
         {
             var id = element.GetHtmlId();
             shareRequestElements[id] = new WeakReference<FrameworkElement>(element);
-            System.Diagnostics.Debug.WriteLine("ButtonExtensions.EnableShareOnTapped id:[" + id + "]");
-
-            //var javascript = $"$('#{id}')[0].onclick = function() {{ alert('pizza'); }} ";
             var javascript = $"$('#{id}')[0].onclick = function() {{ UnoShare_ShareFromElement('{id}'); }} ";
-            System.Diagnostics.Debug.WriteLine("ButtonExtensions.EnableShareOnTapped javascript: [" + javascript + "]");
-
             WebAssemblyRuntime.InvokeJS(javascript);
         }
 
@@ -125,11 +110,7 @@ namespace Xamarin.Essentials
         {
             var id = element.GetHtmlId();
             shareRequestElements.Remove(id);
-            System.Diagnostics.Debug.WriteLine("ButtonExtensions.EnableShareOnTapped id:[" + id + "]");
-
             var javascript = $"$('#{id}')[0].onclick = null; ";
-            System.Diagnostics.Debug.WriteLine("ButtonExtensions.EnableShareOnTapped javascript: [" + javascript + "]");
-
             WebAssemblyRuntime.InvokeJS(javascript);
         }
 

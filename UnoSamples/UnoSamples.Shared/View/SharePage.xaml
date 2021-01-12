@@ -23,7 +23,13 @@
         <TextBlock
             Margin="12"
             FontWeight="Bold"
-            Text="Share text, websites and files to other applications on the users device." />
+            Text="Share text, websites and files to other applications on the users device."
+            Visibility="{Binding CanShare, Converter={StaticResource VisibilityConverter}}" />
+        <TextBlock
+            Margin="12"
+            FontWeight="Bold"
+            Text="SHARING NOT AVAILABLE ON THIS PLATFORM"
+            Visibility="{Binding CanShare, Converter={StaticResource InverseVisibilityConverter}}" />
 
         <ScrollViewer Grid.Row="1">
             <Grid>
@@ -40,7 +46,7 @@
                         Text="Share Text" />
 
                     <TextBlock Text="Title (Optional)" />
-                    <TextBox Text="{Binding Title, Mode=TwoWay, FallbackValue='Share Text Title'}" />
+                    <TextBox x:Name="_shareTextTitle" Text="{Binding Title, Mode=TwoWay, FallbackValue='Share Text Title'}" />
 
                     <TextBlock Text="Subject (Optional)" />
                     <TextBox Text="{Binding Subject, Mode=TwoWay, FallbackValue='Share File Subject'}" />
@@ -57,7 +63,10 @@
                             IsOn="{Binding ShareText, Mode=TwoWay}" />
                     </StackPanel>
 
-                    <TextBox PlaceholderText="Enter text to share here." Text="{Binding Text, Mode=TwoWay, FallbackValue='This is the text to be shared.'}" />
+                    <TextBox
+                        x:Name="_shareTextText"
+                        PlaceholderText="Enter text to share here."
+                        Text="{Binding Text, Mode=TwoWay, FallbackValue='This is the text to be shared.'}" />
 
                     <StackPanel Orientation="Horizontal">
                         <TextBlock
@@ -73,10 +82,22 @@
 
                     <TextBox PlaceholderText="Enter URI to share here." Text="{Binding Uri, Mode=TwoWay, FallbackValue='http://platform.uno'}" />
 
-                    <Button
-                        Command="{Binding RequestCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                        Content="Share Text" />
+                    <StackPanel Orientation="Horizontal" Spacing="30">
+                        <Button
+                            Command="{Binding RequestCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                            Content="Share Text" />
+                        <Button
+                            x:Name="_canShareTextButton"
+                            Click="OnCanShareTextClick"
+                            Content="Can Share Text?">
+                            <Button.Flyout>
+                                <Flyout>
+                                    <TextBlock x:Name="_canShareTextResult" />
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </StackPanel>
 
                     <Rectangle
                         Height="1"
@@ -85,9 +106,6 @@
                         Fill="Gray" />
                 </StackPanel>
 
-                <!--
-                    views:PanelExtensions.IsEnabled="{Binding CanShareFile}"
-                -->
                 <StackPanel
                     Grid.Row="1"
                     Padding="12,0,12,12"
@@ -96,13 +114,7 @@
                     <TextBlock
                         Margin="0,6,0,0"
                         FontWeight="Bold"
-                        Text="Share File"
-                        Visibility="{Binding CanShareFile, Converter={StaticResource VisibilityConverter}}" />
-                    <TextBlock
-                        Margin="0,6,0,0"
-                        FontWeight="Bold"
-                        Text="Share File NOT AVAILABLE ON THIS PLATFORM"
-                        Visibility="{Binding CanShareFile, Converter={StaticResource InverseVisibilityConverter}}" />
+                        Text="Share File" />
 
                     <TextBlock Text="Title (Optional)" />
                     <TextBox
@@ -127,7 +139,20 @@
                         CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                         Content="Share File" />
                     -->
-                    <Button x:Name="_shareFileButton" Content="Share File" />
+                    <StackPanel Orientation="Horizontal" Spacing="30">
+                        <Button
+                            x:Name="_shareFileButton"
+                            Click="OnShareFileClick"
+                            Content="Share File" />
+                        <Button Click="OnCanShareFileClick" Content="Can Share File?">
+                            <Button.Flyout>
+                                <Flyout>
+                                    <TextBlock x:Name="_canShareFileResult" />
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </StackPanel>
+
 
                     <Rectangle
                         Height="1"
@@ -139,19 +164,13 @@
                 <StackPanel
                     Grid.Row="2"
                     Padding="12,0,12,12"
-                    views:PanelExtensions.IsEnabled="{Binding CanShareFile}"
+                    views:PanelExtensions.IsEnabled="{Binding CanShare}"
                     Spacing="6">
 
                     <TextBlock
                         Margin="0,6,0,0"
                         FontWeight="Bold"
-                        Text="Share Files"
-                        Visibility="{Binding CanShareFile, Converter={StaticResource VisibilityConverter}}" />
-                    <TextBlock
-                        Margin="0,6,0,0"
-                        FontWeight="Bold"
-                        Text="Share Files NOT AVAILABLE ON THIS PLATFORM"
-                        Visibility="{Binding CanShareFile, Converter={StaticResource InverseVisibilityConverter}}" />
+                        Text="Share Files" />
 
                     <TextBlock Text="Title (Optional)" />
                     <TextBox
@@ -188,7 +207,19 @@
                         CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                         Content="Share Files" />
                     -->
-                    <Button x:Name="_shareFilesButton" Content="Share Files" />
+                    <StackPanel Orientation="Horizontal" Spacing="30">
+                        <Button
+                            x:Name="_shareFilesButton"
+                            Click="OnShareFilesClick"
+                            Content="Share Files" />
+                        <Button Click="OnCanShareFilesClick" Content="Can Share Files?">
+                            <Button.Flyout>
+                                <Flyout>
+                                    <TextBlock x:Name="_canShareFilesResult" />
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </StackPanel>
 
                 </StackPanel>
 

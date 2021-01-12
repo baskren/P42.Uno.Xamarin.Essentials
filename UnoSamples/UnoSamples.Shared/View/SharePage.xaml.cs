@@ -28,6 +28,61 @@ namespace Samples.View
             this.InitializeComponent();
         }
 
+        ShareFileRequest GetShareFileRequest()
+        {
+            var shareFile = CreateShareFile(_shareFileNameTextBox.Text, _shareFileContentTextBox.Text, "fileShareDemoFile.txt");
+            var request = new Xamarin.Essentials.ShareFileRequest
+            {
+                Title = _shareFileTitleTextBox.Text,
+                File = shareFile
+            };
+            return request;
+        }
+
+        ShareMultipleFilesRequest GetShareFilesRequest()
+        {
+            var file1Name = _shareFile1Name.Text;
+            var file1Content = _shareFile1Content.Text;
+
+            var file2Name = _shareFile2Name.Text;
+            var file2Content = _shareFile2Content.Text;
+
+            var request = new Xamarin.Essentials.ShareMultipleFilesRequest
+            {
+                Title = _shareFilesTitle.Text,
+                Files = new List<ShareFile>()
+            };
+            if (!string.IsNullOrWhiteSpace(file1Content))
+            {
+                var shareFile = CreateShareFile(file1Name, file1Content, "fileShareDemoFile1.txt");
+                request.Files.Add(shareFile);
+            }
+            if (!string.IsNullOrWhiteSpace(file2Content))
+            {
+                var shareFile = CreateShareFile(file2Name, file2Content, "fileShareDemoFile2.txt");
+                request.Files.Add(shareFile);
+            }
+            return request;
+        }
+
+        void OnCanShareTextClick(object sender, RoutedEventArgs e)
+        {
+            var request = new ShareTextRequest(_shareTextText.Text, _shareTextTitle.Text);
+            _canShareTextResult.Text = Share.CanShare(request).ToString();
+        }
+
+        void OnCanShareFileClick(object sender, RoutedEventArgs e)
+        {
+            var request = GetShareFileRequest();
+            _canShareFileResult.Text = Share.CanShare(request).ToString();
+        }
+
+        void OnCanShareFilesClick(object sender, RoutedEventArgs e)
+        {
+            var request = GetShareFilesRequest();
+            _canShareFilesResult.Text = Share.CanShare(request).ToString();
+        }
+
         static ShareFile CreateShareFile(string fileName, string fileContents, string emptyName)
         {
             fileName = string.IsNullOrWhiteSpace(fileName) ? emptyName : fileName.Trim();
@@ -41,58 +96,36 @@ namespace Samples.View
 
         void OnShareFileInputLostFocus(object sender, RoutedEventArgs e)
         {
+            /*
             if (_shareFileButton is Button shareButton)
             {
-                var fileName = _shareFileNameTextBox.Text;
-                var fileContent = _shareFileContentTextBox.Text;
-
-                if (!string.IsNullOrWhiteSpace(fileContent))
-                {
-                    var shareFile = CreateShareFile(_shareFileNameTextBox.Text, _shareFileContentTextBox.Text, "fileShareDemoFile.txt");
-                    var request = new Xamarin.Essentials.ShareFileRequest
-                    {
-                        Title = _shareFileTitleTextBox.Text,
-                        File = shareFile
-                    };
-                    shareButton.SetShareRequestPayload(request);
-                }
-                else
-                {
-                    shareButton.SetShareRequestPayload(null);
-                }
+                var request = GetShareFileRequest();
+                shareButton.SetShareRequestPayload(request);
             }
-            System.Diagnostics.Debug.WriteLine("SharePage.OnShareFileInputLosingFocus EXIT");
+            */
         }
 
         void OnShareFilesInputLostFocus(object sender, RoutedEventArgs e)
         {
+            /*
             if (_shareFilesButton is Button shareButton)
             {
-                var file1Name = _shareFile1Name.Text;
-                var file1Content = _shareFile1Content.Text;
-
-                var file2Name = _shareFile2Name.Text;
-                var file2Content = _shareFile2Content.Text;
-
-                var request = new Xamarin.Essentials.ShareMultipleFilesRequest
-                {
-                    Title = _shareFilesTitle.Text,
-                    Files = new List<ShareFile>()
-                };
-                if (!string.IsNullOrWhiteSpace(file1Content))
-                {
-                    var shareFile = CreateShareFile(file1Name, file1Content, "fileShareDemoFile1.txt");
-                    request.Files.Add(shareFile);
-                }
-                if (!string.IsNullOrWhiteSpace(file2Content))
-                {
-                    var shareFile = CreateShareFile(file2Name, file2Content, "fileShareDemoFile2.txt");
-                    request.Files.Add(shareFile);
-                }
+                var request = GetShareFilesRequest();
                 shareButton.SetShareRequestPayload(request);
             }
-            System.Diagnostics.Debug.WriteLine("SharePage.OnShareFileInputLosingFocus EXIT");
+            */
         }
 
+        async void OnShareFileClick(object sender, RoutedEventArgs e)
+        {
+            var request = GetShareFileRequest();
+            await Share.RequestAsync(request);
+        }
+
+        async void OnShareFilesClick(object sender, RoutedEventArgs e)
+        {
+            var request = GetShareFilesRequest();
+            await Share.RequestAsync(request);
+        }
     }
 }

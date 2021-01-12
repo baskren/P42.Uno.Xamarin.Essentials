@@ -13,8 +13,9 @@ namespace Xamarin.Essentials
         static Task<bool> PlatformCanShareAsync(ShareRequestBase request) =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static bool PlatformCanShareFile() => false;
+        static bool PlatformCanShare(ShareRequestBase request) => false;
 
+        static bool PlatformIsAvailable() => false;
     }
 }
 
