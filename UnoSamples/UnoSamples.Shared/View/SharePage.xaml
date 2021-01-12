@@ -134,15 +134,15 @@
                         Text="{Binding ShareFileAttachmentContents, Mode=TwoWay, FallbackValue='This is the file content'}" />
 
                     <!--
-                    <Button
-                        Command="{Binding RequestFileCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                        Content="Share File" />
-                    -->
-                    <StackPanel Orientation="Horizontal" Spacing="30">
                         <Button
                             x:Name="_shareFileButton"
                             Click="OnShareFileClick"
+                            Content="Share File" />
+                    -->
+                    <StackPanel Orientation="Horizontal" Spacing="30">
+                        <Button
+                            Command="{Binding RequestFileCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                             Content="Share File" />
                         <Button Click="OnCanShareFileClick" Content="Can Share File?">
                             <Button.Flyout>
@@ -201,16 +201,16 @@
                         Text="{Binding ShareFile2AttachmentContents, Mode=TwoWay, FallbackValue='This is file 2 content.'}" />
 
                     <!--
-                    <Button
-                        x:Name="_shareFilesButton"
-                        Command="{Binding RequestFilesCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                        Content="Share Files" />
+                        <Button
+                            x:Name="_shareFilesButton"
+                            Click="OnShareFilesClick"
+                            Content="Share Files" />
                     -->
                     <StackPanel Orientation="Horizontal" Spacing="30">
                         <Button
                             x:Name="_shareFilesButton"
-                            Click="OnShareFilesClick"
+                            Command="{Binding RequestFilesCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                             Content="Share Files" />
                         <Button Click="OnCanShareFilesClick" Content="Can Share Files?">
                             <Button.Flyout>
