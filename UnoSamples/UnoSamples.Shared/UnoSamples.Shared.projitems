@@ -51,11 +51,26 @@
     </Compile>
     <!-- VIEW -->
     <Compile Include="$(MSBuildThisFileDirectory)View\BasePage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View\FilePickerPage.xaml.cs">
+      <DependentUpon>FilePickerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)View\FileSystemPage.xaml.cs">
+      <DependentUpon>FileSystemPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)View\HapticFeedbackPage.xaml.cs">
       <DependentUpon>HapticFeedbackPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)View\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)View\MediaPickerPage.xaml.cs">
+      <DependentUpon>MediaPickerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)View\OrientationSensorPage.xaml.cs">
+      <DependentUpon>OrientationSensorPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)View\PermissionsPage.xaml.cs">
+      <DependentUpon>PermissionsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)View\PhoneDialerPage.xaml.cs">
       <DependentUpon>PhoneDialerPage.xaml</DependentUpon>
@@ -101,11 +116,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="$(MSBuildThisFileDirectory)View\FilePickerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)View\FileSystemPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)View\HapticFeedbackPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="$(MSBuildThisFileDirectory)View\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)View\MediaPickerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)View\OrientationSensorPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)View\PermissionsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -158,5 +193,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)ViewModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Assets\app_info_action_icon.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\battery_action_icon.png" />
+    <Content Include="$(MSBuildThisFileDirectory)FileSystemTemplate.txt" />
   </ItemGroup>
 </Project>

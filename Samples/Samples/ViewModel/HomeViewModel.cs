@@ -97,6 +97,7 @@ namespace Samples.ViewModel
                     typeof(EmailPage),
                     "Easily send email messages.",
                     new[] { "email", "share", "communication", "message" }),
+                */
                 new SampleItem(
                     "📁",
                     "File Picker",
@@ -109,6 +110,7 @@ namespace Samples.ViewModel
                     typeof(FileSystemPage),
                     "Easily save files to app data.",
                     new[] { "files", "directory", "filesystem", "storage" }),
+                /*
                 new SampleItem(
                     "🔦",
                     "Flashlight",
@@ -157,6 +159,7 @@ namespace Samples.ViewModel
                     typeof(MapsPage),
                     "Easily launch maps with coordinates.",
                     new[] { "geocoding", "geolocation", "position", "address", "mapping", "maps", "route", "navigation" }),
+                */
                 new SampleItem(
                     "📏",
                     "Orientation Sensor",
@@ -175,7 +178,6 @@ namespace Samples.ViewModel
                     typeof(PermissionsPage),
                     "Request various permissions.",
                     new[] { "permissions" }),
-                */
                 new SampleItem(
                     "📞",
                     "Phone Dialer",

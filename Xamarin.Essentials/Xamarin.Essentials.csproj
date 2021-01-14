@@ -168,13 +168,18 @@
     <None Remove="mdoc.targets" />
     <None Remove="WasmScripts\html2canvas.min.js" />
     <None Remove="WasmScripts\jquery-3.5.1.slim.min.js" />
+    <None Remove="WasmScripts\motion-sensors.js" />
+    <None Remove="WasmScripts\sensor.js" />
+    <None Remove="WasmScripts\UnoFilePicker.js" />
     <None Remove="WasmScripts\UnoMimeTypes.js" />
+    <None Remove="WasmScripts\UnoOrientation.js" />
     <None Remove="WasmScripts\UnoPathExtentions.js" />
     <None Remove="WasmScripts\UnoScreenshot.js" />
     <None Remove="WasmScripts\UnoShare.js" />
     <None Remove="WasmScripts\UnoSms.js" />
     <None Remove="WasmScripts\UnoTextToSpeech.js" />
     <None Remove="WasmScripts\UnoUtils.js" />
+    <None Remove="WasmScripts\UnoUuid.js" />
     <None Remove="WasmScripts\UnoVibration.js" />
   </ItemGroup>
 
@@ -186,13 +191,18 @@
   <ItemGroup>
     <EmbeddedResource Include="WasmScripts\html2canvas.min.js" />
     <EmbeddedResource Include="WasmScripts\jquery-3.5.1.slim.min.js" />
+    <EmbeddedResource Include="WasmScripts\motion-sensors.js" />
+    <EmbeddedResource Include="WasmScripts\sensor.js" />
+    <EmbeddedResource Include="WasmScripts\UnoFilePicker.js" />
     <EmbeddedResource Include="WasmScripts\UnoMimeTypes.js" />
+    <EmbeddedResource Include="WasmScripts\UnoOrientation.js" />
     <EmbeddedResource Include="WasmScripts\UnoPathExtentions.js" />
     <EmbeddedResource Include="WasmScripts\UnoScreenshot.js" />
     <EmbeddedResource Include="WasmScripts\UnoShare.js" />
     <EmbeddedResource Include="WasmScripts\UnoSms.js" />
     <EmbeddedResource Include="WasmScripts\UnoTextToSpeech.js" />
     <EmbeddedResource Include="WasmScripts\UnoUtils.js" />
+    <EmbeddedResource Include="WasmScripts\UnoUuid.js" />
     <EmbeddedResource Include="WasmScripts\UnoVibration.js" />
   </ItemGroup>
   

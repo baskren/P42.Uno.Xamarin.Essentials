@@ -3,5 +3,11 @@
     <type fullname="Xamarin.Essentials.SharingExtensions">
       <method name="GetShareRequestJsonForHtmlElement" />
     </type>
+    <type fullname="Xamarin.Essentials.OrientationSensor">
+      <method name="DataUpdated" />
+    </type>
+    <type fullname="Xamarin.Essentials.OrientationSensor">
+      <method name="LegacyDataUpdated" />
+    </type>
   </assembly>
 </linker>

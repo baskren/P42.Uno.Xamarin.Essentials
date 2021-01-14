@@ -1,41 +1,50 @@
-﻿using Windows.Devices.Sensors;
-using WindowsOrientationSensor = Windows.Devices.Sensors.OrientationSensor;
+﻿using System;
+using Uno.Foundation;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Xamarin.Essentials
 {
+    // IMPORTANT NOTE:
+    // Requires the use of Feature-Policy or Permissions-Policy in the HTTP response header
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Feature_Policy
     public static partial class OrientationSensor
     {
         // keep around a reference so we can stop this same instance
-        static WindowsOrientationSensor sensor;
 
-        internal static WindowsOrientationSensor DefaultSensor =>
-          WindowsOrientationSensor.GetDefault();
-
-        internal static bool IsSupported =>
-            DefaultSensor != null;
+        internal static bool IsSupported
+        {
+            get
+            {
+                return WebAssemblyRuntime.InvokeJS($"UnoOrientation_IsAvailable()") == "true";
+            }
+        }
 
         internal static void PlatformStart(SensorSpeed sensorSpeed)
         {
-            sensor = DefaultSensor;
-
-            var interval = sensorSpeed.ToPlatform();
-
-            sensor.ReportInterval = sensor.MinimumReportInterval >= interval ? sensor.MinimumReportInterval : interval;
-
-            sensor.ReadingChanged += DataUpdated;
+            var frequency = sensorSpeed.ToPlatform();
+            WebAssemblyRuntime.InvokeJS($"UnoOrientation_Start({frequency})");
         }
 
-        static void DataUpdated(object sender, OrientationSensorReadingChangedEventArgs e)
+        static void DataUpdated(string json)
         {
-            var reading = e.Reading;
-            var data = new OrientationSensorData(reading.Quaternion.X, reading.Quaternion.Y, reading.Quaternion.Z, reading.Quaternion.W);
+            var reading = JsonConvert.DeserializeObject<List<double>>(json);
+            var data = new OrientationSensorData(reading[0], reading[1], reading[2], reading[3]);
             OnChanged(data);
+        }
+
+        static void LegacyDataUpdated(string json)
+        {
+            var reading = JsonConvert.DeserializeObject(json);
+            //var data = new OrientationSensorData(reading.Quaternion.X, reading.Quaternion.Y, reading.Quaternion.Z, reading.Quaternion.W);
+            //OnChanged(data);
         }
 
         internal static void PlatformStop()
         {
-            sensor.ReadingChanged -= DataUpdated;
-            sensor.ReportInterval = 0;
+            WebAssemblyRuntime.InvokeJS("UnoOrientation_Stop()");
         }
+
     }
 }

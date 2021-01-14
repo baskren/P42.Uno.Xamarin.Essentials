@@ -63,6 +63,11 @@ namespace Xamarin.Essentials
 
         internal virtual Task<Stream> PlatformOpenReadAsync() =>
             File.OpenStreamForReadAsync();
+
+        public override string ToString()
+        {
+            return "{ type: " + GetType() + ", path: " + FullPath + ", contentType: " + contentType + ", name: " + FileName + " }";
+        }
     }
 
     public partial class FileResult

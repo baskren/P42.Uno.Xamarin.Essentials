@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.Storage.AccessCache;
-using Windows.Storage.Pickers;
+using Newtonsoft.Json;
+using Uno.Foundation;
 
 namespace Xamarin.Essentials
 {
@@ -12,54 +10,32 @@ namespace Xamarin.Essentials
     {
         static async Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
         {
-            var picker = new FileOpenPicker
+            System.Diagnostics.Debug.WriteLine("FilePicker. options.Title: [" + options.PickerTitle + "]");
+            System.Diagnostics.Debug.WriteLine("FilePicker. options.FileTypes: [" + string.Join(", ", options.FileTypes) + "]");
+            var jsonOptions = JsonConvert.SerializeObject(options);
+            System.Diagnostics.Debug.WriteLine("FilePicker.PlatformPickAsync: jsonOptions: " + jsonOptions);
+            var javascript = $"UnoFilePicker_Pick('{jsonOptions}', {allowMultiple.ToString().ToLower()})";
+            System.Diagnostics.Debug.WriteLine("FilePicker.PlatformPickAsync: javascript: " + javascript);
+
+            var jsonResult = await WebAssemblyRuntime.InvokeAsync(javascript);
+            System.Diagnostics.Debug.WriteLine("FilePicker.result: " + jsonResult);
+
+            var payload = JsonConvert.DeserializeObject<Dictionary<string, List<Dictionary<string, string>>>>(jsonResult);
+
+            var results = new List<FileResult>();
+            var files = payload["Files"];
+            foreach (var file in files)
             {
-                ViewMode = PickerViewMode.List,
-                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
-            };
-
-            SetFileTypes(options, picker);
-
-            var resultList = new List<StorageFile>();
-
-            if (allowMultiple)
-            {
-                var fileList = await picker.PickMultipleFilesAsync();
-                if (fileList != null)
-                    resultList.AddRange(fileList);
-            }
-            else
-            {
-                var file = await picker.PickSingleFileAsync();
-                if (file != null)
-                    resultList.Add(file);
-            }
-
-            foreach (var file in resultList)
-                StorageApplicationPermissions.FutureAccessList.Add(file);
-
-            return resultList.Select(storageFile => new FileResult(storageFile));
-        }
-
-        static void SetFileTypes(PickOptions options, FileOpenPicker picker)
-        {
-            var hasAtLeastOneType = false;
-
-            if (options?.FileTypes?.Value != null)
-            {
-                foreach (var type in options.FileTypes.Value)
+                if (file.TryGetValue("FullPath", out var path))
                 {
-                    var ext = FileSystem.Extensions.Clean(type);
-                    if (!string.IsNullOrWhiteSpace(ext))
-                    {
-                        picker.FileTypeFilter.Add(ext);
-                        hasAtLeastOneType = true;
-                    }
+                    System.Diagnostics.Debug.WriteLine("FilePicker. path [" + path + "]");
+                    var storageFile = await Windows.Storage.StorageFile.GetFileFromPathAsync(path);
+                    var fileResult = new FileResult(storageFile);
+                    System.Diagnostics.Debug.WriteLine($"FilePicker fileResult: " + fileResult);
+                    results.Add(fileResult);
                 }
             }
-
-            if (!hasAtLeastOneType)
-                picker.FileTypeFilter.Add("*");
+            return results;
         }
     }
 
