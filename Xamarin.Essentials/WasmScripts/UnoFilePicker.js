@@ -6,17 +6,21 @@ function UnoFilePicker_Pick(optionsJson, multiple) {
         const options = JSON.parse(optionsJson);
         console.log('options: ' + options);
 
-
         var picker = document.createElement('input');
         picker.setAttribute('type', 'file');
 
+        console.log('1');
         if (multiple === true)
             picker.setAttribute('multiple', '');
+        console.log('2');
 
-        if ('FileTypes' in options && 'Value' in options.FileTypes) {
+        console.log('FileTypes: ' + options.FileTypes);
+
+        if ('FileTypes' in options && options.FileTypes !== null && options.FileTypes !== undefined && 'Value' in options.FileTypes) {
             console.log('options.FileTypes: ' + JSON.stringify(options.FileTypes.Value));
             picker.setAttribute('accept', options.FileTypes.Value);
         }
+        console.log('3');
         //picker.setAttribute('placeholder', placeholder);
         //picker.setAttribute('value', value);
 
@@ -24,10 +28,15 @@ function UnoFilePicker_Pick(optionsJson, multiple) {
             console.log('abort');
             resolve(null);
         };
+        console.log('4');
+
         picker.oncancel = function () {
             console.log('cancel');
             resolve(null);
         };
+
+        console.log('5');
+
         picker.onchange = function () {
 
             //Blob.prototype.arrayBuffer ??= function () { return new Response(this).arrayBuffer() }
