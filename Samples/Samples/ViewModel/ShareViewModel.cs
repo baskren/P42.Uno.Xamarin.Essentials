@@ -18,16 +18,10 @@ namespace Samples.ViewModel
 
         static string CreateFile(string fileName, string fileContents, string emptyName)
         {
-            System.Diagnostics.Debug.WriteLine("ShareViewModel.CreateFile ENTER");
             var fn = string.IsNullOrWhiteSpace(fileName) ? emptyName : fileName.Trim();
-            System.Diagnostics.Debug.WriteLine("ShareViewModel. A");
             var file = Path.Combine(FileSystem.CacheDirectory, fn);
-            System.Diagnostics.Debug.WriteLine("ShareViewModel. B");
             File.WriteAllText(file, fileContents);
-            System.Diagnostics.Debug.WriteLine("ShareViewModel. C");
             var text = File.ReadAllText(file);
-            System.Diagnostics.Debug.WriteLine("ShareViewModel. text=[" + text + "]");
-            System.Diagnostics.Debug.WriteLine("ShareViewModel. path=[" + file + "]");
             return file;
         }
 

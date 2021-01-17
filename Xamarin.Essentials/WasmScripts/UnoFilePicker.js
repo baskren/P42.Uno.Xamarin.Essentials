@@ -10,7 +10,7 @@ function UnoFilePicker_Pick(optionsJson, multiple) {
             picker.setAttribute('multiple', '');
 
         if ('FileTypes' in options && options.FileTypes !== null && options.FileTypes !== undefined && 'Value' in options.FileTypes) {
-            console.log('options.FileTypes: ' + JSON.stringify(options.FileTypes.Value));
+            //console.log('options.FileTypes: ' + JSON.stringify(options.FileTypes.Value));
             picker.setAttribute('accept', options.FileTypes.Value);
         }
 
@@ -92,11 +92,11 @@ function UnoFilePicker_Export(shareFile, fileName) {
     //console.log(' file: ' + file);
     //saveAs(file, fileName);
     UnoFileSystem_GetDataFromJsFile(file).then(function (data) {
-        if ('text' in data)
-            console.log('text: ' + data.text);
-        else if ('view' in data)
-            console.log('view: ' + toHex(data.view));
-        else if ('error' in data)
+        //if ('text' in data)
+        //    console.log('text: ' + data.text);
+        //else if ('view' in data)
+        //    console.log('view: ' + toHex(data.view));
+        if ('error' in data)
             console.log('error: ' + data.error);
         else if ('abort' in data)
             console.log('abort');

@@ -157,7 +157,7 @@ namespace Samples.ViewModel
                     {
 #if UNO_PLATFORM
                         var asm = GetType().Assembly;
-
+                        /*
                         System.Diagnostics.Debug.WriteLine("FilePickerViewModel. asm:");
                         System.Diagnostics.Debug.WriteLine("FilePickerViewModel.   .CodeBase: " + asm.CodeBase);
                         System.Diagnostics.Debug.WriteLine("FilePickerViewModel.   .FullName: " + asm.FullName);
@@ -168,7 +168,6 @@ namespace Samples.ViewModel
                             System.Diagnostics.Debug.WriteLine("FilePickerViewModel.          " + attribute);
                         }
                         System.Diagnostics.Debug.WriteLine("FilePickerViewModel.        ");
-
                         var asmName = asm.FullName.Split(',')[0].Trim();
                         var resourceId = asmName + ".Assets.doodle.png";
                         System.Diagnostics.Debug.WriteLine("FilePickerViewModel. resourceId: " + resourceId);
@@ -176,7 +175,6 @@ namespace Samples.ViewModel
                         var resources = GetType().Assembly.GetManifestResourceNames();
                         foreach (var resource in resources)
                             System.Diagnostics.Debug.WriteLine("                " + resource);
-                        /*
 
                         using (var aStream = GetType().Assembly.GetManifestResourceStream(resourceId))
                         {
@@ -198,7 +196,7 @@ namespace Samples.ViewModel
                         }
                         */
 
-                        System.Diagnostics.Debug.WriteLine("FilePickerViewModel. IS IMAGE");
+                        //System.Diagnostics.Debug.WriteLine("FilePickerViewModel. IS IMAGE");
                         using (var stream = await LastSingleFileResult.OpenReadAsync())
                         {
                             /*
@@ -219,16 +217,12 @@ namespace Samples.ViewModel
                             */
                             stream.Position = 0;
 
-                            System.Diagnostics.Debug.WriteLine("FilePickerViewModel. STREAM OPEN");
                             var randomStream = stream.AsRandomAccessStream();
                             var imageResult = new ImageSource();
                             await imageResult.SetSourceAsync(randomStream);
-                            System.Diagnostics.Debug.WriteLine("FilePickerViewModel. imageResult SOURCE SET");
                             Image = imageResult;
                             IsImageVisible = true;
-                            System.Diagnostics.Debug.WriteLine("FilePickerViewModel. DONE WITH STREAM");
                         }
-                        System.Diagnostics.Debug.WriteLine("FilePickerViewModel. SHOULD BE CLOSED!!!");
 #else
                         using (var stream = await LastSingleFileResult.OpenReadAsync())
                         {

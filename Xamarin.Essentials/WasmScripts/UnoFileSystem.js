@@ -6,7 +6,7 @@
 
 function UnoFileSystem_GetShareFileType(shareFile, isUtf8) {
 
-    if (shareFile.ContentType && !isEmpty(shareFile.ContentType))
+    if (shareFile.ContentType && !isEmpty(shareFile.ContentType) && shareFile.ContentType != 'application/octet-stream')
         return shareFile.ContentType;
 
     let mimeType = UnoMime_Lookup(shareFile.FullPath);
@@ -59,7 +59,6 @@ function UnoFileSystem_ShareFilesToJsFiles(shareFiles) {
  */
 
 function UnoFileSystem_GetFsFileArrayBuf(array) {
-    console.log('GetFsFileArrayBuf');
     var out, i, len, c;
     var char2, char3;
     var bom = false;
@@ -67,9 +66,7 @@ function UnoFileSystem_GetFsFileArrayBuf(array) {
     len = array.length;
     i = 0;
     while (i < len) {
-        console.log('  i: ' + i);
         c = array[i++];
-        console.log('  c: ' + c);
         switch (c >> 4) {
             case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
                 // 0xxxxxxx
@@ -114,7 +111,7 @@ function UnoFileSystem_GetDataFromJsFile(file) {
 
         reader.onload = function (e) {
             let content = e.target.result;
-            console.log('content: length[' + content.length + ']');
+            //console.log('content: length[' + content.length + ']');
 
             if (isText) {
                 result.text = content;
