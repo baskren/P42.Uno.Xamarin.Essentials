@@ -19,6 +19,7 @@ namespace Samples.ViewModel
         string text;
         ImageSource image;
         bool isImageVisible;
+        FileResult lastSingleFileResult;
 
         public FilePickerViewModel()
         {
@@ -52,6 +53,12 @@ namespace Samples.ViewModel
         {
             get => image;
             set => SetProperty(ref image, value);
+        }
+
+        public FileResult LastSingleFileResult 
+        { 
+            get => lastSingleFileResult;
+            set => SetProperty(ref lastSingleFileResult, value); 
         }
 
         public bool IsImageVisible
@@ -111,14 +118,14 @@ namespace Samples.ViewModel
         async void DoPickAndSend()
         {
             // pick a file
-            var result = await PickAndShow(PickOptions.Images);
-            if (result == null)
+            LastSingleFileResult = await PickAndShow(PickOptions.Images);
+            if (LastSingleFileResult == null)
                 return;
 
             // copy it locally
-            var copyPath = Path.Combine(FileSystem.CacheDirectory, result.FileName);
+            var copyPath = Path.Combine(FileSystem.CacheDirectory, LastSingleFileResult.FileName);
             using (var destination = File.Create(copyPath))
-            using (var source = await result.OpenReadAsync())
+            using (var source = await LastSingleFileResult.OpenReadAsync())
                 await source.CopyToAsync(destination);
 
             // send it via an email
@@ -137,30 +144,97 @@ namespace Samples.ViewModel
         {
             try
             {
-                var result = await FilePicker.PickAsync(options);
+                LastSingleFileResult = await FilePicker.PickAsync(options);
 
-                if (result != null)
+                if (LastSingleFileResult != null)
                 {
-                    var size = await GetStreamSizeAsync(result);
+                    var size = await GetStreamSizeAsync(LastSingleFileResult);
 
-                    Text = $"File Name: {result.FileName} ({size:0.00} KB)";
+                    Text = $"File Name: {LastSingleFileResult.FileName} ({size:0.00} KB)";
 
-                    var ext = Path.GetExtension(result.FileName).ToLowerInvariant();
+                    var ext = Path.GetExtension(LastSingleFileResult.FileName).ToLowerInvariant();
                     if (ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".gif")
                     {
 #if UNO_PLATFORM
-                        if (await result.OpenReadAsync() is IRandomAccessStream stream)
+                        var asm = GetType().Assembly;
+
+                        System.Diagnostics.Debug.WriteLine("FilePickerViewModel. asm:");
+                        System.Diagnostics.Debug.WriteLine("FilePickerViewModel.   .CodeBase: " + asm.CodeBase);
+                        System.Diagnostics.Debug.WriteLine("FilePickerViewModel.   .FullName: " + asm.FullName);
+                        System.Diagnostics.Debug.WriteLine("FilePickerViewModel.   .ImageRuntimeVersion: " + asm.ImageRuntimeVersion);
+                        System.Diagnostics.Debug.WriteLine("FilePickerViewModel.   .CustomAttributes");
+                        foreach (var attribute in asm.CustomAttributes)
                         {
+                            System.Diagnostics.Debug.WriteLine("FilePickerViewModel.          " + attribute);
+                        }
+                        System.Diagnostics.Debug.WriteLine("FilePickerViewModel.        ");
+
+                        var asmName = asm.FullName.Split(',')[0].Trim();
+                        var resourceId = asmName + ".Assets.doodle.png";
+                        System.Diagnostics.Debug.WriteLine("FilePickerViewModel. resourceId: " + resourceId);
+
+                        var resources = GetType().Assembly.GetManifestResourceNames();
+                        foreach (var resource in resources)
+                            System.Diagnostics.Debug.WriteLine("                " + resource);
+                        /*
+
+                        using (var aStream = GetType().Assembly.GetManifestResourceStream(resourceId))
+                        {
+                            System.Diagnostics.Debug.WriteLine("FilePickerViewModel. FROM /ASSETS/doodle.png");
+                            var log = "";
+                            for (var i = 0; i < 16; i++)
+                            {
+                                for (var j = 0; j < 4; j++)
+                                {
+                                    var buf = new byte[4];
+                                    aStream.Read(buf, 0, 4);
+                                    foreach (var b in buf)
+                                        log += b.ToString("X2");
+                                    log += " ";
+                                }
+                                log += "\n";
+                            }
+                            System.Diagnostics.Debug.WriteLine(log);
+                        }
+                        */
+
+                        System.Diagnostics.Debug.WriteLine("FilePickerViewModel. IS IMAGE");
+                        using (var stream = await LastSingleFileResult.OpenReadAsync())
+                        {
+                            /*
+                            var log = "";
+                            for (var i = 0; i < 16; i++)
+                            {
+                                for (var j = 0; j < 4; j++)
+                                {
+                                    var buf = new byte[4];
+                                    stream.Read(buf, 0, 4);
+                                    foreach (var b in buf)
+                                        log += b.ToString("X2");
+                                    log += " ";
+                                }
+                                log += "\n";
+                            }
+                            System.Diagnostics.Debug.WriteLine(log);
+                            */
+                            stream.Position = 0;
+
+                            System.Diagnostics.Debug.WriteLine("FilePickerViewModel. STREAM OPEN");
+                            var randomStream = stream.AsRandomAccessStream();
                             var imageResult = new ImageSource();
-                            await imageResult.SetSourceAsync(stream);
+                            await imageResult.SetSourceAsync(randomStream);
+                            System.Diagnostics.Debug.WriteLine("FilePickerViewModel. imageResult SOURCE SET");
                             Image = imageResult;
                             IsImageVisible = true;
+                            System.Diagnostics.Debug.WriteLine("FilePickerViewModel. DONE WITH STREAM");
                         }
+                        System.Diagnostics.Debug.WriteLine("FilePickerViewModel. SHOULD BE CLOSED!!!");
 #else
-                        var stream = await result.OpenReadAsync();
-
-                        Image = ImageSource.FromStream(() => stream);
-                        IsImageVisible = true;
+                        using (var stream = await LastSingleFileResult.OpenReadAsync())
+                        {
+                            Image = ImageSource.FromStream(() => stream);
+                            IsImageVisible = true;
+                        }
 #endif
                     }
                     else
@@ -173,7 +247,7 @@ namespace Samples.ViewModel
                     Text = $"Pick cancelled.";
                 }
 
-                return result;
+                return LastSingleFileResult;
             }
             catch (Exception ex)
             {
@@ -204,6 +278,7 @@ namespace Samples.ViewModel
 
                 if (resultList != null && resultList.Any())
                 {
+                    LastSingleFileResult = null;
                     Text = "File Names: " + string.Join(", ", resultList.Select(result => result.FileName));
 
                     // only showing the first file's content

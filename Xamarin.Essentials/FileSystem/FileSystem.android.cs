@@ -379,4 +379,12 @@ namespace Xamarin.Essentials
             return Task.FromResult<Stream>(stream);
         }
     }
+
+    public partial class ReadOnlyFile
+    {
+        public ReadOnlyFile(Java.IO.File file)
+            : base(file)
+        {
+        }
+    }
 }

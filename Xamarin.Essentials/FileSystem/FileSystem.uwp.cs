@@ -49,6 +49,14 @@ namespace Xamarin.Essentials
             File.OpenStreamForReadAsync();
     }
 
+    public partial class ReadOnlyFile
+    {
+        public ReadOnlyFile(IStorageFile file)
+            : base(file)
+        {
+        }
+    }
+
     public partial class FileResult
     {
         internal FileResult(IStorageFile file)

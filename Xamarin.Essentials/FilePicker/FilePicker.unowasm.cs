@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Uno.Foundation;
@@ -10,15 +11,9 @@ namespace Xamarin.Essentials
     {
         static async Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
         {
-            System.Diagnostics.Debug.WriteLine("FilePicker. options.Title: [" + options.PickerTitle + "]");
-            System.Diagnostics.Debug.WriteLine("FilePicker. options.FileTypes: [" + string.Join(", ", options.FileTypes) + "]");
             var jsonOptions = JsonConvert.SerializeObject(options);
-            System.Diagnostics.Debug.WriteLine("FilePicker.PlatformPickAsync: jsonOptions: " + jsonOptions);
             var javascript = $"UnoFilePicker_Pick('{jsonOptions}', {allowMultiple.ToString().ToLower()})";
-            System.Diagnostics.Debug.WriteLine("FilePicker.PlatformPickAsync: javascript: " + javascript);
-
             var jsonResult = await WebAssemblyRuntime.InvokeAsync(javascript);
-            System.Diagnostics.Debug.WriteLine("FilePicker.result: " + jsonResult);
 
             var payload = JsonConvert.DeserializeObject<Dictionary<string, List<Dictionary<string, string>>>>(jsonResult);
 
@@ -28,14 +23,51 @@ namespace Xamarin.Essentials
             {
                 if (file.TryGetValue("FullPath", out var path))
                 {
-                    System.Diagnostics.Debug.WriteLine("FilePicker. path [" + path + "]");
                     var storageFile = await Windows.Storage.StorageFile.GetFileFromPathAsync(path);
                     var fileResult = new FileResult(storageFile);
-                    System.Diagnostics.Debug.WriteLine($"FilePicker fileResult: " + fileResult);
                     results.Add(fileResult);
                 }
             }
             return results;
+        }
+
+        static async Task<string> PlatformExportAsync(byte[] bytes, SaveOptions options)
+        {
+            var path = Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, Guid.NewGuid().ToString());
+            File.WriteAllBytes(path, bytes);
+
+            var contentType = options?.ContentType;
+            if (string.IsNullOrWhiteSpace(contentType))
+                contentType = FileSystem.MimeTypes.OctetStream;
+
+            var shareFile = new ShareFile(path, contentType);
+            var json = JsonConvert.SerializeObject(shareFile);
+
+            var fileName = options?.SuggestedFileName;
+            if (string.IsNullOrWhiteSpace(fileName))
+                fileName = "data.bin";
+            WebAssemblyRuntime.InvokeJS($"UnoFilePicker_Export('{json}', '{fileName}')");
+            return fileName;
+        }
+
+        static async Task<string> PlatformExportAsync(string text, SaveOptions options)
+        {
+            //System.Diagnostics.Debug.WriteLine("FilePicker. TEXT");
+            var path = Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, Guid.NewGuid().ToString());
+            File.WriteAllText(path, text);
+
+            var contentType = options?.ContentType;
+            if (string.IsNullOrWhiteSpace(contentType))
+                contentType = FileSystem.MimeTypes.TextPlain;
+
+            var shareFile = new ShareFile(path, contentType);
+            var json = JsonConvert.SerializeObject(shareFile);
+
+            var fileName = options?.SuggestedFileName;
+            if (string.IsNullOrWhiteSpace(fileName))
+                fileName = "data.text";
+            WebAssemblyRuntime.InvokeJS($"UnoFilePicker_Export('{json}', '{fileName}')");
+            return fileName;
         }
     }
 

@@ -8,6 +8,12 @@ namespace Xamarin.Essentials
     {
         static Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
             => throw new NotImplementedInReferenceAssemblyException();
+
+        static async Task<string> PlatformExportAsync(byte[] bytes, SaveOptions options)
+            => throw new NotImplementedInReferenceAssemblyException();
+
+        static async Task<string> PlatformExportAsync(string text, SaveOptions options)
+            => throw new NotImplementedInReferenceAssemblyException();
     }
 
     public partial class FilePickerFileType

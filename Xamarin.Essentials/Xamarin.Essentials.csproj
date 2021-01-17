@@ -166,11 +166,13 @@
 
   <ItemGroup>
     <None Remove="mdoc.targets" />
+    <None Remove="WasmScripts\FileSaver.min.js" />
     <None Remove="WasmScripts\html2canvas.min.js" />
     <None Remove="WasmScripts\jquery-3.5.1.slim.min.js" />
     <None Remove="WasmScripts\motion-sensors.js" />
     <None Remove="WasmScripts\sensor.js" />
     <None Remove="WasmScripts\UnoFilePicker.js" />
+    <None Remove="WasmScripts\UnoFileSystem.js" />
     <None Remove="WasmScripts\UnoMimeTypes.js" />
     <None Remove="WasmScripts\UnoOrientation.js" />
     <None Remove="WasmScripts\UnoPathExtentions.js" />
@@ -189,11 +191,13 @@
 
   <!-- JAVASCRIPT FOR WASM -->
   <ItemGroup>
+    <EmbeddedResource Include="WasmScripts\FileSaver.min.js" />
     <EmbeddedResource Include="WasmScripts\html2canvas.min.js" />
     <EmbeddedResource Include="WasmScripts\jquery-3.5.1.slim.min.js" />
     <EmbeddedResource Include="WasmScripts\motion-sensors.js" />
     <EmbeddedResource Include="WasmScripts\sensor.js" />
     <EmbeddedResource Include="WasmScripts\UnoFilePicker.js" />
+    <EmbeddedResource Include="WasmScripts\UnoFileSystem.js" />
     <EmbeddedResource Include="WasmScripts\UnoMimeTypes.js" />
     <EmbeddedResource Include="WasmScripts\UnoOrientation.js" />
     <EmbeddedResource Include="WasmScripts\UnoPathExtentions.js" />

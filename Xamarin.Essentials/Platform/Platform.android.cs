@@ -34,6 +34,8 @@ namespace Xamarin.Essentials
 
         internal const int requestCodeStart = 12000;
 
+        internal const int requestCodeSaveFile = 12100;
+
         static int requestCode = requestCodeStart;
 
         internal static int NextRequestCode()

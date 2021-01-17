@@ -172,7 +172,7 @@ namespace Xamarin.Essentials
             => PlatformOpenReadAsync();
     }
 
-    public class ReadOnlyFile : FileBase
+    public partial class ReadOnlyFile : FileBase
     {
         public ReadOnlyFile(string fullPath)
             : base(fullPath)
@@ -189,10 +189,12 @@ namespace Xamarin.Essentials
         {
         }
 
+#if !NETFX_CORE && !__WASM__
         public ReadOnlyFile(Windows.Storage.IStorageFile storageFile)
             : base(storageFile.Path, storageFile.ContentType)
         {
         }
+#endif
 
         public static explicit operator ReadOnlyFile(Windows.Storage.StorageFile storageFile)
             => new ReadOnlyFile(storageFile.Path);
@@ -230,4 +232,5 @@ namespace Xamarin.Essentials
         public static explicit operator FileResult(Windows.Storage.StorageFile storageFile)
             => new FileResult(storageFile.Path);
     }
+
 }

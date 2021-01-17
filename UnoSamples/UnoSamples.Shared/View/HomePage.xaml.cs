@@ -30,21 +30,28 @@ namespace Samples.View
             _listView.IsItemClickEnabled = true;
         }
 
+        bool pushing;
+
         async void OnSampleClicked(object sender, ItemClickEventArgs e)
         {
-            var item = e.ClickedItem as SampleItem;
-            if (item == null)
-                return;
+            if (!pushing)
+            {
+                pushing = true;
+                var item = e.ClickedItem as SampleItem;
+                if (item == null)
+                    return;
 
-            Page page;
-            if (item.PageType == typeof(TextToSpeechPage))
-                page = new TextToSpeechPage();
-            else
-                page = (Page)Activator.CreateInstance(item.PageType);
-            await this.PushAsync(page);
+                Page page;
+                if (item.PageType == typeof(TextToSpeechPage))
+                    page = new TextToSpeechPage();
+                else
+                    page = (Page)Activator.CreateInstance(item.PageType);
+                await this.PushAsync(page);
 
-            // deselect Item
-            ((ListView)sender).SelectedItem = null;
+                // deselect Item
+                ((ListView)sender).SelectedItem = null;
+                pushing = false;
+            }
         }
     }
 }

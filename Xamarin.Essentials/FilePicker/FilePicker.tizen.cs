@@ -44,6 +44,12 @@ namespace Xamarin.Essentials
 
             return await tcs.Task;
         }
+
+        static async Task<string> PlatformExportAsync(byte[] bytes, SaveOptions options)
+            => throw new NotImplementedInReferenceAssemblyException();
+
+        static async Task<string> PlatformExportAsync(string text, SaveOptions options)
+            => throw new NotImplementedInReferenceAssemblyException();
     }
 
     public partial class FilePickerFileType

@@ -13,6 +13,38 @@ namespace Xamarin.Essentials
 
         public static Task<IEnumerable<FileResult>> PickMultipleAsync(PickOptions options = null) =>
             PlatformPickAsync(options ?? PickOptions.Default, true);
+
+        public static Task<string> ExportAsync(string text, SaveOptions options = null) =>
+            PlatformExportAsync(text, options);
+
+        public static Task<string> ExportAsync(byte[] bytes, SaveOptions options = null) =>
+            PlatformExportAsync(bytes, options);
+
+        public static async Task<string> ExportAsync(FileBase fileBase, SaveOptions options = null)
+        {
+            options = options ?? new SaveOptions();
+            options.ContentType = fileBase.ContentType;
+            if (string.IsNullOrWhiteSpace(options.SuggestedFileName))
+                options.SuggestedFileName = fileBase.FileName;
+            using (var stream = await fileBase.OpenReadAsync())
+            {
+                if (fileBase.ContentType.StartsWith("text"))
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        var text = reader.ReadToEnd();
+                        return await ExportAsync(text, options);
+                    }
+                }
+                else
+                {
+                    var bytes = new byte[stream.Length];
+                    await stream.ReadAsync(bytes, 0, (int)stream.Length);
+                    return await ExportAsync(bytes, options);
+                }
+            }
+        }
+
     }
 
     public partial class FilePickerFileType
@@ -60,5 +92,24 @@ namespace Xamarin.Essentials
         public string PickerTitle { get; set; }
 
         public FilePickerFileType FileTypes { get; set; }
+
+        public override string ToString()
+        {
+            return "{ PickerTitle: " + PickerTitle + ", FileTypes: [" + string.Join(", ", FileTypes) + "] }";
+        }
     }
+
+    public class SaveOptions
+    {
+        public string PickerTitle { get; set; }
+
+        public string SuggestedFileName { get; set; }
+
+        public string ContentType { get; set; }
+
+        public string FileTypeDisplayName { get; set; }
+
+    }
+
+
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AppKit;
+using Foundation;
 using MobileCoreServices;
 
 namespace Xamarin.Essentials
@@ -46,6 +47,43 @@ namespace Xamarin.Essentials
             }
 
             panel.AllowedFileTypes = allowedFileTypes.ToArray();
+        }
+
+        static async Task<string> PlatformExportAsync(byte[] bytes, SaveOptions options)
+            => await PlatformExportAsync(options, async (url) => await System.IO.File.WriteAllBytesAsync(url.Path, bytes));
+
+        static async Task<string> PlatformExportAsync(string text, SaveOptions options)
+            => await PlatformExportAsync(options, async (url) => await System.IO.File.WriteAllTextAsync(url.Path, text));
+
+        static async Task<string> PlatformExportAsync(SaveOptions options, Func<NSUrl, Task> writeAction)
+        {
+            var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            using (var folderUrl = new NSUrl(folderPath))
+            {
+                using (var panel = new NSOpenPanel
+                {
+                    CanCreateDirectories = true,
+                    CanChooseDirectories = false,
+                    CanChooseFiles = true,
+                    FloatingPanel = true,
+                    AllowsMultipleSelection = false,
+                    ResolvesAliases = true,
+                    DirectoryUrl = folderUrl,
+                    //Prompt = "THIS IS THE PROMPT!",
+                    Title = options?.PickerTitle ?? string.Empty,
+                })
+                {
+                    //if (!string.IsNullOrWhiteSpace(message))
+                    //    panel.Message = message;
+
+                    if (panel.RunModal(folderUrl.Path, options?.SuggestedFileName, new string[] { options?.ContentType ?? FileSystem.MimeTypes.TextPlain }) == 1)
+                    {
+                        await writeAction?.Invoke(panel.Url);
+                        return panel.Url.Path;
+                    }
+                }
+            }
+            return null;
         }
     }
 

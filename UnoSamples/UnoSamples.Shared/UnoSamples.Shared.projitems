@@ -197,6 +197,7 @@
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Assets\app_info_action_icon.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\battery_action_icon.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Assets\doodle.png" />
     <Content Include="$(MSBuildThisFileDirectory)FileSystemTemplate.txt" />
   </ItemGroup>
 </Project>

@@ -42,9 +42,18 @@ namespace Xamarin.Essentials
 
     public partial class FileBase
     {
+        NSUrl url;
+
+        public NSUrl Url
+        {
+            get => url ?? new NSUrl(FullPath);
+            private set => url = value;
+        }
+
         internal FileBase(NSUrl file)
             : this(file?.Path)
         {
+            Url = file;
             FileName = NSFileManager.DefaultManager.DisplayName(file?.Path);
         }
 
@@ -65,4 +74,13 @@ namespace Xamarin.Essentials
         internal virtual Task<Stream> PlatformOpenReadAsync() =>
             Task.FromResult((Stream)File.OpenRead(FullPath));
     }
+
+    public partial class ReadOnlyFile
+    {
+        public ReadOnlyFile(NSUrl file)
+            : base(file)
+        {
+        }
+    }
+
 }

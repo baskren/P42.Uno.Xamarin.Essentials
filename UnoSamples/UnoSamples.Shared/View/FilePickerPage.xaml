@@ -15,43 +15,68 @@
         <viewmodels:FilePickerViewModel />
     </views:BasePage.DataContext>
 
-    <StackPanel Padding="12" Spacing="6">
-        <TextBlock FontWeight="Bold" Text="Pick files from storage." />
+    <ScrollViewer>
 
-        <StackPanel Spacing="10">
+        <StackPanel Padding="12" Spacing="6">
+            <TextBlock FontWeight="Bold" Text="Pick files from storage." />
+
+            <StackPanel Spacing="10">
+                <Button
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding PickFileCommand}"
+                    Content="Pick file" />
+                <Button
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding PickImageCommand}"
+                    Content="Pick image" />
+                <Button
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding PickPdfCommand}"
+                    Content="Pick pdf" />
+                <Button
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding PickCustomTypeCommand}"
+                    Content="Pick custom type" />
+                <Button
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding PickAndSendCommand}"
+                    Content="Pick image and send email" />
+                <Button
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding PickMultipleFilesCommand}"
+                    Content="Pick multiple files" />
+            </StackPanel>
+
+            <TextBlock HorizontalAlignment="Stretch" Text="{Binding Text}" />
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Export using file name: " />
+                <TextBox
+                    x:Name="_exportFileName"
+                    HorizontalAlignment="Stretch"
+                    IsEnabled="False" />
+            </StackPanel>
             <Button
-                HorizontalAlignment="Stretch"
-                Command="{Binding PickFileCommand}"
-                Content="Pick file" />
-            <Button
-                HorizontalAlignment="Stretch"
-                Command="{Binding PickImageCommand}"
-                Content="Pick image" />
-            <Button
-                HorizontalAlignment="Stretch"
-                Command="{Binding PickPdfCommand}"
-                Content="Pick pdf" />
-            <Button
-                HorizontalAlignment="Stretch"
-                Command="{Binding PickCustomTypeCommand}"
-                Content="Pick custom type" />
-            <Button
-                HorizontalAlignment="Stretch"
-                Command="{Binding PickAndSendCommand}"
-                Content="Pick image and send email" />
-            <Button
-                HorizontalAlignment="Stretch"
-                Command="{Binding PickMultipleFilesCommand}"
-                Content="Pick multiple files" />
+                Name="_exportFileButton"
+                Click="OnExportFileClicked"
+                Content="EXPORT"
+                IsEnabled="False" />
+
+            <Border
+                Background="DarkGray"
+                BorderBrush="AliceBlue"
+                BorderThickness="1">
+                <Image
+                    x:Name="_image"
+                    MinHeight="100"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Source="/Assets/doodle.png"
+                    Stretch="Uniform"
+                    Visibility="Visible" />
+            </Border>
         </StackPanel>
 
-        <TextBlock HorizontalAlignment="Stretch" Text="{Binding Text}" />
-
-        <Image
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Source="{Binding Image}"
-            Visibility="{Binding IsImageVisible, Converter={StaticResource VisibilityConverter}}" />
-    </StackPanel>
+    </ScrollViewer>
 
 </views:BasePage>

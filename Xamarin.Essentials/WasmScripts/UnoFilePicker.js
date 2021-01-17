@@ -2,46 +2,29 @@
 function UnoFilePicker_Pick(optionsJson, multiple) {
     return new Promise(function (resolve, reject) {
 
-        console.log('optionsJson: ' + optionsJson);
         const options = JSON.parse(optionsJson);
-        console.log('options: ' + options);
-
         var picker = document.createElement('input');
         picker.setAttribute('type', 'file');
 
-        console.log('1');
         if (multiple === true)
             picker.setAttribute('multiple', '');
-        console.log('2');
-
-        console.log('FileTypes: ' + options.FileTypes);
 
         if ('FileTypes' in options && options.FileTypes !== null && options.FileTypes !== undefined && 'Value' in options.FileTypes) {
             console.log('options.FileTypes: ' + JSON.stringify(options.FileTypes.Value));
             picker.setAttribute('accept', options.FileTypes.Value);
         }
-        console.log('3');
-        //picker.setAttribute('placeholder', placeholder);
-        //picker.setAttribute('value', value);
 
         picker.onabort = function () {
             console.log('abort');
             resolve(null);
         };
-        console.log('4');
 
         picker.oncancel = function () {
             console.log('cancel');
             resolve(null);
         };
 
-        console.log('5');
-
         picker.onchange = function () {
-
-            //Blob.prototype.arrayBuffer ??= function () { return new Response(this).arrayBuffer() }
-
-            
             let homeAnalysis = FS.analyzePath('/UnoFilePicker', false);
             if (!homeAnalysis.exists)
                 FS.mkdir('/UnoFilePicker');
@@ -60,66 +43,86 @@ function UnoFilePicker_Pick(optionsJson, multiple) {
                 fileObj.FullPath = path;
                 fileObj.ContentType = file.type;
 
-                let reader = new FileReader();
-                reader.onload = function (e) {
+                UnoFileSystem_GetDataFromJsFile(file).then(function (jsFileData) {
                     completed++;
-                    let content = e.target.result;
-                    console.log('content: length[' + content.length + ']');
-                    if (typeof content === "string" || content instanceof String) {
-                        FS.writeFile(path, content);
+                    if ('abort' in jsFileData)
+                        result.Aborts.push(fileObj);
+                    else if ('error' in jsFileData) {
+                        fileObj.Error = reader.error;
+                        result.Errors.push(fileObj);
                     }
-                    else {
-                        var view = new Uint8Array(content);
-                        console.log('view: length[' + view.byteLength + '] buffer.length[' + view.buffer.length + ']')
-                        FS.writeFile(path, view);
+                    else if ('text' in jsFileData) {
+                        result.Files.push(fileObj);
+                        //console.log('text: length[' + jsFileData.text.length + '] ');
+                        FS.writeFile(path, jsFileData.text);
+                        //console.log(' =================== ');
+                        //console.log('path: ' + path);
+                        //console.log(FS.readFile(path));
+                        //console.log(' =================== ');
+                    } else if ('view' in jsFileData) {
+                        result.Files.push(fileObj);
+                        //console.log('view: length[' + jsFileData.view.length + '] buffer.byteLength[' + jsFileData.view.byteLength + ']');
+                        FS.writeFile(path, jsFileData.view);
+                        //console.log(' =================== ');
+                        //console.log('path: ' + path);
+                        //console.log(toHex(FS.readFile(path)));
+                        //console.log(' =================== ');
                     }
-                    
-                    var analysis = FS.analyzePath(path);
-                    console.log('    isRoot: ' + analysis.isRoot);
-                    console.log('    exists: ' + analysis.exists);
-                    console.log('    Error:  ' + analysis.Error);
-                    console.log('    name:   ' + analysis.name);
-                    console.log('    path:   ' + analysis.path);
-                    console.log('    parentPath: ' + analysis.parentPath);
-                    var stats = FS.stat(path);
-                    console.log('    size:   ' + stats.size);
-                    console.log('    atime:  ' + stats.atime);
-                    console.log('    mtime:  ' + stats.mtime);
-                    console.log('    ctime:  ' + stats.ctime);
 
-
-                    result.Files.push(fileObj);
                     if (completed == picker.files.length)
                         resolve(JSON.stringify(result));
-                };
-                reader.onabort = function (e) {
-                    completed++;
-                    result.Aborts.push(fileObj);
-                    if (completed == picker.files.length)
-                        resolve(JSON.stringify(result));
-                }
-                reader.onerror = function (e) {
-                    completed++;
-                    fileObj.Error = reader.error;
-                    result.Errors.push(fileObj);
-                    if (completed == picker.files.length)
-                        resolve(JSON.stringify(result));
-                }
-
-                if (file.type.toString().startsWith('text')) {
-                    reader.readAsText(file);
-                } else {
-                    reader.readAsArrayBuffer(file);
-                }
-
-                console.log('selectedFile: name[' + file.name + '] size[' + file.size + '] type[' + file.type + ']');
+                });
             }
-            //resolve(JSON.stringify(result));
         }
+
         picker.onclose = function () {
             console.log('closed');
+            resolve(null);
         }
 
         picker.click();
     });
+}
+
+function UnoFilePicker_Export(shareFile, fileName) {
+    //console.log('UnoFilePicker_Export');
+    //console.log(' shareFile: ' + shareFile);
+    //console.log(' fileName: ' + fileName);
+    let file = UnoFileSystem_ShareFileToJsFile(shareFile);
+    //console.log(' file: ' + file);
+    //saveAs(file, fileName);
+    UnoFileSystem_GetDataFromJsFile(file).then(function (data) {
+        if ('text' in data)
+            console.log('text: ' + data.text);
+        else if ('view' in data)
+            console.log('view: ' + toHex(data.view));
+        else if ('error' in data)
+            console.log('error: ' + data.error);
+        else if ('abort' in data)
+            console.log('abort');
+        saveAs(file, fileName);
+    });
+}
+
+
+// Pre-Init
+const LUT_HEX_4b = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
+const LUT_HEX_8b = new Array(0x100);
+for (let n = 0; n < 0x100; n++) {
+    LUT_HEX_8b[n] = `${LUT_HEX_4b[(n >>> 4) & 0xF]}${LUT_HEX_4b[n & 0xF]}`;
+}
+// End Pre-Init
+function toHex(buffer) {
+    let out = '';
+    let length = buffer.length;
+    if (length > 16 * 16)
+        length = 16 * 16;
+    for (let idx = 0, edx = buffer.length; idx < length; idx++) {
+        if (idx % 4 == 0)
+            out += ' ';
+        if (idx % 16 == 0)
+            out += '\n';
+        out += LUT_HEX_8b[buffer[idx]];
+    }
+    return out;
 }
