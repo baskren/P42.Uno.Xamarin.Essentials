@@ -16,6 +16,7 @@ namespace Xamarin.Essentials
 
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
         {
+            System.Diagnostics.Debug.WriteLine("FileSystem.PlatformOpenAppPackageFileAsync UWP ENTER");
             if (filename == null)
                 throw new ArgumentNullException(nameof(filename));
 

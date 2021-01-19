@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Uno.Foundation;
 using Windows.ApplicationModel;
 using Windows.Storage;
 
@@ -8,6 +10,7 @@ namespace Xamarin.Essentials
 {
     public static partial class FileSystem
     {
+
         static string PlatformCacheDirectory
         {
             get
@@ -30,17 +33,50 @@ namespace Xamarin.Essentials
             }
         }
 
-        static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
+        static async Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
         {
+            if (false)
+            {
+                var x = new FileForAssetResult();
+            }
+
+            System.Diagnostics.Debug.WriteLine("FileSystem.PlatformOpenAppPackageFileAsync WASM ENTER");
             if (filename == null)
                 throw new ArgumentNullException(nameof(filename));
 
-            return Package.Current.InstalledLocation.OpenStreamForReadAsync(NormalizePath(filename));
+            System.Diagnostics.Debug.WriteLine("FileSystem.PlatformOpenAppPackageFileAsync A");
+            var json = await WebAssemblyRuntime.InvokeAsync($"UnoFileSystem_FileForAsset('{filename}')");
+            System.Diagnostics.Debug.WriteLine("FileSystem.PlatformOpenAppPackageFileAsync b json: " + json);
+
+            var result = JsonConvert.DeserializeObject<FileForAssetResult>(json);
+
+            System.Diagnostics.Debug.WriteLine("FileSystem.PlatformOpenAppPackageFileAsync C");
+            if (result.abort || !string.IsNullOrWhiteSpace(result.error))
+                return null;
+            //return Package.Current.InstalledLocation.OpenStreamForReadAsync(NormalizePath(filename));
+            System.Diagnostics.Debug.WriteLine("FileSystem.PlatformOpenAppPackageFileAsync D");
+            return File.OpenRead(result.path);
         }
 
         internal static string NormalizePath(string path)
             => path.Replace('/', Path.DirectorySeparatorChar);
+
     }
+
+    public class FileForAssetResult
+    {
+        public string error { get; set; }
+
+        public bool abort { get; set; }
+
+        public string path { get; set; }
+
+        public string isText { get; set; }
+
+        [Preserve]
+        public FileForAssetResult() { }
+    }
+
 
     public partial class FileBase
     {

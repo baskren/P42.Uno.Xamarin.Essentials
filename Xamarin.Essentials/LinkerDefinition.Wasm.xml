@@ -1,5 +1,6 @@
 ﻿<linker>
-  <assembly fullname="P42.Uno.Xamarin.Essentials">
+  <assembly fullname="P42.Uno.Xamarin.Essentials" />
+  <!--
     <type fullname="Xamarin.Essentials.SharingExtensions">
       <method name="GetShareRequestJsonForHtmlElement" />
     </type>
@@ -9,5 +10,9 @@
     <type fullname="Xamarin.Essentials.OrientationSensor">
       <method name="LegacyDataUpdated" />
     </type>
+    <type fullname="Xamarin.Essentials.FileForAssetResult">
+      
+    </type>
   </assembly>
+  -->
 </linker>

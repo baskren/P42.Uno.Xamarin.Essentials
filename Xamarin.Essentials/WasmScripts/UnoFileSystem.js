@@ -145,3 +145,75 @@ function UnoFileSystem_GetDataFromJsFile(file) {
 }
 
 
+function UnoFileSystem_FileForAsset(assetPath) {
+    return new Promise(function (resolve, reject) {
+        if (!FS.analyzePath('/UnoAssets').exists)
+            FS.mkdir('/UnoAssets');
+        let pathParts = assetPath.split("/");
+        let path = '/UnoAssets';
+        for (let i = 0; i < pathParts.length - 1; i++) {
+            path = path + '/' + pathParts[i];
+            if (!FS.analyzePath(path).exists)
+                FS.mkdir(path);
+        }
+        path = path + '/' + pathParts[pathParts.length - 1];
+        UnoFileSystem_FileFromUrl(`${config.uno_app_base}/` + assetPath, path).then(function (result) {
+            resolve(JSON.stringify(result));
+        }).catch(function (reason) {
+            let result = new Object();
+            result.error = reason;
+            resolve(JSON.stringify(result));
+        });
+    });
+}
+
+function UnoFileSystem_FileFromUrl(url, path) {
+    return new Promise(function (resolve, reject) {
+        let blob = null;
+        let xhr = new XMLHttpRequest();
+        let result = new Object();
+        result.path = path;
+        xhr.open("GET", url);
+        xhr.responseType = "blob";
+
+        xhr.onabort = function () {
+            console.log('xhr abort');
+            result.abort = true;
+            resolve(result);
+        };
+
+        xhr.onerror = function (e) {
+            console.log('xhr error');
+            result.error = e.srcElement.error;
+            resolve(result);
+        }
+
+        xhr.onload = function () {
+            blob = xhr.response;
+            console.log('blob.type: ' + blob.type);
+            UnoFileSystem_GetDataFromJsFile(blob).then(function (jsFileData) {
+                if ('abort' in jsFileData) {
+                    result.abort = true;
+                    resolve(result);
+                }
+                else if ('error' in jsFileData) {
+                    console.log('FileFromUrl.error: ' + jsFileData.error);
+                    result.error = jsFileData.error;
+                    resolve(result);
+                }
+                else if ('text' in jsFileData) {
+                    FS.writeFile(path, jsFileData.text);
+                    result.isText = true;
+                    resolve(result);
+                }
+                else if ('view' in jsFileData) {
+                    result.isView = true;
+                    FS.writeFile(path, jsFileData.view);
+                }
+
+            });
+        };
+
+        xhr.send();
+    });
+}
