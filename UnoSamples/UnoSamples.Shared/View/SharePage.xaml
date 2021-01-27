@@ -66,7 +66,7 @@
                     <TextBox
                         x:Name="_shareTextText"
                         PlaceholderText="Enter text to share here."
-                        Text="{Binding Text, Mode=TwoWay, FallbackValue='This is the text to be shared.'}" />
+                        Text="{Binding Text, Mode=TwoWay, FallbackValue='This is the text to be shared.'}"  InputScope="Chat" />
 
                     <StackPanel Orientation="Horizontal">
                         <TextBlock
@@ -131,7 +131,7 @@
                     <TextBox
                         x:Name="_shareFileContentTextBox"
                         LostFocus="OnShareFileInputLostFocus"
-                        Text="{Binding ShareFileAttachmentContents, Mode=TwoWay, FallbackValue='This is the file content'}" />
+                        Text="{Binding ShareFileAttachmentContents, Mode=TwoWay, FallbackValue='This is the file content'}"  InputScope="Chat" />
 
                     <!--
                         <Button
@@ -187,7 +187,7 @@
                     <TextBox
                         x:Name="_shareFile1Content"
                         LostFocus="OnShareFilesInputLostFocus"
-                        Text="{Binding ShareFile1AttachmentContents, Mode=TwoWay, FallbackValue='This is file 1 content'}" />
+                        Text="{Binding ShareFile1AttachmentContents, Mode=TwoWay, FallbackValue='This is file 1 content'}"  InputScope="Chat"/>
 
                     <TextBlock Margin="0,20,0,0" Text="File2 Name:" />
                     <TextBox
@@ -198,7 +198,7 @@
                     <TextBox
                         x:Name="_shareFile2Content"
                         LostFocus="OnShareFilesInputLostFocus"
-                        Text="{Binding ShareFile2AttachmentContents, Mode=TwoWay, FallbackValue='This is file 2 content.'}" />
+                        Text="{Binding ShareFile2AttachmentContents, Mode=TwoWay, FallbackValue='This is file 2 content.'}" InputScope="Chat"/>
 
                     <!--
                         <Button

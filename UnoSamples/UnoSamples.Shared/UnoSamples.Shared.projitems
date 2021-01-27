@@ -26,6 +26,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ActionSheetPopupContent.xaml.cs">
       <DependentUpon>ActionSheetPopupContent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\TextBoxExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\View.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\MessagingCenter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -51,6 +53,9 @@
     </Compile>
     <!-- VIEW -->
     <Compile Include="$(MSBuildThisFileDirectory)View\BasePage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View\EmailPage.xaml.cs">
+      <DependentUpon>EmailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)View\FilePickerPage.xaml.cs">
       <DependentUpon>FilePickerPage.xaml</DependentUpon>
     </Compile>
@@ -113,6 +118,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="$(MSBuildThisFileDirectory)View\AccelerometerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)View\EmailPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

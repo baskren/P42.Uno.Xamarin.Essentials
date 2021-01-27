@@ -15,47 +15,54 @@
         <viewmodels:PermissionsViewModel x:Name="viewModel" />
     </views:BasePage.DataContext>
 
-    <StackPanel>
-        <ListView ItemsSource="{Binding PermissionItems}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="8,0,8,0" RowSpacing="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="Test App Permissions" />
+        <ScrollViewer Grid.Row="1">
+            <StackPanel>
+                <ListView ItemsSource="{Binding PermissionItems}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="8,0,8,0" RowSpacing="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
-                        <TextBlock
+                                <TextBlock
                             Grid.Row="0"
                             Grid.Column="0"
                             VerticalAlignment="Center"
                             FontWeight="Bold"
                             Text="{Binding Title}" />
-                        <TextBlock
+                                <TextBlock
                             Grid.Row="1"
                             Grid.Column="0"
                             VerticalAlignment="Center"
                             Text="{Binding Status, Mode=OneWay}" />
-                        <TextBlock
+                                <TextBlock
                             Grid.Row="2"
                             Grid.Column="0"
                             VerticalAlignment="Center"
                             Text="{Binding Rationale, Mode=OneWay}" />
 
-                        <Button
+                                <Button
                             Grid.Row="0"
                             Grid.RowSpan="2"
                             Grid.Column="1"
                             VerticalAlignment="Center"
                             Command="{Binding CheckStatusCommand}"
                             Content="Check" />
-                        <Button
+                                <Button
                             Grid.Row="0"
                             Grid.RowSpan="2"
                             Grid.Column="2"
@@ -63,7 +70,7 @@
                             Command="{Binding RequestCommand}"
                             Content="Request" />
 
-                        <Button
+                                <Button
                             Grid.Row="2"
                             Grid.Column="1"
                             Grid.ColumnSpan="2"
@@ -71,9 +78,11 @@
                             Command="{Binding ShouldShowRationaleCommand}"
                             Content="Show Rationale" />
 
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </views:BasePage>

@@ -27,7 +27,7 @@
                 <!--
                 <TextBox Text="{Binding PhoneNumber}" Keyboard="Telephone" />
                 -->
-                <TextBox Text="{Binding PhoneNumber}" />
+                <TextBox Text="{Binding PhoneNumber}" InputScope="TelephoneNumber"/>
                 <Button
                     Command="{Binding OpenPhoneDialerCommand}"
                     Content="Open Phone Dialer"

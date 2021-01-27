@@ -14,7 +14,7 @@ namespace Samples.ViewModel
 {
     class ShareViewModel : BaseViewModel
     {
-        static System.Drawing.Rectangle GetRectangle(FrameworkElement element) => ViewHelpers.ToSystemRectangle(element.GetAbsoluteBounds());
+        static System.Drawing.Rectangle GetRectangle(FrameworkElement element) => element.GetAbsoluteBounds().ToSystemRectangle();
 
         static string CreateFile(string fileName, string fileContents, string emptyName)
         {

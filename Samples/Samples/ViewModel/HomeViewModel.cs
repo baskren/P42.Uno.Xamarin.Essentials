@@ -91,13 +91,13 @@ namespace Samples.ViewModel
                     typeof(DeviceInfoPage),
                     "Find out about the device with ease.",
                     new[] { "hardware", "device", "info", "screen", "display", "orientation", "rotation" }),
+                */
                 new SampleItem(
                     "📧",
                     "Email",
                     typeof(EmailPage),
                     "Easily send email messages.",
                     new[] { "email", "share", "communication", "message" }),
-                */
                 new SampleItem(
                     "📁",
                     "File Picker",

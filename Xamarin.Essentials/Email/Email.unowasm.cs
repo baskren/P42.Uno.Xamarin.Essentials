@@ -2,68 +2,41 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Email;
-using Windows.Foundation.Metadata;
-using Windows.Storage;
-using Windows.Storage.Streams;
-using NativeEmailAttachment = Windows.ApplicationModel.Email.EmailAttachment;
-using NativeEmailMessage = Windows.ApplicationModel.Email.EmailMessage;
+using Uno.Foundation;
 
 namespace Xamarin.Essentials
 {
     public static partial class Email
     {
         internal static bool IsComposeSupported
-            => ApiInformation.IsTypePresent("Windows.ApplicationModel.Email.EmailManager");
+            => true;
+
 
         static async Task PlatformComposeAsync(EmailMessage message)
         {
             if (message != null && message.BodyFormat != EmailBodyFormat.PlainText)
                 throw new FeatureNotSupportedException("UWP can only compose plain text email messages.");
 
-            var nativeMessage = new NativeEmailMessage();
-            if (!string.IsNullOrEmpty(message?.Body))
-                nativeMessage.Body = message.Body;
-            if (!string.IsNullOrEmpty(message?.Subject))
-                nativeMessage.Subject = message.Subject;
-            Sync(message?.To, nativeMessage.To);
-            Sync(message?.Cc, nativeMessage.CC);
-            Sync(message?.Bcc, nativeMessage.Bcc);
+            var concatUsed = 0;
+            Func<string> concatChar = () => concatUsed++ > 0 ? "&" : "?";
 
-            if (message?.Attachments?.Count > 0)
-            {
-                foreach (var attachment in message.Attachments)
-                {
-                    var path = FileSystem.NormalizePath(attachment.FullPath);
-                    var file = attachment.File ?? await StorageFile.GetFileFromPathAsync(path);
+            var payload = "mailto:";
+            if (message?.To != null && message.To.Count > 0)
+                payload += string.Join(",", message.To);
+            if (message?.Cc != null && message.Cc.Count > 0)
+                payload += concatChar() + "cc=" + System.Web.HttpUtility.UrlEncode(string.Join(",", message.Cc), System.Text.Encoding.UTF8);
+            if (message?.Bcc != null && message.Bcc.Count > 0)
+                payload += concatChar() + "bcc=" + System.Web.HttpUtility.UrlEncode(string.Join(",", message.Bcc), System.Text.Encoding.UTF8);
+            if (!string.IsNullOrWhiteSpace(message?.Subject))
+                payload += concatChar() + "subject=" + System.Web.HttpUtility.UrlEncode(message.Subject, System.Text.Encoding.UTF8);
+            if (!string.IsNullOrWhiteSpace(message?.Body))
+                payload += concatChar() + "body=" + System.Web.HttpUtility.UrlEncode(message.Body, System.Text.Encoding.UTF8);
 
-                    var stream = RandomAccessStreamReference.CreateFromFile(file);
-                    var nativeAttachment = new NativeEmailAttachment(attachment.FileName, stream);
+            if (message?.Attachments != null && message.Attachments.Count > 0)
+                payload += System.Web.HttpUtility.UrlEncode("\n\n ATTACHEMENTS ARE NOT SUPPORTED", System.Text.Encoding.UTF8);
 
-                    if (!string.IsNullOrEmpty(attachment.ContentType))
-                        nativeAttachment.MimeType = attachment.ContentType;
-                    else if (!string.IsNullOrWhiteSpace(file?.ContentType))
-                        nativeAttachment.MimeType = file.ContentType;
-
-                    nativeMessage.Attachments.Add(nativeAttachment);
-                }
-            }
-
-            await EmailManager.ShowComposeNewEmailAsync(nativeMessage);
+            WebAssemblyRuntime.InvokeJS($"location.replace('{payload}'");
         }
 
-        static void Sync(List<string> recipients, IList<EmailRecipient> nativeRecipients)
-        {
-            if (recipients == null)
-                return;
-
-            foreach (var recipient in recipients)
-            {
-                if (string.IsNullOrWhiteSpace(recipient))
-                    continue;
-
-                nativeRecipients.Add(new EmailRecipient(recipient));
-            }
-        }
     }
 }
