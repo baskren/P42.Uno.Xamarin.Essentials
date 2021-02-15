@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace Xamarin.Essentials
 {
@@ -84,6 +85,11 @@ namespace Xamarin.Essentials
 
     public partial class EmailAttachment : FileBase
     {
+        public EmailAttachment(IStorageFile storageFile)
+            :base(storageFile)
+        {
+        }
+
         public EmailAttachment(string fullPath)
             : base(fullPath)
         {

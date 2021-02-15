@@ -97,6 +97,8 @@ namespace Xamarin.Essentials
                 UpdateBookmark(url, newBookmark);
             }
 
+            if (StorageFile != null)
+                return StorageFile.OpenStreamForReadAsync();
             var fileStream = File.OpenRead(FullPath);
             Stream stream = new SecurityScopedStream(fileStream, url);
             return Task.FromResult(stream);
@@ -170,8 +172,9 @@ namespace Xamarin.Essentials
 
         internal override Task<Stream> PlatformOpenReadAsync()
         {
+            if (StorageFile != null)
+                return StorageFile.OpenStreamForReadAsync();
             Stream fileStream = File.OpenRead(FullPath);
-
             return Task.FromResult(fileStream);
         }
     }

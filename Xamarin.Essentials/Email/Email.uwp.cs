@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
                 foreach (var attachment in message.Attachments)
                 {
                     var path = FileSystem.NormalizePath(attachment.FullPath);
-                    var file = attachment.File ?? await StorageFile.GetFileFromPathAsync(path);
+                    var file = attachment.StorageFile ?? await StorageFile.GetFileFromPathAsync(path);
 
                     var stream = RandomAccessStreamReference.CreateFromFile(file);
                     var nativeAttachment = new NativeEmailAttachment(attachment.FileName, stream);

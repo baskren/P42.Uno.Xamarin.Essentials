@@ -71,8 +71,12 @@ namespace Xamarin.Essentials
         {
         }
 
-        internal virtual Task<Stream> PlatformOpenReadAsync() =>
-            Task.FromResult((Stream)File.OpenRead(FullPath));
+        internal virtual Task<Stream> PlatformOpenReadAsync()
+        {
+            if (StorageFile != null)
+                return StorageFile.OpenStreamForReadAsync();
+            return Task.FromResult((Stream)File.OpenRead(FullPath));
+        }
     }
 
     public partial class ReadOnlyFile

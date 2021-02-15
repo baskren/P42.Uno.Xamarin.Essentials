@@ -42,7 +42,7 @@ namespace Xamarin.Essentials
         {
             var storageFiles = new List<IStorageFile>();
             foreach (var file in request.Files)
-                storageFiles.Add(file.File ?? await StorageFile.GetFileFromPathAsync(file.FullPath));
+                storageFiles.Add(file.StorageFile ?? await StorageFile.GetFileFromPathAsync(file.FullPath));
 
             var dataTransferManager = DataTransferManager.GetForCurrentView();
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace Xamarin.Essentials
 {
@@ -88,11 +89,19 @@ namespace Xamarin.Essentials
 
         string contentType;
 
-        // The caller must setup FullPath at least!!!
+        internal IStorageFile StorageFile { get; set; }
+
         internal FileBase()
         {
         }
 
+        internal FileBase(IStorageFile storageFile)
+            : this(storageFile.Path)
+        {
+            StorageFile = storageFile;
+        }
+
+        // The caller must setup FullPath at least!!!
         internal FileBase(string fullPath)
         {
             if (fullPath == null)
@@ -101,12 +110,12 @@ namespace Xamarin.Essentials
                 throw new ArgumentException("The file path cannot be an empty string.", nameof(fullPath));
             if (string.IsNullOrWhiteSpace(Path.GetFileName(fullPath)))
                 throw new ArgumentException("The file path must be a file path.", nameof(fullPath));
-
             FullPath = fullPath;
         }
 
         public FileBase(FileBase file)
         {
+            StorageFile = file.StorageFile;
             FullPath = file.FullPath;
             ContentType = file.ContentType;
             FileName = file.FileName;
@@ -134,11 +143,16 @@ namespace Xamarin.Essentials
             if (!string.IsNullOrWhiteSpace(contentType))
                 return contentType;
 
+            if (!string.IsNullOrWhiteSpace(StorageFile?.ContentType))
+                return StorageFile.ContentType;
+
             // try get from the file extension
             var ext = Path.GetExtension(FullPath);
             if (!string.IsNullOrWhiteSpace(ext))
             {
                 var content = PlatformGetContentType(ext);
+                if (string.IsNullOrWhiteSpace(content))
+                    content = MimeTypeConverter.GetMimeType(ext);
                 if (!string.IsNullOrWhiteSpace(content))
                     return content;
             }
@@ -174,6 +188,11 @@ namespace Xamarin.Essentials
 
     public partial class ReadOnlyFile : FileBase
     {
+        public ReadOnlyFile(IStorageFile storageFile)
+            : base(storageFile)
+        {
+        }
+
         public ReadOnlyFile(string fullPath)
             : base(fullPath)
         {
@@ -189,21 +208,19 @@ namespace Xamarin.Essentials
         {
         }
 
-#if !NETFX_CORE && !__WASM__
-        public ReadOnlyFile(Windows.Storage.IStorageFile storageFile)
-            : base(storageFile.Path, storageFile.ContentType)
-        {
-        }
-#endif
-
         public static explicit operator ReadOnlyFile(Windows.Storage.StorageFile storageFile)
-            => new ReadOnlyFile(storageFile.Path);
+            => new ReadOnlyFile(storageFile);
     }
 
     public partial class FileResult : FileBase
     {
         // The caller must setup FullPath at least!!!
         internal FileResult()
+        {
+        }
+
+        public FileResult(IStorageFile storageFile)
+            : base(storageFile)
         {
         }
 
@@ -222,15 +239,8 @@ namespace Xamarin.Essentials
         {
         }
 
-#if !NETFX_CORE && !__WASM__
-        public FileResult(Windows.Storage.IStorageFile storageFile)
-            : base(storageFile.Path, storageFile.ContentType)
-        {
-        }
-#endif
-
         public static explicit operator FileResult(Windows.Storage.StorageFile storageFile)
-            => new FileResult(storageFile.Path);
+            => new FileResult(storageFile);
     }
 
 }

@@ -77,48 +77,25 @@ namespace Xamarin.Essentials
         public FileForAssetResult() { }
     }
 
-
     public partial class FileBase
     {
-        internal FileBase(IStorageFile file)
-            : this(file?.Path)
-        {
-            File = file;
-            ContentType = file?.ContentType;
-        }
-
-        internal void PlatformInit(FileBase file)
-        {
-            File = file.File;
-        }
-
-        internal IStorageFile File { get; set; }
-
         // we can't do anything here, but Windows will take care of it
         internal static string PlatformGetContentType(string extension) => null;
 
-        internal virtual Task<Stream> PlatformOpenReadAsync() =>
-            File.OpenStreamForReadAsync();
+        internal void PlatformInit(FileBase file)
+        {
+        }
+
+        internal virtual Task<Stream> PlatformOpenReadAsync()
+        {
+            if (StorageFile != null)
+                return StorageFile.OpenStreamForReadAsync();
+            return Task.FromResult((Stream)File.OpenRead(FullPath));
+        }
 
         public override string ToString()
         {
             return "{ type: " + GetType() + ", path: " + FullPath + ", contentType: " + contentType + ", name: " + FileName + " }";
-        }
-    }
-
-    public partial class ReadOnlyFile
-    {
-        public ReadOnlyFile(IStorageFile file)
-            : base(file)
-        {
-        }
-    }
-
-    public partial class FileResult
-    {
-        internal FileResult(IStorageFile file)
-            : base(file)
-        {
         }
     }
 }

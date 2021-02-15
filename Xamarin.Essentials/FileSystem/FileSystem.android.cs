@@ -375,6 +375,8 @@ namespace Xamarin.Essentials
 
         internal virtual Task<Stream> PlatformOpenReadAsync()
         {
+            if (StorageFile != null)
+                return StorageFile.OpenStreamForReadAsync();
             var stream = File.OpenRead(FullPath);
             return Task.FromResult<Stream>(stream);
         }
