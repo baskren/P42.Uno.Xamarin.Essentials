@@ -31,11 +31,10 @@ namespace Xamarin.Essentials
 
         static void PlatformBeginInvokeOnMainThread(Action action)
         {
-            var dispatcher = CoreApplication.MainView?.CoreWindow?.Dispatcher;
-
-            if (dispatcher == null)
-                throw new InvalidOperationException("Unable to find main thread.");
-            dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => action()).WatchForError();
+            if (CoreApplication.MainView?.CoreWindow?.Dispatcher is CoreDispatcher dispatcher)
+                dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => action()).WatchForError();
+            else
+                action.Invoke();
         }
     }
 }
