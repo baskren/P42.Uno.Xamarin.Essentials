@@ -63,8 +63,8 @@
 
   <!-- WASM -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard2.')) ">
-    <PackageReference Include="Uno.UI" Version="3.4.0" />
-    <PackageReference Include="Uno.UI.WebAssembly" Version="3.4.0" />
+    <PackageReference Include="Uno.UI" Version="3.5.1" />
+    <PackageReference Include="Uno.UI.WebAssembly" Version="3.5.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <Compile Include="**\*.unowasm.cs" />
     <Compile Include="**\*.unowasm.*.cs" />
@@ -88,7 +88,7 @@
   <!-- UWP -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.9" PrivateAssets="all" />
-    <PackageReference Include="Uno.UI" Version="3.4.0" />
+    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <Compile Include="**\*.uwp.cs" />
     <Compile Include="**\*.uwp.*.cs" />
     <SDKReference Include="WindowsMobile, Version=10.0.16299.0">
@@ -98,7 +98,7 @@
 
   <!-- ANDROID -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
-    <PackageReference Include="Uno.UI" Version="3.4.0" />
+    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <Compile Include="**\*.android.cs" />
     <Compile Include="**\*.android.*.cs" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />    
@@ -114,12 +114,12 @@
   </ItemGroup>
   <!-- NOTE: When Android 11.x comes out we neeed to make this check more robust -->
   <ItemGroup Condition="'$(TargetFramework)' == 'MonoAndroid10.0'">
-    <PackageReference Include="Xamarin.AndroidX.Browser" Version="1.3.0" />
+    <PackageReference Include="Xamarin.AndroidX.Browser" Version="1.3.0.5" />
   </ItemGroup>
 
   <!-- IOS -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
-    <PackageReference Include="Uno.UI" Version="3.4.0" />
+    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <Compile Include="**\*.ios.cs" />
     <Compile Include="**\*.ios.*.cs" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
@@ -129,7 +129,7 @@
 
   <!-- TVOS -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.TVOS')) ">
-    <PackageReference Include="Uno.UI" Version="3.4.0" />
+    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <Compile Include="**\*.tvos.cs" />
     <Compile Include="**\*.tvos.*.cs" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
@@ -139,7 +139,7 @@
 
   <!-- WATCH OS -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.WatchOS')) ">
-    <PackageReference Include="Uno.UI" Version="3.4.0" />
+    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <Compile Include="**\*.watchos.cs" />
     <Compile Include="**\*.watchos.*.cs" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
@@ -148,7 +148,7 @@
 
   <!-- TIZEN -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('tizen')) ">
-    <PackageReference Include="Uno.UI" Version="3.4.0" />
+    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <PackageReference Include="Tizen.NET" Version="4.0.0" PrivateAssets="All" />
     <Compile Include="**\*.tizen.cs" />
     <Compile Include="**\*.tizen.*.cs" />
@@ -156,7 +156,7 @@
 
   <!-- MACOS -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac20')) ">
-    <PackageReference Include="Uno.UI" Version="3.4.0" />
+    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <Compile Include="**\*.macos.cs" />
     <Compile Include="**\*.macos.*.cs" />
     <Reference Include="System.Numerics" />
