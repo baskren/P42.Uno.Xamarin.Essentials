@@ -2,6 +2,7 @@
 
   <PropertyGroup>
 
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
     <AssemblyName>P42.Uno.Xamarin.Essentials</AssemblyName>
