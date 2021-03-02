@@ -137,14 +137,15 @@ namespace Xamarin.Essentials
             }
             return ToRgba(v, p, q, a);
 
-            static Color ToRgba(double r, double g, double b, double a)
-            {
-                r = r.Clamp(0, 1);
-                g = g.Clamp(0, 1);
-                b = b.Clamp(0, 1);
+        }
 
-                return Color.FromArgb((int)a, (int)(r * 255), (int)(g * 255), (int)(b * 255));
-            }
+        static Color ToRgba(double r, double g, double b, double a)
+        {
+            r = r.Clamp(0, 1);
+            g = g.Clamp(0, 1);
+            b = b.Clamp(0, 1);
+
+            return Color.FromArgb((int)a, (int)(r * 255), (int)(g * 255), (int)(b * 255));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

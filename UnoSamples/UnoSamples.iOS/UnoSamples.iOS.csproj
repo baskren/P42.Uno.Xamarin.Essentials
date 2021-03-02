@@ -152,11 +152,10 @@
       <Visible>false</Visible>
     </ImageAsset>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\Xamarin.Essentials\Xamarin.Essentials.csproj">
-      <Project>{cd6d6ae6-83a1-41b1-bd7c-c555a77c288b}</Project>
-      <Name>Xamarin.Essentials</Name>
+    <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.iOS.csproj">
+      <Project>{f5b7e97e-f816-40a4-9217-9ac40f8738ea}</Project>
+      <Name>P42.Uno.Xamarin.Essentials.iOS</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\UnoSamples.Shared\UnoSamples.Shared.projitems" Label="Shared" Condition="Exists('..\UnoSamples.Shared\UnoSamples.Shared.projitems')" />

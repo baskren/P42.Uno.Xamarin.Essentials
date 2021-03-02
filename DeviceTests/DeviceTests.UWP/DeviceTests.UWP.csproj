@@ -126,9 +126,9 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Xamarin.Essentials\Xamarin.Essentials.csproj">
-      <Project>{63a4f6a1-48bf-4d32-aed7-82f605edb042}</Project>
-      <Name>Xamarin.Essentials</Name>
+    <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.UWP.csproj">
+      <Project>{f444a19e-9f4a-4448-ba74-3897f06de50b}</Project>
+      <Name>P42.Uno.Xamarin.Essentials.UWP</Name>
     </ProjectReference>
     <ProjectReference Include="..\DeviceTests.Shared\DeviceTests.Shared.csproj">
       <Project>{be0de9a3-d92c-47c5-9ec4-dfb546bbdf77}</Project>

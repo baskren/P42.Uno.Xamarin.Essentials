@@ -50,11 +50,9 @@ namespace Xamarin.Essentials
 
         internal async Task<Stream> PlatformOpenReadAsync(ScreenshotFormat format)
         {
-            var f = format switch
-            {
-                ScreenshotFormat.Jpeg => BitmapEncoder.JpegEncoderId,
-                _ => BitmapEncoder.PngEncoderId
-            };
+            var f = BitmapEncoder.PngEncoderId;
+            if (format == ScreenshotFormat.Jpeg)
+                f = BitmapEncoder.JpegEncoderId;
 
             var ms = new InMemoryRandomAccessStream();
 

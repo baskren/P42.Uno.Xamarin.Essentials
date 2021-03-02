@@ -45,7 +45,7 @@
                 <TextBlock Text="Subject:" />
                 <TextBox Text="{Binding Subject, Mode=TwoWay}" />
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Is Html?" HorizontalTextAlignment="End"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    <TextBlock Text="Is Html?" HorizontalTextAlignment="Right"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                     <ToggleSwitch IsOn="{Binding IsHtml, Mode=TwoWay}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <TextBlock Text="Body:" />
@@ -59,7 +59,7 @@
                 <TextBox Text="{Binding AttachmentContents, Mode=TwoWay}" InputScope="Chat" views:TextBoxExtensions.AutoSize="true" />
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Attach Multiple" HorizontalTextAlignment="End"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    <TextBlock Text="Attach Multiple" HorizontalTextAlignment="Right"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                     <ToggleSwitch IsOn="{Binding HasMultipleAttachements, Mode=TwoWay}" VerticalAlignment="Center"/>
                 </StackPanel>
 

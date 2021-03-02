@@ -37,8 +37,10 @@ namespace Xamarin.Essentials
 
         static string GetVersionString()
         {
-            using var info = new NSProcessInfo();
-            return info.OperatingSystemVersion.ToString();
+            using (var info = new NSProcessInfo())
+            {
+                return info.OperatingSystemVersion.ToString();
+            }
         }
 
         static DevicePlatform GetPlatform() => DevicePlatform.macOS;

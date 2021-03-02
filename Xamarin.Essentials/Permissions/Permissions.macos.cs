@@ -128,13 +128,13 @@ namespace Xamarin.Essentials
 
                 var status = CLLocationManager.Status;
 
-                return status switch
+                switch( status )
                 {
-                    CLAuthorizationStatus.AuthorizedAlways => PermissionStatus.Granted,
-                    CLAuthorizationStatus.AuthorizedWhenInUse => PermissionStatus.Granted,
-                    CLAuthorizationStatus.Denied => PermissionStatus.Denied,
-                    CLAuthorizationStatus.Restricted => PermissionStatus.Restricted,
-                    _ => PermissionStatus.Unknown,
+                    case CLAuthorizationStatus.AuthorizedAlways: return PermissionStatus.Granted;
+                    case CLAuthorizationStatus.AuthorizedWhenInUse: return PermissionStatus.Granted;
+                    case CLAuthorizationStatus.Denied: return PermissionStatus.Denied;
+                    case CLAuthorizationStatus.Restricted: return PermissionStatus.Restricted;
+                    default: return PermissionStatus.Unknown;
                 };
             }
 

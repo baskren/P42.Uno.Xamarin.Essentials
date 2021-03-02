@@ -50,20 +50,6 @@ namespace Xamarin.Essentials
             var scheme = redirectUri.Scheme;
 
 #if __IOS__
-            static void AuthSessionCallback(NSUrl cbUrl, NSError error)
-            {
-                if (error == null)
-                    OpenUrl(cbUrl);
-                else if (error.Domain == asWebAuthenticationSessionErrorDomain && error.Code == asWebAuthenticationSessionErrorCodeCanceledLogin)
-                    tcsResponse.TrySetCanceled();
-                else if (error.Domain == sfAuthenticationErrorDomain && error.Code == sfAuthenticationErrorCanceledLogin)
-                    tcsResponse.TrySetCanceled();
-                else
-                    tcsResponse.TrySetException(new NSErrorException(error));
-
-                was = null;
-                sf = null;
-            }
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
             {
@@ -117,6 +103,23 @@ namespace Xamarin.Essentials
             return await tcsResponse.Task;
         }
 
+
+#if __IOS__
+        static void AuthSessionCallback(NSUrl cbUrl, NSError error)
+        {
+            if (error == null)
+                OpenUrl(cbUrl);
+            else if (error.Domain == asWebAuthenticationSessionErrorDomain && error.Code == asWebAuthenticationSessionErrorCodeCanceledLogin)
+                tcsResponse.TrySetCanceled();
+            else if (error.Domain == sfAuthenticationErrorDomain && error.Code == sfAuthenticationErrorCanceledLogin)
+                tcsResponse.TrySetCanceled();
+            else
+                tcsResponse.TrySetException(new NSErrorException(error));
+
+            was = null;
+            sf = null;
+        }
+#endif
         internal static bool OpenUrl(Uri uri)
         {
             // If we aren't waiting on a task, don't handle the url

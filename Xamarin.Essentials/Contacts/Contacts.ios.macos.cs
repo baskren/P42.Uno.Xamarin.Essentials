@@ -71,14 +71,16 @@ namespace Xamarin.Essentials
             {
                 foreach (var container in containers)
                 {
-                    using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
-                    var contacts = store.GetUnifiedContacts(pred, keys, out var error);
-                    if (contacts == null)
-                        continue;
-
-                    foreach (var contact in contacts)
+                    using (var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier))
                     {
-                        yield return ConvertContact(contact);
+                        var contacts = store.GetUnifiedContacts(pred, keys, out var error);
+                        if (contacts == null)
+                            continue;
+
+                        foreach (var contact in contacts)
+                        {
+                            yield return ConvertContact(contact);
+                        }
                     }
                 }
             }

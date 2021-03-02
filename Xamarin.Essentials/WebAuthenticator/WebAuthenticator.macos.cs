@@ -23,6 +23,18 @@ namespace Xamarin.Essentials
             callbackHelper.Register();
         }
 
+        static void AuthSessionCallback(NSUrl cbUrl, NSError error)
+        {
+            if (error == null)
+                OpenUrl(cbUrl);
+            else if (error.Domain == asWebAuthenticationSessionErrorDomain && error.Code == asWebAuthenticationSessionErrorCodeCanceledLogin)
+                tcsResponse.TrySetCanceled();
+            else
+                tcsResponse.TrySetException(new NSErrorException(error));
+
+            was = null;
+        }
+
         internal static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
         {
             if (!AppInfo.VerifyHasUrlScheme(callbackUrl.Scheme))
@@ -38,17 +50,6 @@ namespace Xamarin.Essentials
 
             if (DeviceInfo.Version >= new Version(10, 15))
             {
-                static void AuthSessionCallback(NSUrl cbUrl, NSError error)
-                {
-                    if (error == null)
-                        OpenUrl(cbUrl);
-                    else if (error.Domain == asWebAuthenticationSessionErrorDomain && error.Code == asWebAuthenticationSessionErrorCodeCanceledLogin)
-                        tcsResponse.TrySetCanceled();
-                    else
-                        tcsResponse.TrySetException(new NSErrorException(error));
-
-                    was = null;
-                }
 
                 was = new ASWebAuthenticationSession(WebUtils.GetNativeUrl(url), scheme, AuthSessionCallback);
 

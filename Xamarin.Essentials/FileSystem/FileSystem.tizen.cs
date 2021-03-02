@@ -41,7 +41,7 @@ namespace Xamarin.Essentials
             await Permissions.RequestAsync<Permissions.StorageRead>();
 
             if (StorageFile != null)
-                return StorageFile.OpenStreamForReadAsync();
+                return await StorageFile.OpenStreamForReadAsync();
             var stream = File.Open(FullPath, FileMode.Open, FileAccess.Read);
             return Task.FromResult<Stream>(stream).Result;
         }

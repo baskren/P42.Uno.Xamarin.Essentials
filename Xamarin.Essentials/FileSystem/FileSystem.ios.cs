@@ -19,31 +19,32 @@ namespace Xamarin.Essentials
             var opts = NSFileCoordinatorReadingOptions.WithoutChanges;
             var intents = urls.Select(x => NSFileAccessIntent.CreateReadingIntent(x, opts)).ToArray();
 
-            using var coordinator = new NSFileCoordinator();
-
-            var tcs = new TaskCompletionSource<FileResult[]>();
-
-            coordinator.CoordinateAccess(intents, new NSOperationQueue(), error =>
+            using (var coordinator = new NSFileCoordinator())
             {
-                if (error != null)
+                var tcs = new TaskCompletionSource<FileResult[]>();
+
+                coordinator.CoordinateAccess(intents, new NSOperationQueue(), error =>
                 {
-                    tcs.TrySetException(new NSErrorException(error));
-                    return;
-                }
+                    if (error != null)
+                    {
+                        tcs.TrySetException(new NSErrorException(error));
+                        return;
+                    }
 
-                var bookmarks = new List<FileResult>();
+                    var bookmarks = new List<FileResult>();
 
-                foreach (var intent in intents)
-                {
-                    var url = intent.Url;
-                    var result = new BookmarkDataFileResult(url);
-                    bookmarks.Add(result);
-                }
+                    foreach (var intent in intents)
+                    {
+                        var url = intent.Url;
+                        var result = new BookmarkDataFileResult(url);
+                        bookmarks.Add(result);
+                    }
 
-                tcs.TrySetResult(bookmarks.ToArray());
-            });
+                    tcs.TrySetResult(bookmarks.ToArray());
+                });
 
-            return await tcs.Task;
+                return await tcs.Task;
+            }
         }
     }
 
@@ -195,7 +196,7 @@ namespace Xamarin.Essentials
 
         internal override Task<Stream> PlatformOpenReadAsync()
         {
-            data ??= uiImage.AsPNG();
+            data = data ?? uiImage.AsPNG();
 
             return Task.FromResult(data.AsStream());
         }

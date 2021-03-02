@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Xamarin.Forms
 {
-    public class View : Windows.UI.Xaml.FrameworkElement
+    public partial class View : Windows.UI.Xaml.FrameworkElement
     {
     }
 }

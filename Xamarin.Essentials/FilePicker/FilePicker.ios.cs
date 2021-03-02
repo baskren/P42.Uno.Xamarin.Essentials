@@ -24,27 +24,29 @@ namespace Xamarin.Essentials
 
             // Use Open instead of Import so that we can attempt to use the original file.
             // If the file is from an external provider, then it will be downloaded.
-            using var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Open);
-            if (Platform.HasOSVersion(11, 0))
-                documentPicker.AllowsMultipleSelection = allowMultiple;
-            documentPicker.Delegate = new PickerDelegate
+            using (var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Open))
             {
-                PickHandler = urls => GetFileResults(urls, tcs)
-            };
-
-            if (documentPicker.PresentationController != null)
-            {
-                documentPicker.PresentationController.Delegate = new PickerPresentationControllerDelegate
+                if (Platform.HasOSVersion(11, 0))
+                    documentPicker.AllowsMultipleSelection = allowMultiple;
+                documentPicker.Delegate = new PickerDelegate
                 {
                     PickHandler = urls => GetFileResults(urls, tcs)
                 };
+
+                if (documentPicker.PresentationController != null)
+                {
+                    documentPicker.PresentationController.Delegate = new PickerPresentationControllerDelegate
+                    {
+                        PickHandler = urls => GetFileResults(urls, tcs)
+                    };
+                }
+
+                var parentController = Platform.GetCurrentViewController();
+
+                parentController.PresentViewController(documentPicker, true, null);
+
+                return await tcs.Task;
             }
-
-            var parentController = Platform.GetCurrentViewController();
-
-            parentController.PresentViewController(documentPicker, true, null);
-
-            return await tcs.Task;
         }
 
         static async void GetFileResults(NSUrl[] urls, TaskCompletionSource<IEnumerable<FileResult>> tcs)
@@ -88,9 +90,11 @@ namespace Xamarin.Essentials
             var tmpDir = Path.Combine(FileSystem.CacheDirectory, Guid.NewGuid().ToString());
             var tmpPath = Path.Combine(tmpDir, options?.SuggestedFileName ?? "data.bin");
             await File.WriteAllBytesAsync(tmpPath, bytes);
-            using var exportUrl = new NSUrl(tmpPath);
-            var result = await PlatformExportAsync(exportUrl, options);
-            return result;
+            using (var exportUrl = new NSUrl(tmpPath))
+            {
+                var result = await PlatformExportAsync(exportUrl, options);
+                return result;
+            }
         }
 
         static async Task<string> PlatformExportAsync(string text, SaveOptions options)
@@ -98,40 +102,44 @@ namespace Xamarin.Essentials
             var tmpDir = Path.Combine(FileSystem.CacheDirectory, Guid.NewGuid().ToString());
             var tmpPath = Path.Combine(tmpDir, options?.SuggestedFileName ?? "data.txt");
             await File.WriteAllTextAsync(tmpPath, text);
-            using var exportUrl = new NSUrl(tmpPath);
-            return await PlatformExportAsync(exportUrl, options);
+            using (var exportUrl = new NSUrl(tmpPath))
+            {
+                return await PlatformExportAsync(exportUrl, options);
+            }
         }
 
         static async Task<string> PlatformExportAsync(NSUrl exportUrl, SaveOptions options)
         {
             var tcs = new TaskCompletionSource<IEnumerable<FileResult>>();
-            using var documentPicker = new UIDocumentPickerViewController(exportUrl, UIDocumentPickerMode.MoveToService)
+            using (var documentPicker = new UIDocumentPickerViewController(exportUrl, UIDocumentPickerMode.MoveToService)
             {
                 Delegate = new PickerDelegate
                 {
                     PickHandler = urls => GetFileResults(urls, tcs)
                 }
-            };
-
-            if (documentPicker.PresentationController != null)
+            })
             {
-                documentPicker.PresentationController.Delegate = new PickerPresentationControllerDelegate
+
+                if (documentPicker.PresentationController != null)
                 {
-                    PickHandler = urls => GetFileResults(urls, tcs)
-                };
+                    documentPicker.PresentationController.Delegate = new PickerPresentationControllerDelegate
+                    {
+                        PickHandler = urls => GetFileResults(urls, tcs)
+                    };
+                }
+
+                var parentController = Platform.GetCurrentViewController();
+                parentController.PresentViewController(documentPicker, true, null);
+
+                var result = await tcs.Task;
+
+                if (File.Exists(exportUrl.Path))
+                    File.Delete(exportUrl.Path);
+                if (Directory.Exists(Path.GetDirectoryName(exportUrl.Path)))
+                    Directory.Delete(Path.GetDirectoryName(exportUrl.Path));
+
+                return result.FirstOrDefault()?.FullPath;
             }
-
-            var parentController = Platform.GetCurrentViewController();
-            parentController.PresentViewController(documentPicker, true, null);
-
-            var result = await tcs.Task;
-
-            if (File.Exists(exportUrl.Path))
-                File.Delete(exportUrl.Path);
-            if (Directory.Exists(Path.GetDirectoryName(exportUrl.Path)))
-                Directory.Delete(Path.GetDirectoryName(exportUrl.Path));
-
-            return result.FirstOrDefault()?.FullPath;
         }
     }
 

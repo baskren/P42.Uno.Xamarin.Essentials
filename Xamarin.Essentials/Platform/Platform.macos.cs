@@ -62,13 +62,14 @@ namespace Xamarin.Essentials
             if (result != 0 || handle == IntPtr.Zero)
                 return 0.0;
 
-            using var dl = new CVDisplayLink(handle);
+            using (var dl = new CVDisplayLink(handle))
+            {
+                var period = dl.NominalOutputVideoRefreshPeriod;
+                if (((CVTimeFlags)period.Flags).HasFlag(CVTimeFlags.IsIndefinite) || period.TimeValue == 0)
+                    return 0.0;
 
-            var period = dl.NominalOutputVideoRefreshPeriod;
-            if (((CVTimeFlags)period.Flags).HasFlag(CVTimeFlags.IsIndefinite) || period.TimeValue == 0)
-                return 0.0;
-
-            return period.TimeScale / (double)period.TimeValue;
+                return period.TimeScale / (double)period.TimeValue;
+            }
         }
     }
 

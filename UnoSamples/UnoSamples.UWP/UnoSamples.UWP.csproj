@@ -129,13 +129,6 @@
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\..\Xamarin.Essentials\Xamarin.Essentials.csproj">
-      <Project>{cd6d6ae6-83a1-41b1-bd7c-c555a77c288b}</Project>
-      <Name>Xamarin.Essentials</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +145,12 @@
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="Properties\Default.rd.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.UWP.csproj">
+      <Project>{f444a19e-9f4a-4448-ba74-3897f06de50b}</Project>
+      <Name>P42.Uno.Xamarin.Essentials.UWP</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\UnoSamples.Shared\UnoSamples.Shared.projitems" Label="Shared" Condition="Exists('..\UnoSamples.Shared\UnoSamples.Shared.projitems')" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

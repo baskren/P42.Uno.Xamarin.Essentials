@@ -68,9 +68,9 @@
     <PackageReference Include="Xamarin.AndroidX.Palette" Version="1.0.0.6" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Xamarin.Essentials\Xamarin.Essentials.csproj">
-      <Project>{CD6D6AE6-83A1-41B1-BD7C-C555A77C288B}</Project>
-      <Name>Xamarin.Essentials</Name>
+    <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.Android.csproj">
+      <Project>{b9a8f022-742d-4ad3-bba3-dfebbb997922}</Project>
+      <Name>P42.Uno.Xamarin.Essentials.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\DeviceTests.Shared\DeviceTests.Shared.csproj">
       <Project>{D30EA5AD-6C9B-4517-9767-41C2E62946DB}</Project>

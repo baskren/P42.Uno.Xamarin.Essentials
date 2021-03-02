@@ -1,0 +1,43 @@
+<Project ToolsVersion="15.0">
+
+  <PropertyGroup>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+    <AssemblyName>P42.Uno.Xamarin.Essentials</AssemblyName>
+    <RootNamespace>P42.Uno.Xamarin.Essentials</RootNamespace>
+
+    <NoWarn>Uno0001</NoWarn>
+
+    <!--
+    Force all projects of this folder to use a different output
+    path to avoid intermediate output collisions
+    -->
+	  <BaseOutputPath>bin\$(MSBuildProjectName)</BaseOutputPath>
+	  <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+	  <DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
+
+    <DebugType>portable</DebugType>
+
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LinkerDefinition.Wasm.xml">
+      <LogicalName>$(AssemblyName).xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="**\*.shared.cs" />
+    <Compile Include="**\*.shared.*.cs" />
+    
+    <PackageReference Include="Uno.UI" Version="3.5.1" />
+  </ItemGroup>
+
+</Project>

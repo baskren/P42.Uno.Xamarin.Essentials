@@ -32,13 +32,9 @@ namespace Xamarin.Essentials
 
         internal Task<Stream> PlatformOpenReadAsync(ScreenshotFormat format)
         {
-            var data = format switch
-            {
-                ScreenshotFormat.Jpeg => uiImage.AsJPEG(),
-                _ => uiImage.AsPNG()
-            };
-
-            return Task.FromResult(data.AsStream());
+            if (format == ScreenshotFormat.Jpeg)
+                return Task.FromResult(uiImage.AsJPEG().AsStream());
+            return Task.FromResult(uiImage.AsPNG().AsStream());
         }
     }
 }

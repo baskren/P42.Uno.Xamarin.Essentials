@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>P42.Uno.Xamarin.Essentials</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Uno.UI.Runtime.Skia" Version="3.0.0-PullRequest-3602-17779-1-3602.956" />
+    <Compile Include="**\*.skia.cs" />
+    <Compile Include="**\*.skia.*.cs" />
+    <Compile Include="**\*.shared.cs" />
+    <Compile Include="**\*.shared.*.cs" />
+  </ItemGroup>
+</Project>

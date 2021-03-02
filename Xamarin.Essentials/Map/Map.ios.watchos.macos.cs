@@ -65,17 +65,18 @@ namespace Xamarin.Essentials
 
         static async Task<CLPlacemark[]> GetPlacemarksAsync(NSDictionary address)
         {
-            using var geocoder = new CLGeocoder();
-
-            try
+            using (var geocoder = new CLGeocoder())
             {
-                // we need to await to keep the geocoder alive until after the async
-                return await geocoder.GeocodeAddressAsync(address);
-            }
-            catch
-            {
-                Debug.WriteLine("Unable to get geocode address from address");
-                return null;
+                try
+                {
+                    // we need to await to keep the geocoder alive until after the async
+                    return await geocoder.GeocodeAddressAsync(address);
+                }
+                catch
+                {
+                    Debug.WriteLine("Unable to get geocode address from address");
+                    return null;
+                }
             }
         }
 

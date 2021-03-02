@@ -54,14 +54,16 @@ namespace Xamarin.Essentials
                  AltitudeReferenceSystem = coordinate.Point.AltitudeReferenceSystem.ToEssentials()
              };
 
-        internal static AltitudeReferenceSystem ToEssentials(this WindowsARS altitudeReferenceSystem) =>
-            altitudeReferenceSystem switch
+        internal static AltitudeReferenceSystem ToEssentials(this WindowsARS altitudeReferenceSystem)
+        {
+            switch (altitudeReferenceSystem )
             {
-                WindowsARS.Ellipsoid => AltitudeReferenceSystem.Ellipsoid,
-                WindowsARS.Geoid => AltitudeReferenceSystem.Geoid,
-                WindowsARS.Surface => AltitudeReferenceSystem.Surface,
-                WindowsARS.Terrain => AltitudeReferenceSystem.Terrain,
-                _ => AltitudeReferenceSystem.Unspecified
+                case WindowsARS.Ellipsoid : return AltitudeReferenceSystem.Ellipsoid;
+                case WindowsARS.Geoid : return AltitudeReferenceSystem.Geoid;
+                case WindowsARS.Surface : return AltitudeReferenceSystem.Surface;
+                case WindowsARS.Terrain : return AltitudeReferenceSystem.Terrain;
+                default: return AltitudeReferenceSystem.Unspecified;
             };
+        }
     }
 }

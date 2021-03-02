@@ -106,7 +106,7 @@
     <Reference Include="System.Numerics" />
     <AndroidResource Include="Resources\xml\*.xml" />
 
-    <PackageReference Include="Xamarin.AndroidX.Browser" Version="1.3.0.5" />
+    <PackageReference Include="Xamarin.AndroidX.Browser" Version="1.3.0" />
 
   </ItemGroup>
 
@@ -193,9 +193,6 @@
     <None Remove="WasmScripts\UnoVibration.js" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Vibration\Vibration.unowasm-nope.cs" />
-  </ItemGroup>
 
   <!-- JAVASCRIPT FOR WASM -->
   <ItemGroup>

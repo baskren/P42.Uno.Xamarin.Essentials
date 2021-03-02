@@ -2,7 +2,7 @@
 <Project Sdk="Tizen.NET.Sdk/1.0.9">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>tizen50</TargetFramework>
+    <TargetFramework>tizen40</TargetFramework>
     <OutputType>Exe</OutputType>
     <DefineConstants>$(DefineConstants);__TIZEN__;UNO_PLATFORM</DefineConstants>
   </PropertyGroup>
@@ -27,7 +27,7 @@
     <PackageReference Include="Uno.UI.RemoteControl" Version="3.5.1" Condition="'$(Configuration)'=='Debug'" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Xamarin.Essentials\Xamarin.Essentials.csproj" />
+    <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.Tizen.csproj" />
   </ItemGroup>
   <Import Project="..\UnoSamples.Shared\UnoSamples.Shared.projitems" Label="Shared" />
 </Project>
