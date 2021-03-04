@@ -88,12 +88,16 @@ namespace Xamarin.Essentials
 
         internal string ValueForKey(string key, string service)
         {
-            using var record = ExistingRecordForKey(key, service);
-            using var match = SecKeyChain.QueryAsRecord(record, out var resultCode);
-            if (resultCode == SecStatusCode.Success)
-                return NSString.FromData(match.ValueData, NSStringEncoding.UTF8);
-            else
-                return null;
+            using (var record = ExistingRecordForKey(key, service))
+            {
+                using (var match = SecKeyChain.QueryAsRecord(record, out var resultCode))
+                {
+                    if (resultCode == SecStatusCode.Success)
+                        return NSString.FromData(match.ValueData, NSStringEncoding.UTF8);
+                    else
+                        return null;
+                }
+            }
         }
 
         internal void SetValueForKey(string value, string key, string service)
@@ -113,32 +117,34 @@ namespace Xamarin.Essentials
                     RemoveRecord(record);
             }
 
-            using var newRecord = CreateRecordForNewKeyValue(key, value, service);
-            var result = SecKeyChain.Add(newRecord);
-
-            switch (result)
+            using (var newRecord = CreateRecordForNewKeyValue(key, value, service))
             {
-                case SecStatusCode.DuplicateItem:
-                    {
-                        Debug.WriteLine("Duplicate item found. Attempting to remove and add again.");
+                var result = SecKeyChain.Add(newRecord);
 
-                        // try to remove and add again
-                        if (Remove(key, service))
+                switch (result)
+                {
+                    case SecStatusCode.DuplicateItem:
                         {
-                            result = SecKeyChain.Add(newRecord);
-                            if (result != SecStatusCode.Success)
-                                throw new Exception($"Error adding record: {result}");
+                            Debug.WriteLine("Duplicate item found. Attempting to remove and add again.");
+
+                            // try to remove and add again
+                            if (Remove(key, service))
+                            {
+                                result = SecKeyChain.Add(newRecord);
+                                if (result != SecStatusCode.Success)
+                                    throw new Exception($"Error adding record: {result}");
+                            }
+                            else
+                            {
+                                Debug.WriteLine("Unable to remove key.");
+                            }
                         }
-                        else
-                        {
-                            Debug.WriteLine("Unable to remove key.");
-                        }
-                    }
-                    break;
-                case SecStatusCode.Success:
-                    return;
-                default:
-                    throw new Exception($"Error adding record: {result}");
+                        break;
+                    case SecStatusCode.Success:
+                        return;
+                    default:
+                        throw new Exception($"Error adding record: {result}");
+                }
             }
         }
 
@@ -158,11 +164,13 @@ namespace Xamarin.Essentials
 
         internal void RemoveAll(string service)
         {
-            using var query = new SecRecord(SecKind.GenericPassword) { Service = service };
-            if (!string.IsNullOrWhiteSpace(accessGroup))
-                query.AccessGroup = accessGroup;
+            using (var query = new SecRecord(SecKind.GenericPassword) { Service = service })
+            {
+                if (!string.IsNullOrWhiteSpace(accessGroup))
+                    query.AccessGroup = accessGroup;
 
-            SecKeyChain.Remove(query);
+                SecKeyChain.Remove(query);
+            }
         }
 
         SecRecord CreateRecordForNewKeyValue(string key, string value, string service)
