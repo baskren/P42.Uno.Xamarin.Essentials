@@ -17,6 +17,7 @@
 	  <BaseOutputPath>bin\$(MSBuildProjectName)</BaseOutputPath>
 	  <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
 
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 	  <DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
 
