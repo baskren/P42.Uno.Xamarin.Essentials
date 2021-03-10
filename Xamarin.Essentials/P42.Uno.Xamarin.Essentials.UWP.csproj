@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="MSBuild.Sdk.Extras/3.0.22">
   <PropertyGroup>
-    <TargetFrameworks>uap10.0.16299;</TargetFrameworks>
+    <TargetFrameworks>uap10.0.17763;</TargetFrameworks>
     
     <!-- sourcelink: Embed source files that are not tracked by the source control manager to the PDB -->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.9" PrivateAssets="all" />
     <PackageReference Include="Uno.UI" Version="3.5.1" />
 
-    <SDKReference Include="WindowsMobile, Version=10.0.16299.0">
+    <SDKReference Include="WindowsMobile, Version=10.0.17763.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
 
