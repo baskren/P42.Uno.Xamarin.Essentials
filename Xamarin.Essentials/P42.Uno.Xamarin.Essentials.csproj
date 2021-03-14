@@ -1,13 +1,9 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.22">
   <PropertyGroup>
-    <!--
-    <TargetFrameworks>netstandard1.0;netstandard2.0;Xamarin.iOS10;Xamarin.TVOS10;Xamarin.WatchOS10;MonoAndroid80;MonoAndroid81;MonoAndroid90;MonoAndroid10.0;tizen40;Xamarin.Mac20;</TargetFrameworks>
-    -->
-    <NoWarn>Uno0001</NoWarn>
+
     <TargetFrameworks>netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;MonoAndroid11.0;MonoAndroid10.0;</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">uap10.0.17763;$(TargetFrameworks);</TargetFrameworks>
-    <AssemblyName>P42.Uno.Xamarin.Essentials</AssemblyName>
-    <RootNamespace>Xamarin.Essentials</RootNamespace>
+
     <PackageId>P42.Uno.Xamarin.Essentials</PackageId>
     <PackageIcon>icon.png</PackageIcon>
     <!-- <PackageIconUrl>https://raw.githubusercontent.com/xamarin/Essentials/master/Assets/xamarin.essentials_128x128.png</PackageIconUrl> -->
@@ -32,13 +28,10 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://go.microsoft.com/fwlink/?linkid=868960</PackageProjectUrl>
-    <MDocDocumentationDirectory>$(MSBuildThisFileDirectory)..\docs\en</MDocDocumentationDirectory>
     <DebugType>portable</DebugType>
     <Configurations>Debug;Release</Configurations>
  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)'=='Release' And '$(OS)' == 'Windows_NT' ">
     <!-- sourcelink: Declare that the Repository URL can be published to NuSpec -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -47,6 +40,7 @@
     <!-- sourcelink: Include PDB in the built .nupkg -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
+
   <ItemGroup Condition=" '$(Configuration)'=='Release' And '$(OS)' == 'Windows_NT' ">
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
@@ -56,15 +50,11 @@
     <None Include="..\LICENSE" PackagePath="" Pack="true" />
     <None Include="..\Assets\xamarin.essentials_128x128.png" PackagePath="icon.png" Pack="true" />
     <None Include="..\nugetreadme.txt" PackagePath="readme.txt" Pack="true" />
-    <PackageReference Include="mdoc" Version="5.7.4.10" PrivateAssets="All" />
     <PackageReference Include="Xamarin.Build.TypeRedirector" Version="0.1.2-preview" PrivateAssets="all" />
-    <Compile Include="**\*.shared.cs" />
-    <Compile Include="**\*.shared.*.cs" />
   </ItemGroup>
 
   <!-- WASM -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard2.')) ">
-    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <PackageReference Include="Uno.UI.WebAssembly" Version="3.5.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <Compile Include="**\*.unowasm.cs" />
@@ -79,8 +69,6 @@
     <Compile Include="**\*.netstandard.cs" />
     <Compile Include="**\*.netstandard.*.cs" />
     -->
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="LinkerDefinition.Wasm.xml">
       <LogicalName>$(AssemblyName).xml</LogicalName>
     </EmbeddedResource>
@@ -88,8 +76,6 @@
 
   <!-- UWP -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.9" PrivateAssets="all" />
-    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <Compile Include="**\*.uwp.cs" />
     <Compile Include="**\*.uwp.*.cs" />
     <SDKReference Include="WindowsMobile, Version=10.0.16299.0">
@@ -99,7 +85,6 @@
 
   <!-- ANDROID -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
-    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <Compile Include="**\*.android.cs" />
     <Compile Include="**\*.android.*.cs" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />    
@@ -127,7 +112,6 @@
   -->
   <!-- IOS -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
-    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <Compile Include="**\*.ios.cs" />
     <Compile Include="**\*.ios.*.cs" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
@@ -137,7 +121,6 @@
 
   <!-- TVOS -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.TVOS')) ">
-    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <Compile Include="**\*.tvos.cs" />
     <Compile Include="**\*.tvos.*.cs" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
@@ -147,7 +130,6 @@
 
   <!-- WATCH OS -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.WatchOS')) ">
-    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <Compile Include="**\*.watchos.cs" />
     <Compile Include="**\*.watchos.*.cs" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
@@ -156,7 +138,6 @@
 
   <!-- TIZEN -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('tizen')) ">
-    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <PackageReference Include="Tizen.NET" Version="4.0.0" PrivateAssets="All" />
     <Compile Include="**\*.tizen.cs" />
     <Compile Include="**\*.tizen.*.cs" />
@@ -164,7 +145,6 @@
 
   <!-- MACOS -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac20')) ">
-    <PackageReference Include="Uno.UI" Version="3.5.1" />
     <Compile Include="**\*.macos.cs" />
     <Compile Include="**\*.macos.*.cs" />
     <Reference Include="System.Numerics" />
@@ -215,5 +195,4 @@
     <EmbeddedResource Include="WasmScripts\UnoVibration.js" />
   </ItemGroup>
   
-  <Import Project="$(MSBuildThisFileDirectory)mdoc.targets" />
 </Project>

@@ -10,6 +10,9 @@
     <Compile Include="**\*.unowasm.cs" />
     <Compile Include="**\*.unowasm.*.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="WasmScripts\FileSaver.min.js.map" />
+  </ItemGroup>
   
   <ItemGroup>
     <EmbeddedResource Include="LinkerDefinition.Wasm.xml">
@@ -21,10 +24,9 @@
   <!-- JAVASCRIPT FOR WASM -->
   <ItemGroup>
     <EmbeddedResource Include="WasmScripts\FileSaver.min.js" />
+    <EmbeddedResource Include="WasmScripts\FileSaver.min.js.map" />
     <EmbeddedResource Include="WasmScripts\html2canvas.min.js" />
     <EmbeddedResource Include="WasmScripts\jquery-3.5.1.slim.min.js" />
-    <EmbeddedResource Include="WasmScripts\motion-sensors.js" />
-    <EmbeddedResource Include="WasmScripts\sensor.js" />
     <EmbeddedResource Include="WasmScripts\UnoFilePicker.js" />
     <EmbeddedResource Include="WasmScripts\UnoFileSystem.js" />
     <EmbeddedResource Include="WasmScripts\UnoMimeTypes.js" />

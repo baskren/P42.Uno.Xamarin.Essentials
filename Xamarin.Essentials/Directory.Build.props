@@ -6,9 +6,9 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
     <AssemblyName>P42.Uno.Xamarin.Essentials</AssemblyName>
-    <RootNamespace>P42.Uno.Xamarin.Essentials</RootNamespace>
+    <RootNamespace>Xamarin.Essentials</RootNamespace>
 
-    <NoWarn>Uno0001</NoWarn>
+    <NoWarn>Uno0001;VSX1000</NoWarn>
 
     <!--
     Force all projects of this folder to use a different output
