@@ -4,12 +4,6 @@
     <TargetFrameworks>xamarinmac20;</TargetFrameworks>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="**\*.macos.cs" />
-    <Compile Include="**\*.macos.*.cs" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors" />
-    <Reference Include="OpenTK" />
-  </ItemGroup>
+  <Import Project=".\P42.Uno.Xamarin.Essentials.MacOS.props" />
 
 </Project>

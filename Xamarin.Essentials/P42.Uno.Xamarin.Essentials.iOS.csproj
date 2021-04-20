@@ -4,16 +4,6 @@
     <TargetFrameworks>xamarinios10;</TargetFrameworks>
   </PropertyGroup>
 
-  <ItemGroup>
-  
-    <PackageReference Include="Uno.UI" Version="3.6.6" />
-    <Compile Include="**\*.ios.cs" />
-    <Compile Include="**\*.ios.*.cs" />
+  <Import Project=".\P42.Uno.Xamarin.Essentials.iOS.props" />
 
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
-
-    <Reference Include="System.Numerics" />
-    <Reference Include="OpenTK-1.0" />
-
-  </ItemGroup>
 </Project>

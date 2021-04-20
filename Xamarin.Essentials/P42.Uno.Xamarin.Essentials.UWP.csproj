@@ -9,15 +9,6 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="**\*.uwp.cs" />
-    <Compile Include="**\*.uwp.*.cs" />
+  <Import Project=".\P42.Uno.Xamarin.Essentials.UWP.props" />
 
-    <PackageReference Include="Uno.UI" Version="3.6.6" />
-
-    <SDKReference Include="WindowsMobile, Version=10.0.18362.0">
-      <Name>Windows Mobile Extensions for the UWP</Name>
-    </SDKReference>
-
-  </ItemGroup>
 </Project>

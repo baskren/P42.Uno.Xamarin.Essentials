@@ -4,41 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Uno.UI.Runtime.WebAssembly" Version="3.6.6" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <Compile Include="**\*.unowasm.cs" />
-    <Compile Include="**\*.unowasm.*.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="WasmScripts\FileSaver.min.js.map" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <EmbeddedResource Include="LinkerDefinition.Wasm.xml">
-      <LogicalName>$(AssemblyName).xml</LogicalName>
-    </EmbeddedResource>
-  </ItemGroup>
 
-
-  <!-- JAVASCRIPT FOR WASM -->
-  <ItemGroup>
-    <EmbeddedResource Include="WasmScripts\FileSaver.min.js" />
-    <EmbeddedResource Include="WasmScripts\FileSaver.min.js.map" />
-    <EmbeddedResource Include="WasmScripts\html2canvas.min.js" />
-    <EmbeddedResource Include="WasmScripts\jquery-3.5.1.slim.min.js" />
-    <EmbeddedResource Include="WasmScripts\UnoFilePicker.js" />
-    <EmbeddedResource Include="WasmScripts\UnoFileSystem.js" />
-    <EmbeddedResource Include="WasmScripts\UnoMimeTypes.js" />
-    <EmbeddedResource Include="WasmScripts\UnoOrientation.js" />
-    <EmbeddedResource Include="WasmScripts\UnoPathExtentions.js" />
-    <EmbeddedResource Include="WasmScripts\UnoScreenshot.js" />
-    <EmbeddedResource Include="WasmScripts\UnoShare.js" />
-    <EmbeddedResource Include="WasmScripts\UnoSms.js" />
-    <EmbeddedResource Include="WasmScripts\UnoTextToSpeech.js" />
-    <EmbeddedResource Include="WasmScripts\UnoUtils.js" />
-    <EmbeddedResource Include="WasmScripts\UnoUuid.js" />
-    <EmbeddedResource Include="WasmScripts\UnoVibration.js" />
-  </ItemGroup>
+  <Import Project=".\P42.Uno.Xamarin.Essentials.Wasm.props" />
 
 </Project>
