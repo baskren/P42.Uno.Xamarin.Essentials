@@ -7,5 +7,7 @@
     <PackageReference Include="Uno.UI.Runtime.Skia.Tizen" Version="3.7.3" />
     <Compile Include="**\*.tizen.cs" />
     <Compile Include="**\*.tizen.*.cs" />
+    
+    <PackageReference Include="Uno.UI" Version="3.7.3" />
   </ItemGroup>
 </Project>

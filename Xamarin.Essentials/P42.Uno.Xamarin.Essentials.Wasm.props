@@ -35,6 +35,8 @@
     <EmbeddedResource Include="WasmScripts\UnoUtils.js" />
     <EmbeddedResource Include="WasmScripts\UnoUuid.js" />
     <EmbeddedResource Include="WasmScripts\UnoVibration.js" />
+    
+    <PackageReference Include="Uno.UI" Version="3.7.3" />
   </ItemGroup>
 
 </Project>
