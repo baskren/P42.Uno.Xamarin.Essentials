@@ -33,7 +33,7 @@
     <Compile Include="**\*.shared.cs" />
     <Compile Include="**\*.shared.*.cs" />
     
-    <PackageReference Include="Uno.UI" Version="3.7.3" />
+    <PackageReference Include="Uno.UI" Version="3.8.6" />
   </ItemGroup>
 
 </Project>
