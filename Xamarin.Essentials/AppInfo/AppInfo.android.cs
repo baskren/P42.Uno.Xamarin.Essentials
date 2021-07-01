@@ -6,7 +6,7 @@ using Android.Provider;
 #if __ANDROID_29__
 using AndroidX.Core.Content.PM;
 #else
-using Android.Support.V4.Content.PM;
+//using Android.Support.V4.Content.PM;
 #endif
 
 namespace Xamarin.Essentials

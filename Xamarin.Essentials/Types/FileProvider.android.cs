@@ -8,7 +8,7 @@ using AndroidUri = Android.Net.Uri;
 #if __ANDROID_29__
 using ContentFileProvider = AndroidX.Core.Content.FileProvider;
 #else
-using ContentFileProvider = Android.Support.V4.Content.FileProvider;
+//using ContentFileProvider = Android.Support.V4.Content.FileProvider;
 #endif
 
 namespace Xamarin.Essentials

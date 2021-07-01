@@ -9,8 +9,8 @@ using Android.OS;
 using AndroidX.Core.App;
 using AndroidX.Core.Content;
 #else
-using Android.Support.V4.App;
-using Android.Support.V4.Content;
+//using Android.Support.V4.App;
+//using Android.Support.V4.Content;
 #endif
 
 namespace Xamarin.Essentials
