@@ -2,6 +2,7 @@
 <Project Sdk="MSBuild.Sdk.Extras/3.0.22">
   <PropertyGroup>
     <TargetFrameworks>monoandroid10.0</TargetFrameworks>
+    
   </PropertyGroup>
 
   <Import Project=".\P42.Uno.Xamarin.Essentials.Android.props" />
