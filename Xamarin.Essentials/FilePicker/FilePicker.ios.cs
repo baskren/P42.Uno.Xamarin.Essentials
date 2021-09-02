@@ -85,10 +85,19 @@ namespace Xamarin.Essentials
                 PickHandler?.Invoke(null);
         }
 
+        static string GetTmpDir()
+        {
+            if (!System.IO.Directory.Exists(FileSystem.CacheDirectory))
+                System.IO.Directory.CreateDirectory(FileSystem.CacheDirectory);
+            var tmpDir = Path.Combine(FileSystem.CacheDirectory, Guid.NewGuid().ToString());
+            if (!System.IO.Directory.Exists(tmpDir))
+                System.IO.Directory.CreateDirectory(tmpDir);
+            return tmpDir;
+        }
+
         static async Task<string> PlatformExportAsync(byte[] bytes, SaveOptions options)
         {
-            var tmpDir = Path.Combine(FileSystem.CacheDirectory, Guid.NewGuid().ToString());
-            var tmpPath = Path.Combine(tmpDir, options?.SuggestedFileName ?? "data.bin");
+            var tmpPath = Path.Combine(GetTmpDir(), options?.SuggestedFileName ?? "data.bin");
             await File.WriteAllBytesAsync(tmpPath, bytes);
             using (var exportUrl = new NSUrl(tmpPath))
             {
@@ -99,8 +108,7 @@ namespace Xamarin.Essentials
 
         static async Task<string> PlatformExportAsync(string text, SaveOptions options)
         {
-            var tmpDir = Path.Combine(FileSystem.CacheDirectory, Guid.NewGuid().ToString());
-            var tmpPath = Path.Combine(tmpDir, options?.SuggestedFileName ?? "data.txt");
+            var tmpPath = Path.Combine(GetTmpDir(), options?.SuggestedFileName ?? "data.txt");
             await File.WriteAllTextAsync(tmpPath, text);
             using (var exportUrl = new NSUrl(tmpPath))
             {
@@ -110,8 +118,12 @@ namespace Xamarin.Essentials
 
         static async Task<string> PlatformExportAsync(NSUrl exportUrl, SaveOptions options)
         {
+            // get directory into which the file will be placed
+
             var tcs = new TaskCompletionSource<IEnumerable<FileResult>>();
-            using (var documentPicker = new UIDocumentPickerViewController(exportUrl, UIDocumentPickerMode.MoveToService)
+            //using (var documentPicker = new UIDocumentPickerViewController(exportUrl, UIDocumentPickerMode.MoveToService)
+            //using (var documentPicker = new UIDocumentPickerViewController(exportUrl, UIDocumentPickerMode.ExportToService)
+            using (var documentPicker = new UIDocumentPickerViewController(new string[] { UTType.Folder }, UIDocumentPickerMode.Open)
             {
                 Delegate = new PickerDelegate
                 {
@@ -131,14 +143,29 @@ namespace Xamarin.Essentials
                 var parentController = Platform.GetCurrentViewController();
                 parentController.PresentViewController(documentPicker, true, null);
 
-                var result = await tcs.Task;
+                if ((await tcs.Task).FirstOrDefault() is FileResult result)
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(exportUrl.Path);
+                    var extension = Path.GetExtension(exportUrl.Path);
+                    var destFileName = Path.Combine(result.Url.Path, fileName + (string.IsNullOrWhiteSpace(extension) ? null : extension ) );
 
-                if (File.Exists(exportUrl.Path))
-                    File.Delete(exportUrl.Path);
-                if (Directory.Exists(Path.GetDirectoryName(exportUrl.Path)))
-                    Directory.Delete(Path.GetDirectoryName(exportUrl.Path));
+                    int attempt = 0;
+                    while (NSFileManager.DefaultManager.FileExists(destFileName))
+                    {
+                        attempt++;
+                        destFileName = Path.Combine(result.Url.Path, fileName + "(" + attempt + ")" + (string.IsNullOrWhiteSpace(extension) ? null : extension));
+                    }
+                    
+                    //var destUrl = new NSUrl(destFileName);
+                    NSFileManager.DefaultManager.Move(exportUrl.Path, destFileName, out NSError error);
 
-                return result.FirstOrDefault()?.FullPath;
+                    if (error != null)
+                        throw new Exception(error.LocalizedDescription);
+
+                    return destFileName;
+                }
+
+                return null;
             }
         }
     }

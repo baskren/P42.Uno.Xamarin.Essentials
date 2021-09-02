@@ -53,7 +53,7 @@ namespace Xamarin.Essentials
         NSData bookmark;
 
         internal BookmarkDataFileResult(NSUrl url)
-            : base()
+            : base(url)
         {
             try
             {
