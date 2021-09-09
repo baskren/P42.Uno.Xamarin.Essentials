@@ -2,7 +2,7 @@
 
   <ItemGroup>
   
-    <PackageReference Include="Uno.UI" Version="3.8.13" />
+    <PackageReference Include="Uno.UI" Version="3.9.7" />
     <Compile Include="**\*.ios.cs" />
     <Compile Include="**\*.ios.*.cs" />
 
