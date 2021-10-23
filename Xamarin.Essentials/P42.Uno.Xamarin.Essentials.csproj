@@ -1,7 +1,8 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.22">
   <PropertyGroup>
 
-    <TargetFrameworks>netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;MonoAndroid11.0;MonoAndroid10.0;</TargetFrameworks>
+    <TargetFramework Condition=" '$(GitHubActionTarget)' == 'WASM' ">netstandard2.0</TargetFramework>
+    <TargetFrameworks Condition=" '$(GitHubActionTarget)' != 'WASM' ">netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;MonoAndroid11.0;MonoAndroid10.0;</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">uap10.0.18362;$(TargetFrameworks);</TargetFrameworks>
 
     
@@ -10,6 +11,7 @@
 
   <!-- WASM -->
   <Import Project=".\P42.Uno.Xamarin.Essentials.Wasm.props" Condition=" $(TargetFramework.StartsWith('net')) " />
+  <Import Project=".\P42.Uno.Xamarin.Essentials.Wasm.props" Condition=" '$(GitHubActionTarget)' == 'WASM' " />
 
   <!-- UWP -->
   <Import Project=".\P42.Uno.Xamarin.Essentials.UWP.props" Condition=" $(TargetFramework.StartsWith('uap10.0')) " />
