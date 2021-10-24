@@ -3,7 +3,7 @@
 
     <TargetFramework Condition=" '$(GitHubActionTarget)' == 'WASM' ">netstandard2.0</TargetFramework>
     <TargetFrameworks Condition=" '$(GitHubActionTarget)' != 'WASM' ">netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;MonoAndroid11.0;MonoAndroid10.0;</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">uap10.0.18362;$(TargetFrameworks);</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.18362;</TargetFrameworks>
 
     
     <SynchReleaseVersion>false</SynchReleaseVersion>
