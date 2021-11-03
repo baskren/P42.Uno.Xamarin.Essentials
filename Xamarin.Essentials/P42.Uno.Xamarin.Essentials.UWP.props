@@ -6,10 +6,11 @@
 
     <PackageReference Include="Uno.UI" Version="3.10.11" />
 
+<!--
     <SDKReference Include="WindowsMobile, Version=10.0.18362.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
-
+-->
   </ItemGroup>
 
 
