@@ -82,17 +82,18 @@ namespace Xamarin.Essentials
             await Permissions.RequestAsync<Permissions.StorageWrite>();
 
             // Essentials supports >= API 19 where this action is available
-            var pickFolderIntent = new Intent(Intent.ActionOpenDocumentTree);
+            //var pickFolderIntent = new Intent(Intent.ActionOpenDocumentTree);
 
             var fileName = options?.SuggestedFileName;
             if (string.IsNullOrWhiteSpace(options?.SuggestedFileName))
-                fileName = Xamarin.Essentials.AppInfo.Name + ".bin";
+                fileName = Xamarin.Essentials.AppInfo.Name + ".data";
 
             var tcs = new TaskCompletionSource<string>();
-            var pickerIntent = Intent.CreateChooser(pickFolderIntent, options?.PickerTitle ?? "Choose Folder to save " + fileName);
+            //var pickerIntent = Intent.CreateChooser(pickFolderIntent, options?.PickerTitle ?? "Choose Folder to save " + fileName);
 
             try
             {
+                /*
                 void OnPickFolderResult(Intent intent)
                 {
                     // The uri returned is only temporary and only lives as long as the Activity that requested it,
@@ -101,7 +102,28 @@ namespace Xamarin.Essentials
                     string path = null;
                     if (intent.ClipData == null)
                     {
-                        path = FileSystem.EnsurePhysicalPath(intent.Data);
+                        if (intent.Data is global::Android.Net.Uri uri)
+                        {
+                            if (global::Android.Provider.DocumentsContract.IsTreeUri(uri))
+                            {
+                               
+
+                                var id = global::Android.Provider.DocumentsContract.GetTreeDocumentId(uri);
+
+                                var fileUri = global::Android.Provider.DocumentsContract.BuildChildDocumentsUriUsingTree(uri, fileName);
+                                
+
+                                using (var fileOutputStream = global::Android.App.Application.Context.ContentResolver.OpenOutputStream(fileUri))
+                                {
+                                    writeAction?.Invoke(fileOutputStream);
+                                    fileOutputStream.Flush();
+                                    fileOutputStream.Close();
+                                    tcs.SetResult(fileUri.Path);
+                                }
+                                System.Diagnostics.Debug.WriteLine($"FilePicker.");
+                            }
+                        }
+                        //path = FileSystem.EnsurePhysicalPath(intent.Data);
                     }
                     else
                     {
@@ -142,6 +164,46 @@ namespace Xamarin.Essentials
                 }
 
                 await IntermediateActivity.StartAsync(pickerIntent, Platform.requestCodeFilePicker, onResult: OnPickFolderResult);
+                */
+                var saveFileIntent = new Intent(Intent.ActionCreateDocument);
+                saveFileIntent.AddCategory(Intent.CategoryOpenable);
+                if (string.IsNullOrWhiteSpace(options?.ContentType))
+                    saveFileIntent.SetType(FileSystem.MimeTypes.All);
+                else
+                    saveFileIntent.SetType(options.ContentType);
+                saveFileIntent.PutExtra(Intent.ExtraTitle, fileName);
+
+                void OnSaveFileResult(Intent intent)
+                {
+                    if (intent.Data is global::Android.Net.Uri uri)
+                    {
+                        using (var fileOutputStream = global::Android.App.Application.Context.ContentResolver.OpenOutputStream(uri))
+                        {
+                            writeAction?.Invoke(fileOutputStream);
+                            fileOutputStream.Flush();
+                            fileOutputStream.Close();
+
+                            //var x = global::Android.App.Application.Context.ContentResolver.OpenFileDescriptor(uri, "r");
+                            var cursor = global::Android.App.Application.Context.ContentResolver.Query(uri, null, null, null, null);
+                            var nameIndex = cursor.GetColumnIndex(global::Android.Provider.OpenableColumns.DisplayName);
+                            var sizeIndex = cursor.GetColumnIndex(global::Android.Provider.OpenableColumns.Size);
+                            cursor.MoveToFirst();
+                            var name = cursor.GetString(nameIndex);
+                            var size = cursor.GetString(sizeIndex);
+
+                            var path = new List<string>(uri.PathSegments);
+                            if (path.Any())
+                                path.RemoveAt(path.Count - 1);
+                            path.Add(name);
+                            tcs.SetResult(Path.Combine(path.ToArray()));
+                            return;
+                        }
+                    }
+
+                    tcs.SetResult(null);
+                }
+
+                await IntermediateActivity.StartAsync(saveFileIntent, Platform.requestCodeSaveFile, onResult: OnSaveFileResult);
 
                 return await tcs.Task;
             }
