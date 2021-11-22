@@ -12,7 +12,9 @@ namespace Xamarin.Essentials
             => true;
 
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         static async Task PlatformComposeAsync(EmailMessage message)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             if (message != null && message.BodyFormat != EmailBodyFormat.PlainText)
                 throw new FeatureNotSupportedException("UWP can only compose plain text email messages.");

@@ -52,7 +52,7 @@ namespace Xamarin.Essentials
             }
             catch(Exception e)
             {
-                System.Diagnostics.Debug.WriteLine($"FilePicker");
+                System.Diagnostics.Debug.WriteLine($"FilePicker Exception: " + e.Message);
             }
 
             return null;

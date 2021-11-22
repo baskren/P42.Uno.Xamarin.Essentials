@@ -31,7 +31,9 @@ namespace Xamarin.Essentials
             return results;
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         static async Task<string> PlatformExportAsync(byte[] bytes, SaveOptions options)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             var path = Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, Guid.NewGuid().ToString());
             File.WriteAllBytes(path, bytes);
@@ -50,7 +52,9 @@ namespace Xamarin.Essentials
             return fileName;
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         static async Task<string> PlatformExportAsync(string text, SaveOptions options)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             //System.Diagnostics.Debug.WriteLine("FilePicker. TEXT");
             var path = Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, Guid.NewGuid().ToString());
