@@ -4,7 +4,7 @@
     <Compile Include="**\*.uwp.cs" />
     <Compile Include="**\*.uwp.*.cs" />
 
-    <PackageReference Include="Uno.UI" Version="3.10.11" />
+    <PackageReference Include="Uno.UI" Version="3.11.6" />
 
 <!--
     <SDKReference Include="WindowsMobile, Version=10.0.18362.0">

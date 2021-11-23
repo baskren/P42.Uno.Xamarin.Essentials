@@ -1,7 +1,7 @@
 <Project ToolsVersion="15.0">
 
   <ItemGroup>
-    <PackageReference Include="Uno.UI.Runtime.WebAssembly" Version="3.10.11" />
+    <PackageReference Include="Uno.UI.Runtime.WebAssembly" Version="3.11.6" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <Compile Include="**\*.unowasm.cs" />
     <Compile Include="**\*.unowasm.*.cs" />
