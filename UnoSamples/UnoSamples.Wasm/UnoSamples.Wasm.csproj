@@ -47,7 +47,7 @@
     <PackageReference Include="Uno.Wasm.Bootstrap.DevServer" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.Wasm.csproj" />
+    <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.WASM.csproj" />
   </ItemGroup>
   <Import Project="..\UnoSamples.Shared\UnoSamples.Shared.projitems" Label="Shared" Condition="Exists('..\UnoSamples.Shared\UnoSamples.Shared.projitems')" />
 </Project>

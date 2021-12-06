@@ -5,6 +5,6 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
-  <Import Project=".\P42.Uno.Xamarin.Essentials.Wasm.props" />
+  <Import Project=".\P42.Uno.Xamarin.Essentials.WASM.props" />
 
 </Project>
