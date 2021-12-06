@@ -35,26 +35,15 @@ namespace Xamarin.Essentials
 
         static async Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
         {
-            if (false)
-            {
-                var x = new FileForAssetResult();
-            }
-
-            System.Diagnostics.Debug.WriteLine("FileSystem.PlatformOpenAppPackageFileAsync WASM ENTER");
             if (filename == null)
                 throw new ArgumentNullException(nameof(filename));
 
-            System.Diagnostics.Debug.WriteLine("FileSystem.PlatformOpenAppPackageFileAsync A");
             var json = await WebAssemblyRuntime.InvokeAsync($"UnoFileSystem_FileForAsset('{filename}')");
-            System.Diagnostics.Debug.WriteLine("FileSystem.PlatformOpenAppPackageFileAsync b json: " + json);
-
             var result = JsonConvert.DeserializeObject<FileForAssetResult>(json);
 
-            System.Diagnostics.Debug.WriteLine("FileSystem.PlatformOpenAppPackageFileAsync C");
             if (result.abort || !string.IsNullOrWhiteSpace(result.error))
                 return null;
             //return Package.Current.InstalledLocation.OpenStreamForReadAsync(NormalizePath(filename));
-            System.Diagnostics.Debug.WriteLine("FileSystem.PlatformOpenAppPackageFileAsync D");
             return File.OpenRead(result.path);
         }
 
