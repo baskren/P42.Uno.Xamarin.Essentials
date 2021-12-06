@@ -26,7 +26,7 @@
 
 
   <!-- WASM -->
-  <Import Project=".\P42.Uno.Xamarin.Essentials.WASM.props" Condition=" $(TargetFramework.StartsWith('net')) " />
+  <Import Project=".\P42.Uno.Xamarin.Essentials.Wasm.props" Condition=" $(TargetFramework.StartsWith('net')) " />
 
   <!-- UWP -->
   <Import Project=".\P42.Uno.Xamarin.Essentials.UWP.props" Condition=" $(TargetFramework.StartsWith('uap10.0')) " />
