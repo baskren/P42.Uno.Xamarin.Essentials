@@ -46,6 +46,18 @@ namespace Xamarin.Essentials
                 return await tcs.Task;
             }
         }
+
+        public static async Task<FileResult> EnsurePhysicalFileResultAsync(Uri uri)
+        {
+            if (uri.IsAbsoluteUri && uri.Scheme.Equals("file", StringComparison.OrdinalIgnoreCase))
+            {
+                var url = new NSUrl(uri.AbsoluteUri);
+                var urls = new NSUrl[] { url };
+                if (await EnsurePhysicalFileResultsAsync(urls) is FileResult[] results && results.Any())
+                    return results[0];
+            }
+            return null;
+        }
     }
 
     class BookmarkDataFileResult : FileResult
