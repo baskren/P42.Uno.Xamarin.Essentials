@@ -4,7 +4,7 @@
     <TargetFrameworks>tizen40</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Uno.UI.Runtime.Skia.Tizen" Version="3.11.6" />
+    <PackageReference Include="Uno.UI.Runtime.Skia.Tizen" Version="4.0.13" />
     <Compile Include="**\*.tizen.cs" />
     <Compile Include="**\*.tizen.*.cs" />
   </ItemGroup>

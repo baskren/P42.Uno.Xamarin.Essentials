@@ -5,7 +5,7 @@ using Windows.Foundation;
 
 namespace Xamarin.Essentials
 {
-    internal static partial class MainThreadExtensions
+    static partial class MainThreadExtensions
     {
         internal static void WatchForError(this IAsyncAction self) =>
             self.AsTask().WatchForError();
