@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Core;
-
+/*
 namespace Xamarin.Essentials
 {
     internal static partial class MainThreadExtensions
@@ -32,3 +32,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+*/
