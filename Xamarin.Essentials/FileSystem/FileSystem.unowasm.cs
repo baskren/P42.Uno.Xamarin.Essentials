@@ -10,7 +10,6 @@ namespace Xamarin.Essentials
 {
     public static partial class FileSystem
     {
-
         static string PlatformCacheDirectory
         {
             get
@@ -43,13 +42,13 @@ namespace Xamarin.Essentials
 
             if (result.abort || !string.IsNullOrWhiteSpace(result.error))
                 return null;
-            //return Package.Current.InstalledLocation.OpenStreamForReadAsync(NormalizePath(filename));
+
+            // return Package.Current.InstalledLocation.OpenStreamForReadAsync(NormalizePath(filename));
             return File.OpenRead(result.path);
         }
 
         internal static string NormalizePath(string path)
             => path.Replace('/', Path.DirectorySeparatorChar);
-
     }
 
     public class FileForAssetResult
@@ -63,7 +62,9 @@ namespace Xamarin.Essentials
         public string isText { get; set; }
 
         [Preserve]
-        public FileForAssetResult() { }
+        public FileForAssetResult()
+        {
+        }
     }
 
     public partial class FileBase

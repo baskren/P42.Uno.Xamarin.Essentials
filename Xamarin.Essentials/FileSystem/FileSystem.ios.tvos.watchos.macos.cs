@@ -89,8 +89,9 @@ namespace Xamarin.Essentials
 
     public partial class FileResult
     {
-        public FileResult(NSUrl nSUrl) : base(nSUrl)
-        { }
+        public FileResult(NSUrl nSUrl)
+            : base(nSUrl)
+        {
+        }
     }
-
 }

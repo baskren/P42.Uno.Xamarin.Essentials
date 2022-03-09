@@ -69,11 +69,12 @@ namespace Xamarin.Essentials
                     AllowsMultipleSelection = false,
                     ResolvesAliases = true,
                     DirectoryUrl = folderUrl,
-                    //Prompt = "THIS IS THE PROMPT!",
+
+                    // Prompt = "THIS IS THE PROMPT!",
                     Title = options?.PickerTitle ?? string.Empty,
                 })
                 {
-                    //if (!string.IsNullOrWhiteSpace(message))
+                    // if (!string.IsNullOrWhiteSpace(message))
                     //    panel.Message = message;
 
                     if (panel.RunModal(folderUrl.Path, options?.SuggestedFileName, new string[] { options?.ContentType ?? FileSystem.MimeTypes.TextPlain }) == 1)

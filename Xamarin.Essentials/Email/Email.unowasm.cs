@@ -11,7 +11,6 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => true;
 
-
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         static async Task PlatformComposeAsync(EmailMessage message)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
@@ -39,6 +38,5 @@ namespace Xamarin.Essentials
 
             WebAssemblyRuntime.InvokeJS($"location.replace('{payload}'");
         }
-
     }
 }

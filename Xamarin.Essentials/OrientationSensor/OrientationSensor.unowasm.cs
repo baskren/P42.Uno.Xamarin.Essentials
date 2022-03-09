@@ -1,7 +1,7 @@
 ﻿using System;
-using Uno.Foundation;
-using Newtonsoft.Json;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Uno.Foundation;
 
 namespace Xamarin.Essentials
 {
@@ -37,14 +37,14 @@ namespace Xamarin.Essentials
         static void LegacyDataUpdated(string json)
         {
             var reading = JsonConvert.DeserializeObject(json);
-            //var data = new OrientationSensorData(reading.Quaternion.X, reading.Quaternion.Y, reading.Quaternion.Z, reading.Quaternion.W);
-            //OnChanged(data);
+
+            // var data = new OrientationSensorData(reading.Quaternion.X, reading.Quaternion.Y, reading.Quaternion.Z, reading.Quaternion.W);
+            // OnChanged(data);
         }
 
         internal static void PlatformStop()
         {
             WebAssemblyRuntime.InvokeJS("UnoOrientation_Stop()");
         }
-
     }
 }

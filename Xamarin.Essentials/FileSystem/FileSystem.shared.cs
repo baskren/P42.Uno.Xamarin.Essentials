@@ -242,5 +242,4 @@ namespace Xamarin.Essentials
         public static explicit operator FileResult(Windows.Storage.StorageFile storageFile)
             => new FileResult(storageFile);
     }
-
 }

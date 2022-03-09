@@ -133,10 +133,13 @@ namespace Xamarin.Essentials
                 var accessStatus = await Geolocator.RequestAccessAsync();
                 switch (accessStatus)
                 {
-                    case GeolocationAccessStatus.Allowed: return PermissionStatus.Granted;
-                    case GeolocationAccessStatus.Unspecified: return PermissionStatus.Unknown;
-                    default: return PermissionStatus.Denied;
-                };
+                    case GeolocationAccessStatus.Allowed:
+                        return PermissionStatus.Granted;
+                    case GeolocationAccessStatus.Unspecified:
+                        return PermissionStatus.Unknown;
+                    default:
+                        return PermissionStatus.Denied;
+                }
             }
         }
 

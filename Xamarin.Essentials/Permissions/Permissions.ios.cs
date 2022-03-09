@@ -15,14 +15,17 @@ namespace Xamarin.Essentials
         {
             internal static PermissionStatus CheckPermissionsStatus(AVAuthorizationMediaType mediaType)
             {
-                var status = AVCaptureDevice.GetAuthorizationStatus(mediaType);
-                switch( status )
+                switch (AVCaptureDevice.GetAuthorizationStatus(mediaType))
                 {
-                    case AVAuthorizationStatus.Authorized: return PermissionStatus.Granted;
-                    case AVAuthorizationStatus.Denied: return PermissionStatus.Denied;
-                    case AVAuthorizationStatus.Restricted: return PermissionStatus.Restricted;
-                    default: return PermissionStatus.Unknown;
-                };
+                    case AVAuthorizationStatus.Authorized:
+                        return PermissionStatus.Granted;
+                    case AVAuthorizationStatus.Denied:
+                        return PermissionStatus.Denied;
+                    case AVAuthorizationStatus.Restricted:
+                        return PermissionStatus.Restricted;
+                    default:
+                        return PermissionStatus.Unknown;
+                }
             }
 
             internal static async Task<PermissionStatus> RequestPermissionAsync(AVAuthorizationMediaType mediaType)
@@ -93,14 +96,17 @@ namespace Xamarin.Essentials
 
             internal static PermissionStatus GetAddressBookPermissionStatus()
             {
-                var status = ABAddressBook.GetAuthorizationStatus();
-                switch( status )
+                switch (ABAddressBook.GetAuthorizationStatus())
                 {
-                    case ABAuthorizationStatus.Authorized : return PermissionStatus.Granted;
-                    case ABAuthorizationStatus.Denied : return PermissionStatus.Denied;
-                    case ABAuthorizationStatus.Restricted : return PermissionStatus.Restricted;
-                    default: return PermissionStatus.Unknown;
-                };
+                    case ABAuthorizationStatus.Authorized:
+                        return PermissionStatus.Granted;
+                    case ABAuthorizationStatus.Denied:
+                        return PermissionStatus.Denied;
+                    case ABAuthorizationStatus.Restricted:
+                        return PermissionStatus.Restricted;
+                    default:
+                        return PermissionStatus.Unknown;
+                }
             }
 
             internal static Task<PermissionStatus> RequestAddressBookPermission()
@@ -182,14 +188,17 @@ namespace Xamarin.Essentials
                 if (!Platform.HasOSVersion(9, 3))
                     return PermissionStatus.Unknown;
 
-                var status = MPMediaLibrary.AuthorizationStatus;
-                switch( status )
+                switch (MPMediaLibrary.AuthorizationStatus)
                 {
-                    case MPMediaLibraryAuthorizationStatus.Authorized : return PermissionStatus.Granted;
-                    case MPMediaLibraryAuthorizationStatus.Denied : return PermissionStatus.Denied;
-                    case MPMediaLibraryAuthorizationStatus.Restricted : return PermissionStatus.Restricted;
-                    default: return PermissionStatus.Unknown;
-                };
+                    case MPMediaLibraryAuthorizationStatus.Authorized:
+                        return PermissionStatus.Granted;
+                    case MPMediaLibraryAuthorizationStatus.Denied:
+                        return PermissionStatus.Denied;
+                    case MPMediaLibraryAuthorizationStatus.Restricted:
+                        return PermissionStatus.Restricted;
+                    default:
+                        return PermissionStatus.Unknown;
+                }
             }
 
             internal static Task<PermissionStatus> RequestMediaPermission()
@@ -276,14 +285,17 @@ namespace Xamarin.Essentials
 
             internal static PermissionStatus GetSpeechPermissionStatus()
             {
-                var status = SFSpeechRecognizer.AuthorizationStatus;
-                switch( status )
+                switch (SFSpeechRecognizer.AuthorizationStatus)
                 {
-                    case SFSpeechRecognizerAuthorizationStatus.Authorized: return PermissionStatus.Granted;
-                    case SFSpeechRecognizerAuthorizationStatus.Denied: return PermissionStatus.Denied;
-                    case SFSpeechRecognizerAuthorizationStatus.Restricted: return PermissionStatus.Restricted;
-                    default: return PermissionStatus.Unknown;
-                };
+                    case SFSpeechRecognizerAuthorizationStatus.Authorized:
+                        return PermissionStatus.Granted;
+                    case SFSpeechRecognizerAuthorizationStatus.Denied:
+                        return PermissionStatus.Denied;
+                    case SFSpeechRecognizerAuthorizationStatus.Restricted:
+                        return PermissionStatus.Restricted;
+                    default:
+                        return PermissionStatus.Unknown;
+                }
             }
 
             internal static Task<PermissionStatus> RequestSpeechPermission()

@@ -40,14 +40,17 @@ namespace Xamarin.Essentials
 
             static PermissionStatus GetPhotoPermissionStatus()
             {
-                var status = PHPhotoLibrary.AuthorizationStatus;
-                switch( status )
+                switch (PHPhotoLibrary.AuthorizationStatus)
                 {
-                    case PHAuthorizationStatus.Authorized: return PermissionStatus.Granted;
-                    case PHAuthorizationStatus.Denied: return PermissionStatus.Denied;
-                    case PHAuthorizationStatus.Restricted: return PermissionStatus.Restricted;
-                    default: return PermissionStatus.Unknown;
-                };
+                    case PHAuthorizationStatus.Authorized:
+                        return PermissionStatus.Granted;
+                    case PHAuthorizationStatus.Denied:
+                        return PermissionStatus.Denied;
+                    case PHAuthorizationStatus.Restricted:
+                        return PermissionStatus.Restricted;
+                    default:
+                        return PermissionStatus.Unknown;
+                }
             }
 
             static Task<PermissionStatus> RequestPhotoPermission()

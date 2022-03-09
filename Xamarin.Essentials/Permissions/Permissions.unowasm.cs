@@ -130,13 +130,15 @@ namespace Xamarin.Essentials
                 if (!MainThread.IsMainThread)
                     throw new PermissionException("Permission request must be invoked on main thread.");
 
-                var accessStatus = await Geolocator.RequestAccessAsync();
-                switch( accessStatus )
+                switch (await Geolocator.RequestAccessAsync())
                 {
-                    case GeolocationAccessStatus.Allowed: return PermissionStatus.Granted;
-                    case GeolocationAccessStatus.Unspecified: return PermissionStatus.Unknown;
-                    default: return PermissionStatus.Denied;
-                };
+                    case GeolocationAccessStatus.Allowed:
+                        return PermissionStatus.Granted;
+                    case GeolocationAccessStatus.Unspecified:
+                        return PermissionStatus.Unknown;
+                    default:
+                        return PermissionStatus.Denied;
+                }
             }
         }
 

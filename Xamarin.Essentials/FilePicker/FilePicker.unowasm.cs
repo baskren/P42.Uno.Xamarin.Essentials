@@ -56,7 +56,7 @@ namespace Xamarin.Essentials
         static async Task<string> PlatformExportAsync(string text, SaveOptions options)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            //System.Diagnostics.Debug.WriteLine("FilePicker. TEXT");
+            // System.Diagnostics.Debug.WriteLine("FilePicker. TEXT");
             var path = Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, Guid.NewGuid().ToString());
             File.WriteAllText(path, text);
 

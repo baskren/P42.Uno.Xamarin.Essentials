@@ -97,7 +97,6 @@ namespace Xamarin.Essentials
             }
             return null;
         }
-
     }
 
     public partial class FilePickerFileType
@@ -132,5 +131,4 @@ namespace Xamarin.Essentials
                 { DevicePlatform.UWP, new[] { FileSystem.Extensions.Pdf } }
             });
     }
-
 }

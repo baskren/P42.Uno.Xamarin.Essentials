@@ -50,7 +50,7 @@ namespace Xamarin.Essentials
                     return await tcs.Task;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine($"FilePicker Exception: " + e.Message);
             }
@@ -130,8 +130,9 @@ namespace Xamarin.Essentials
             // get directory into which the file will be placed
 
             var tcs = new TaskCompletionSource<IEnumerable<FileResult>>();
-            //using (var documentPicker = new UIDocumentPickerViewController(exportUrl, UIDocumentPickerMode.MoveToService)
-            //using (var documentPicker = new UIDocumentPickerViewController(exportUrl, UIDocumentPickerMode.ExportToService)
+
+            // using (var documentPicker = new UIDocumentPickerViewController(exportUrl, UIDocumentPickerMode.MoveToService)
+            // using (var documentPicker = new UIDocumentPickerViewController(exportUrl, UIDocumentPickerMode.ExportToService)
             using (var documentPicker = new UIDocumentPickerViewController(new string[] { UTType.Folder }, UIDocumentPickerMode.Open)
             {
                 Delegate = new PickerDelegate
@@ -140,7 +141,6 @@ namespace Xamarin.Essentials
                 }
             })
             {
-
                 if (documentPicker.PresentationController != null)
                 {
                     documentPicker.PresentationController.Delegate = new PickerPresentationControllerDelegate
@@ -156,17 +156,17 @@ namespace Xamarin.Essentials
                 {
                     var fileName = Path.GetFileNameWithoutExtension(exportUrl.Path);
                     var extension = Path.GetExtension(exportUrl.Path);
-                    var destFileName = Path.Combine(result.Url.Path, fileName + (string.IsNullOrWhiteSpace(extension) ? null : extension ) );
+                    var destFileName = Path.Combine(result.Url.Path, fileName + (string.IsNullOrWhiteSpace(extension) ? null : extension));
 
-                    int attempt = 0;
+                    var attempt = 0;
                     while (NSFileManager.DefaultManager.FileExists(destFileName))
                     {
                         attempt++;
                         destFileName = Path.Combine(result.Url.Path, fileName + "(" + attempt + ")" + (string.IsNullOrWhiteSpace(extension) ? null : extension));
                     }
-                    
-                    //var destUrl = new NSUrl(destFileName);
-                    NSFileManager.DefaultManager.Move(exportUrl.Path, destFileName, out NSError error);
+
+                    // var destUrl = new NSUrl(destFileName);
+                    NSFileManager.DefaultManager.Move(exportUrl.Path, destFileName, out var error);
 
                     if (error != null)
                         throw new Exception(error.LocalizedDescription);

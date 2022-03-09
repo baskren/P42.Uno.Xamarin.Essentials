@@ -50,12 +50,12 @@ namespace Xamarin.Essentials
             var uiStyle = Platform.GetCurrentUIViewController()?.TraitCollection?.UserInterfaceStyle ??
                 UITraitCollection.CurrentTraitCollection.UserInterfaceStyle;
 
-            switch(uiStyle)
+            switch (uiStyle)
             {
                 case UIUserInterfaceStyle.Light: return AppTheme.Light;
                 case UIUserInterfaceStyle.Dark: return AppTheme.Dark;
                 default: return AppTheme.Unspecified;
-            };
+            }
         }
 #elif __MACOS__
         static AppTheme PlatformRequestedTheme()

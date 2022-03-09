@@ -44,7 +44,6 @@ namespace Xamarin.Essentials
                 }
             }
         }
-
     }
 
     public partial class FilePickerFileType
@@ -108,8 +107,5 @@ namespace Xamarin.Essentials
         public string ContentType { get; set; }
 
         public string FileTypeDisplayName { get; set; }
-
     }
-
-
 }

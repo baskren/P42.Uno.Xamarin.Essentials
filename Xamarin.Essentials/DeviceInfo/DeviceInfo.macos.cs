@@ -28,7 +28,7 @@ namespace Xamarin.Essentials
 
             try
             {
-                return CFString.FromHandle(computerNameHandle);// NSString.FromHandle(computerNameHandle);
+                return CFString.FromHandle(computerNameHandle); // NSString.FromHandle(computerNameHandle);
             }
             finally
             {

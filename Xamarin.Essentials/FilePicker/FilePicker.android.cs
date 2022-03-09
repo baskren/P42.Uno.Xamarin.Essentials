@@ -82,14 +82,15 @@ namespace Xamarin.Essentials
             await Permissions.RequestAsync<Permissions.StorageWrite>();
 
             // Essentials supports >= API 19 where this action is available
-            //var pickFolderIntent = new Intent(Intent.ActionOpenDocumentTree);
+            // var pickFolderIntent = new Intent(Intent.ActionOpenDocumentTree);
 
             var fileName = options?.SuggestedFileName;
             if (string.IsNullOrWhiteSpace(options?.SuggestedFileName))
                 fileName = Xamarin.Essentials.AppInfo.Name + ".data";
 
             var tcs = new TaskCompletionSource<string>();
-            //var pickerIntent = Intent.CreateChooser(pickFolderIntent, options?.PickerTitle ?? "Choose Folder to save " + fileName);
+
+            // var pickerIntent = Intent.CreateChooser(pickFolderIntent, options?.PickerTitle ?? "Choose Folder to save " + fileName);
 
             try
             {
@@ -106,12 +107,10 @@ namespace Xamarin.Essentials
                         {
                             if (global::Android.Provider.DocumentsContract.IsTreeUri(uri))
                             {
-                               
 
                                 var id = global::Android.Provider.DocumentsContract.GetTreeDocumentId(uri);
 
                                 var fileUri = global::Android.Provider.DocumentsContract.BuildChildDocumentsUriUsingTree(uri, fileName);
-                                
 
                                 using (var fileOutputStream = global::Android.App.Application.Context.ContentResolver.OpenOutputStream(fileUri))
                                 {
@@ -183,10 +182,10 @@ namespace Xamarin.Essentials
                             fileOutputStream.Flush();
                             fileOutputStream.Close();
 
-                            //var x = global::Android.App.Application.Context.ContentResolver.OpenFileDescriptor(uri, "r");
+                            // var x = global::Android.App.Application.Context.ContentResolver.OpenFileDescriptor(uri, "r");
                             var cursor = global::Android.App.Application.Context.ContentResolver.Query(uri, null, null, null, null);
-                            var nameIndex = cursor.GetColumnIndex(global::Android.Provider.OpenableColumns.DisplayName);
-                            var sizeIndex = cursor.GetColumnIndex(global::Android.Provider.OpenableColumns.Size);
+                            var nameIndex = cursor.GetColumnIndex(global::Android.Provider.IOpenableColumns.DisplayName);
+                            var sizeIndex = cursor.GetColumnIndex(global::Android.Provider.IOpenableColumns.Size);
                             cursor.MoveToFirst();
                             var name = cursor.GetString(nameIndex);
                             var size = cursor.GetString(sizeIndex);

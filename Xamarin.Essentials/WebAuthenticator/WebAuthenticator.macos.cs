@@ -50,7 +50,6 @@ namespace Xamarin.Essentials
 
             if (DeviceInfo.Version >= new Version(10, 15))
             {
-
                 was = new ASWebAuthenticationSession(WebUtils.GetNativeUrl(url), scheme, AuthSessionCallback);
 
                 using (was)

@@ -86,7 +86,7 @@ namespace Xamarin.Essentials
     public partial class EmailAttachment : FileBase
     {
         public EmailAttachment(IStorageFile storageFile)
-            :base(storageFile)
+            : base(storageFile)
         {
         }
 

@@ -116,16 +116,19 @@ namespace Xamarin.Essentials
                 if (!CLLocationManager.LocationServicesEnabled)
                     return PermissionStatus.Disabled;
 
-                var status = CLLocationManager.Status;
-
-                switch( status )
+                switch (CLLocationManager.Status)
                 {
-                    case CLAuthorizationStatus.AuthorizedAlways: return PermissionStatus.Granted;
-                    case CLAuthorizationStatus.AuthorizedWhenInUse: return whenInUse ? PermissionStatus.Granted : PermissionStatus.Denied;
-                    case CLAuthorizationStatus.Denied: return PermissionStatus.Denied;
-                    case CLAuthorizationStatus.Restricted: return PermissionStatus.Restricted;
-                    default: return PermissionStatus.Unknown;
-                };
+                    case CLAuthorizationStatus.AuthorizedAlways:
+                        return PermissionStatus.Granted;
+                    case CLAuthorizationStatus.AuthorizedWhenInUse:
+                        return whenInUse ? PermissionStatus.Granted : PermissionStatus.Denied;
+                    case CLAuthorizationStatus.Denied:
+                        return PermissionStatus.Denied;
+                    case CLAuthorizationStatus.Restricted:
+                        return PermissionStatus.Restricted;
+                    default:
+                        return PermissionStatus.Unknown;
+                }
             }
 
             static CLLocationManager locationManager;

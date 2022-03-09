@@ -136,7 +136,6 @@ namespace Xamarin.Essentials
                     return ToRgba(t, p, v, a);
             }
             return ToRgba(v, p, q, a);
-
         }
 
         static Color ToRgba(double r, double g, double b, double a)
