@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="MSbuild.Sdk.Extras/3.0.23">
-  <PropertyGroup>
-    <TargetFrameworks>xamarinmac20;</TargetFrameworks>
-  </PropertyGroup>
-
-  <Import Project=".\P42.Uno.Xamarin.Essentials.MacOS.props" />
-
-</Project>

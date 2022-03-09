@@ -1,9 +1,0 @@
-<Project ToolsVersion="15.0">
-
-  <ItemGroup>
-    <Compile Include="**\*.uwp.cs" />
-    <Compile Include="**\*.uwp.*.cs" />
-  </ItemGroup>
-
-
-</Project>
