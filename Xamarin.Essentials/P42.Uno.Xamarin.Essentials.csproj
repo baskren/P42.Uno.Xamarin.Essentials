@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="**\*.shared.cs" />
     <Compile Include="**\*.shared.*.cs" />
-    <PackageReference Include="Uno.UI" Version="4.1.8" />
+    <PackageReference Include="Uno.UI" Version="4.3.6" />
   </ItemGroup>
 
 
@@ -81,7 +81,7 @@
 
   <!-- TIZEN -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Tizen')) ">
-    <PackageReference Include="Uno.UI.Runtime.Skia.Tizen" Version="4.1.8" />
+    <PackageReference Include="Uno.UI.Runtime.Skia.Tizen" Version="4.3.6" />
     <Compile Include="**\*.tizen.cs" />
     <Compile Include="**\*.tizen.*.cs" />
   </ItemGroup>
@@ -103,7 +103,7 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net')) ">
-    <PackageReference Include="Uno.UI.Runtime.WebAssembly" Version="4.1.8" />
+    <PackageReference Include="Uno.UI.Runtime.WebAssembly" Version="4.3.6" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <Compile Include="**\*.unowasm.cs" />
     <Compile Include="**\*.unowasm.*.cs" />
