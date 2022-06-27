@@ -32,6 +32,18 @@ namespace Xamarin.Essentials
                 City = placemark.Locality,
                 Zip = placemark.PostalCode
             }.Dictionary;
+#elif NET6_0_MACOS
+            var address = new CNMutablePostalAddress
+            { 
+                IsoCountryCode = placemark.CountryCode,
+                Country = placemark.CountryName,
+                State = placemark.AdminArea,
+                SubAdministrativeArea = placemark.SubAdminArea,
+                SubLocality = placemark.SubLocality,
+                Street = placemark.Thoroughfare,
+                City = placemark.Locality,
+                PostalCode = placemark.PostalCode,
+            };
 #else
             var address = new NSMutableDictionary
             {
@@ -71,6 +83,23 @@ namespace Xamarin.Essentials
                 {
                     // we need to await to keep the geocoder alive until after the async
                     return await geocoder.GeocodeAddressAsync(address);
+                }
+                catch
+                {
+                    Debug.WriteLine("Unable to get geocode address from address");
+                    return null;
+                }
+            }
+        }
+
+        static async Task<CLPlacemark[]> GetPlacemarksAsync(CNPostalAddress address)
+        {
+            using (var geocoder = new CLGeocoder())
+            {
+                try
+                {
+                    // we need to await to keep the geocoder alive until after the async
+                    return await geocoder.GeocodePostalAddressAsync(address);
                 }
                 catch
                 {

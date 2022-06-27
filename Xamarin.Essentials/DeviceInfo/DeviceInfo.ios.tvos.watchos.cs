@@ -63,6 +63,10 @@ namespace Xamarin.Essentials
         }
 
         static DeviceType GetDeviceType()
+#if __MACCATALYST__
+            => DeviceType.Physical;
+#else
             => Runtime.Arch == Arch.DEVICE ? DeviceType.Physical : DeviceType.Virtual;
+#endif
     }
 }

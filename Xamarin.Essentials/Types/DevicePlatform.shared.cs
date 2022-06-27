@@ -12,6 +12,8 @@ namespace Xamarin.Essentials
 
         public static DevicePlatform macOS { get; } = new DevicePlatform(nameof(macOS));
 
+        public static DevicePlatform macCatylst { get; } = new DevicePlatform(nameof(macCatylst));
+
         public static DevicePlatform tvOS { get; } = new DevicePlatform(nameof(tvOS));
 
         public static DevicePlatform Tizen { get; } = new DevicePlatform(nameof(Tizen));

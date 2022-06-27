@@ -63,8 +63,23 @@ namespace Xamarin.Essentials
             extension = extension?.TrimStart('.');
 
             var id = UTType.CreatePreferredIdentifier(UTType.TagClassFilenameExtension, extension, null);
-            var mimeTypes = UTType.CopyAllTags(id, UTType.TagClassMIMEType);
+
+            /*
+            string?[] mimeTypes = null;
+
+            if ((DeviceInfo.Platform == DevicePlatform.iOS && DeviceInfo.Version.Major >= 14)
+                || (DeviceInfo.Platform == DevicePlatform.macCatylst && DeviceInfo.Version.Major >= 14)
+                || (DeviceInfo.Platform == DevicePlatform.macOS && DeviceInfo.Version.Major >= 11)
+                )
+            {
+                var utType = UniformTypeIdentifiers.UTType.CreateFromIdentifier(id);
+                return utType.PreferredMimeType;
+            }
+            mimeTypes = UTType.CopyAllTags(id, UTType.TagClassMIMEType);
             return mimeTypes?.Length > 0 ? mimeTypes[0] : null;
+            */
+            var utType = UniformTypeIdentifiers.UTType.CreateFromIdentifier(id);
+            return utType?.PreferredMimeType;
         }
 
         internal void PlatformInit(FileBase file)

@@ -8,7 +8,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Connectivity
     {
-#if __IOS__
+#if __IOS__ && !__MACCATALYST__
         static readonly Lazy<CTCellularData> cellularData = new Lazy<CTCellularData>(() => new CTCellularData());
 
         internal static CTCellularData CellularData => cellularData.Value;
@@ -37,7 +37,7 @@ namespace Xamarin.Essentials
             get
             {
                 var restricted = false;
-#if __IOS__
+#if __IOS__ && !__MACCATALYST__
                 restricted = CellularData.RestrictedState == CTCellularDataRestrictedState.Restricted;
 #endif
                 var internetStatus = Reachability.InternetConnectionStatus();

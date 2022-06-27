@@ -1,5 +1,4 @@
-﻿#if !__WASM__
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,4 +13,3 @@ namespace Xamarin.Essentials
             throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }
-#endif

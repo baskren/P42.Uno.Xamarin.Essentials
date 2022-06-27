@@ -154,7 +154,7 @@ namespace Xamarin.Essentials
             remoteHostReachability.SetNotification(OnChange);
             remoteHostReachability.Schedule(CFRunLoop.Main, CFRunLoop.ModeDefault);
 
-#if __IOS__
+#if __IOS__ && !__MACCATALYST__
             Connectivity.CellularData.RestrictionDidUpdateNotifier = new Action<CTCellularDataRestrictedState>(OnRestrictedStateChanged);
 #endif
         }
@@ -170,12 +170,12 @@ namespace Xamarin.Essentials
             remoteHostReachability?.Dispose();
             remoteHostReachability = null;
 
-#if __IOS__
+#if __IOS__ && !__MACCATALYST__
             Connectivity.CellularData.RestrictionDidUpdateNotifier = null;
 #endif
         }
 
-#if __IOS__
+#if __IOS__ && !__MACCATALYST__
         void OnRestrictedStateChanged(CTCellularDataRestrictedState state)
         {
             ReachabilityChanged?.Invoke();

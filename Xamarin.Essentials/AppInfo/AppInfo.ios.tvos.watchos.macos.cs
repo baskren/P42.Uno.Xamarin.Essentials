@@ -31,7 +31,11 @@ namespace Xamarin.Essentials
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
+#if NET6_0_MACOS
+                var prefsApp = ScriptingBridge.SBApplication.GetApplication("com.apple.systempreferences");
+#else
                 var prefsApp = ScriptingBridge.SBApplication.FromBundleIdentifier("com.apple.systempreferences");
+#endif
                 prefsApp.SendMode = ScriptingBridge.AESendMode.NoReply;
                 prefsApp.Activate();
             });
@@ -58,7 +62,7 @@ namespace Xamarin.Essentials
             }
         }
 #elif __MACOS__
-        static AppTheme PlatformRequestedTheme()
+                static AppTheme PlatformRequestedTheme()
         {
             if (DeviceInfo.Version >= new Version(10, 14))
             {

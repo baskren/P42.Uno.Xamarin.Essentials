@@ -29,7 +29,7 @@ function UnoShare_BuildRequest(json) {
 }
 
 function UnoShare_ShareFromElement(id) {
-    const getShareRequestJsonForHtmlElement = Module.mono_bind_static_method("[P42.Uno.Xamarin.Essentials] Xamarin.Essentials.SharingExtensions:GetShareRequestJsonForHtmlElement");
+    const getShareRequestJsonForHtmlElement = Module.mono_bind_static_method("[P42.Uno.Xamarin.Essentials.Wasm] Xamarin.Essentials.SharingExtensions:GetShareRequestJsonForHtmlElement");
     const json = getShareRequestJsonForHtmlElement(id);
     var share = UnoShare_BuildRequest(json);
     //getConfirmation(share);

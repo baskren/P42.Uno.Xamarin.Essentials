@@ -1,6 +1,5 @@
 ﻿using System;
 
-#if !__WASM__
 namespace Xamarin.Essentials
 {
     public static partial class Vibration
@@ -15,4 +14,3 @@ namespace Xamarin.Essentials
             => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }
-#endif

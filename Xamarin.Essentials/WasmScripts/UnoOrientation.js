@@ -31,7 +31,7 @@ function UnoOrientation_RequestPermission() {
 }
 
 var UnoOrientation_Sensor = null;
-let UnoOrientation_DataUpdate = Module.mono_bind_static_method("[P42.Uno.Xamarin.Essentials] Xamarin.Essentials.OrientationSensor:DataUpdated");
+let UnoOrientation_DataUpdate = Module.mono_bind_static_method("[P42.Uno.Xamarin.Essentials.Wasm] Xamarin.Essentials.OrientationSensor:DataUpdated");
 
 function UnoOrientation_Start(frequency) {
     const options = { frequency: frequency, referenceFrame: 'device' };
@@ -91,7 +91,7 @@ function UnoLegacyOrientation_UpodateOrientation(event) {
 }
 
 
-let UnoLegacyOrientation_DataUpdate = Module.mono_bind_static_method("[P42.Uno.Xamarin.Essentials] Xamarin.Essentials.OrientationSensor:LegacyDataUpdated");
+let UnoLegacyOrientation_DataUpdate = Module.mono_bind_static_method("[P42.Uno.Xamarin.Essentials.Wasm] Xamarin.Essentials.OrientationSensor:LegacyDataUpdated");
 
 function UnoLegacyOrientation_PushOrientation() {
     UnoLegacyOrientation_DataUpdate({

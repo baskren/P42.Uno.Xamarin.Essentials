@@ -62,7 +62,11 @@ namespace Xamarin.Essentials
             if (result != 0 || handle == IntPtr.Zero)
                 return 0.0;
 
+#if NET6_0_MACOS
+            using (var dl = Marshal.PtrToStructure<CVDisplayLink>(handle))
+#else
             using (var dl = new CVDisplayLink(handle))
+#endif
             {
                 var period = dl.NominalOutputVideoRefreshPeriod;
                 if (((CVTimeFlags)period.Flags).HasFlag(CVTimeFlags.IsIndefinite) || period.TimeValue == 0)
@@ -73,7 +77,7 @@ namespace Xamarin.Essentials
         }
     }
 
-    internal static class IOKit
+        internal static class IOKit
     {
         const string IOKitLibrary = "/System/Library/Frameworks/IOKit.framework/IOKit";
         const string IOPlatformExpertDeviceClassName = "IOPlatformExpertDevice";
@@ -323,7 +327,14 @@ namespace Xamarin.Essentials
             if (sourceRef == default)
                 return null;
 
+#if NET6_0_MACOS
+            // this might be a big pile of poo.
+            var runLoop = Marshal.PtrToStructure<CFRunLoopSource>(sourceRef);
+            // Might need this? https://docs.microsoft.com/en-us/dotnet/standard/native-interop/best-practices#keeping-managed-objects-alive
+            return runLoop;
+#else
             return new CFRunLoopSource(sourceRef, true);
+#endif
         }
 
         delegate void IOPowerSourceCallback(IntPtr context);
