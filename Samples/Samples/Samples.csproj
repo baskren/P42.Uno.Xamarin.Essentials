@@ -11,9 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.6.0" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.6.0" />
-    <PackageReference Include="Microsoft.AppCenter.Distribute" Version="4.6.0" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.1" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.5.1" />
+    <PackageReference Include="Microsoft.AppCenter.Distribute" Version="4.5.1" />
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1821" />
     <PackageReference Include="Xamarin.Forms.Visual.Material" Version="4.8.0.1821" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
