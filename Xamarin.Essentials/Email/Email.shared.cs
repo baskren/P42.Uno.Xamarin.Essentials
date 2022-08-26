@@ -8,6 +8,9 @@ namespace Xamarin.Essentials
 {
     public static partial class Email
     {
+        public static bool IsAvailable
+            => IsComposeSupported;
+
         public static Task ComposeAsync()
             => ComposeAsync(null);
 
