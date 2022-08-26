@@ -11,13 +11,20 @@ namespace Xamarin.Essentials
 
         public static void BeginInvokeOnMainThread(Action action)
         {
-            if (IsMainThread)
+            try
             {
-                action();
+                if (IsMainThread)
+                {
+                    action();
+                }
+                else
+                {
+                    PlatformBeginInvokeOnMainThread(action);
+                }
             }
-            else
+            catch (System.InvalidOperationException ex)
             {
-                PlatformBeginInvokeOnMainThread(action);
+                System.Diagnostics.Debug.WriteLine($"MainThread. {ex.Message} : ");
             }
         }
 

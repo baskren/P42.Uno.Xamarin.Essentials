@@ -61,7 +61,8 @@ namespace DeviceTests
 #if __IOS__
             var platform = new CoreGraphics.CGRect(x, y, height, width);
             Assert.Throws<ArgumentOutOfRangeException>(() => platform.ToSystemRectangle());
-#elif WINDOWS_UWP
+#elif NET6_0_WINDOWS10_0_19041_0
+
             var platform = new Windows.Foundation.Rect(x, y, height, width);
             Assert.Throws<ArgumentOutOfRangeException>(() => platform.ToSystemRectangle());
 #endif

@@ -5,8 +5,8 @@ using System.Web;
 using UnitTests.HeadlessRunner;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Popups;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Xunit.Runners.UI;
 
 namespace DeviceTests.UWP

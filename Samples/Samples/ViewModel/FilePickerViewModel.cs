@@ -8,8 +8,8 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 #if UNO_PLATFORM
 using Windows.Storage.Streams;
-using Windows.UI.Xaml.Media.Imaging;
-using ImageSource = Windows.UI.Xaml.Media.Imaging.BitmapImage;
+using Microsoft.UI.Xaml.Media.Imaging;
+using ImageSource = Microsoft.UI.Xaml.Media.Imaging.BitmapImage;
 #endif
 
 namespace Samples.ViewModel

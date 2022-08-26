@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 
 namespace Xamarin.Essentials
 {
@@ -10,27 +11,21 @@ namespace Xamarin.Essentials
     {
         static Task PlatformRequestAsync(ShareTextRequest request)
         {
-            var dataTransferManager = DataTransferManager.GetForCurrentView();
-
+            //var dataTransferManager = DataTransferManager.GetForCurrentView();
+            var dataTransferManager = MainWindow.Current.GetDataTransferManager();
             dataTransferManager.DataRequested += ShareTextHandler;
-
-            DataTransferManager.ShowShareUI();
+            dataTransferManager.ShowShareUI();
 
             void ShareTextHandler(DataTransferManager sender, DataRequestedEventArgs e)
             {
                 var newRequest = e.Request;
-
                 newRequest.Data.Properties.Title = request.Title ?? AppInfo.Name;
 
                 if (!string.IsNullOrWhiteSpace(request.Text))
-                {
                     newRequest.Data.SetText(request.Text);
-                }
 
                 if (!string.IsNullOrWhiteSpace(request.Uri))
-                {
                     newRequest.Data.SetWebLink(new Uri(request.Uri));
-                }
 
                 dataTransferManager.DataRequested -= ShareTextHandler;
             }
@@ -44,16 +39,14 @@ namespace Xamarin.Essentials
             foreach (var file in request.Files)
                 storageFiles.Add(file.StorageFile ?? await StorageFile.GetFileFromPathAsync(file.FullPath));
 
-            var dataTransferManager = DataTransferManager.GetForCurrentView();
-
+            //var dataTransferManager = DataTransferManager.GetForCurrentView();
+            var dataTransferManager = MainWindow.Current.GetDataTransferManager();
             dataTransferManager.DataRequested += ShareTextHandler;
-
-            DataTransferManager.ShowShareUI();
+            dataTransferManager.ShowShareUI();
 
             void ShareTextHandler(DataTransferManager sender, DataRequestedEventArgs e)
             {
                 var newRequest = e.Request;
-
                 newRequest.Data.SetStorageItems(storageFiles.ToArray());
                 newRequest.Data.Properties.Title = request.Title ?? AppInfo.Name;
 

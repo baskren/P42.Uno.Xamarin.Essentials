@@ -24,7 +24,7 @@
     <PackageReference Include="P42.Uno.AsyncNavigation" Version="0.3.0" />
     <PackageReference Include="SkiaSharp.Views" Version="2.88.0" />
     <PackageReference Include="Uno.UI.Skia.Tizen" Version="4.3.8" />
-    <PackageReference Include="Uno.UI.RemoteControl" Version="4.3.8" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.3.8" Condition="'$(Configuration)'=='Debug'" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.Tizen.csproj" />

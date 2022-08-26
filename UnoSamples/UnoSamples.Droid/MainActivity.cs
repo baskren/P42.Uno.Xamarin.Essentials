@@ -18,7 +18,7 @@ namespace UnoSamples.Droid
     [IntentFilter(
         new[] { Xamarin.Essentials.Platform.Intent.ActionAppAction },
         Categories = new[] { Intent.CategoryDefault })]
-    public class MainActivity : Windows.UI.Xaml.ApplicationActivity
+    public class MainActivity : Microsoft.UI.Xaml.ApplicationActivity
     {
         protected override void OnCreate(Bundle bundle)
         {

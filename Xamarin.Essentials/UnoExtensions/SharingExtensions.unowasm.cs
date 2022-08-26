@@ -4,8 +4,8 @@ using System.Text;
 using Windows.Foundation;
 using Newtonsoft.Json;
 using Uno.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Xamarin.Essentials
 {

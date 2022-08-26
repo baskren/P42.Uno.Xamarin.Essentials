@@ -21,7 +21,7 @@ namespace Xamarin.Essentials
     {
         static ActivityLifecycleContextListener lifecycleListener;
 
-        public static Context AppContext => Application.Context;
+        public static Context AppContext => global::Android.App.Application.Context;
 
         public static Activity CurrentActivity => lifecycleListener?.Activity;
 

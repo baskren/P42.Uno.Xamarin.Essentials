@@ -20,6 +20,7 @@ namespace Xamarin.Essentials
         static async Task<FileResult> PickAsync(MediaPickerOptions options, bool photo)
         {
             var picker = new FileOpenPicker();
+            picker.InitializeWithWindow();
 
             var defaultTypes = photo ? FilePickerFileType.Images.Value : FilePickerFileType.Videos.Value;
 

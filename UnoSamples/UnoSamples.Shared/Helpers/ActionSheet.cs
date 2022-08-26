@@ -4,12 +4,12 @@ using System.Text;
 using System.Threading.Tasks;
 using P42.Uno.AsyncNavigation;
 using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-#if NETFX_CORE
-using Popup = Windows.UI.Xaml.Controls.Primitives.Popup;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+#if NET6_0_WINDOWS10_0_19041_0
+using Popup = Microsoft.UI.Xaml.Controls.Primitives.Popup;
 #else
-using Popup = Windows.UI.Xaml.Controls.Popup;
+using Popup = Microsoft.UI.Xaml.Controls.Popup;
 #endif
 
 namespace Samples.Helpers
@@ -19,7 +19,7 @@ namespace Samples.Helpers
         public static async Task<string> Display(string title, string cancel, string desctruct, params string[] buttons)
         {
 
-            if (Windows.UI.Xaml.Window.Current.Content is Frame frame && frame.Content is NavigationPage navPage)
+            if (Microsoft.UI.Xaml.Window.Current.Content is Frame frame && frame.Content is NavigationPage navPage)
             {
                 var tcs = new TaskCompletionSource<string>();
                 var content = new ActionSheetPopupContent(tcs)

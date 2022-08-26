@@ -1,10 +1,12 @@
 ﻿using System;
-using Windows.Phone.Devices.Notification;
+//using Windows.Phone.Devices.Notification;
+using Windows.Devices.Haptics;
 
 namespace Xamarin.Essentials
 {
     public static partial class Vibration
     {
+
         internal static bool IsSupported => false;
 
         // => Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.Devices.Notification.VibrationDevice") && DefaultDevice != null;

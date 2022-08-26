@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Xamarin.Essentials
 {
@@ -50,7 +50,7 @@ namespace Xamarin.Essentials
             element.Tapped -= OnElementTappedAsync;
         }
 
-        static async void OnElementTappedAsync(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        static async void OnElementTappedAsync(object sender, Microsoft.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             if (sender is FrameworkElement element && element.GetShareRequestPayload() is ShareRequestBase shareRequest)
             {
@@ -73,7 +73,7 @@ namespace Xamarin.Essentials
 
         static Rect GetAbsoluteBounds(this FrameworkElement element)
         {
-            var ttv = element.TransformToVisual(Windows.UI.Xaml.Window.Current.Content);
+            var ttv = element.TransformToVisual(Platform.Window.Content);
             var location = ttv.TransformPoint(new Point(0, 0));
             return new Rect(location, new Size(element.ActualWidth, element.ActualHeight));
         }

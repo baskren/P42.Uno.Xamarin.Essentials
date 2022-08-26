@@ -1,4 +1,6 @@
-﻿using Windows.Graphics.Display;
+﻿using System;
+using System.Runtime.Intrinsics.Arm;
+using Windows.Graphics.Display;
 using Windows.Graphics.Display.Core;
 using Windows.System.Display;
 
@@ -45,26 +47,39 @@ namespace Xamarin.Essentials
 
         static DisplayInfo GetMainDisplayInfo(DisplayInformation di = null)
         {
-            di = di ?? DisplayInformation.GetForCurrentView();
+            try
+            {
+                di = di ?? DisplayInformation.GetForCurrentView();
 
-            var rotation = CalculateRotation(di);
-            var perpendicular =
-                rotation == DisplayRotation.Rotation90 ||
-                rotation == DisplayRotation.Rotation270;
+                var rotation = CalculateRotation(di);
+                var perpendicular =
+                    rotation == DisplayRotation.Rotation90 ||
+                    rotation == DisplayRotation.Rotation270;
 
-            var w = di.ScreenWidthInRawPixels;
-            var h = di.ScreenHeightInRawPixels;
+                var w = di.ScreenWidthInRawPixels;
+                var h = di.ScreenHeightInRawPixels;
 
-            var hdi = HdmiDisplayInformation.GetForCurrentView();
-            var hdm = hdi?.GetCurrentDisplayMode();
+                var hdi = HdmiDisplayInformation.GetForCurrentView();
+                var hdm = hdi?.GetCurrentDisplayMode();
 
-            return new DisplayInfo(
-                width: perpendicular ? h : w,
-                height: perpendicular ? w : h,
-                density: di.LogicalDpi / 96.0,
-                orientation: CalculateOrientation(di),
-                rotation: rotation,
-                rate: (float)(hdm?.RefreshRate ?? 0));
+                return new DisplayInfo(
+                    width: perpendicular ? h : w,
+                    height: perpendicular ? w : h,
+                    density: di.LogicalDpi / 96.0,
+                    orientation: CalculateOrientation(di),
+                    rotation: rotation,
+                    rate: (float)(hdm?.RefreshRate ?? 0));
+            }
+            catch (Exception e)
+            {
+                return new DisplayInfo(
+                    width: 1920,
+                    height: 1080,
+                    density: 1,
+                    orientation: DisplayOrientation.Portrait,
+                rotation: DisplayRotation.Rotation0,
+                    rate: 30.0f);
+            }
         }
 
         static void StartScreenMetricsListeners()

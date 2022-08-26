@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-#if NETFX_CORE
-using Popup = Windows.UI.Xaml.Controls.Primitives.Popup;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
+#if NET6_0_WINDOWS10_0_19041_0
+using Popup = Microsoft.UI.Xaml.Controls.Primitives.Popup;
 #else
-using Popup = Windows.UI.Xaml.Controls.Popup;
+using Popup = Microsoft.UI.Xaml.Controls.Popup;
 #endif
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
@@ -141,11 +141,12 @@ namespace Samples.Helpers
 
         void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            var transform = Windows.UI.Xaml.Window.Current.Content.TransformToVisual(Parent as UIElement);
+            var window = this.GetWindow();
+            var transform = window.Content.TransformToVisual(Parent as UIElement);
             var point = transform.TransformPoint(new Point(0, 0)); // gets the window's (0,0) coordinate relative to the popup
 
-            var hOffset = (Windows.UI.Xaml.Window.Current.Bounds.Width - ActualWidth) / 2;
-            var vOffset = Windows.UI.Xaml.Window.Current.Bounds.Height - ActualHeight;
+            var hOffset = (window.Bounds.Width - ActualWidth) / 2;
+            var vOffset = window.Bounds.Height - ActualHeight;
 
             if (WeakParentPopup.TryGetTarget(out var parent))
             {

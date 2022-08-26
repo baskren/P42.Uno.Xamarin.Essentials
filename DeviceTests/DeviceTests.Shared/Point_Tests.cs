@@ -44,7 +44,8 @@ namespace DeviceTests
 #if __IOS__
             var platform = new CoreGraphics.CGPoint(x, y);
             Assert.Throws<ArgumentOutOfRangeException>(() => platform.ToSystemPoint());
-#elif WINDOWS_UWP
+#elif NET6_0_WINDOWS10_0_19041_0
+
             var platform = new Windows.Foundation.Point(x, y);
             Assert.Throws<ArgumentOutOfRangeException>(() => platform.ToSystemPoint());
 #endif

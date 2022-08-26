@@ -16,8 +16,9 @@ namespace Xamarin.Essentials
             var picker = new FileOpenPicker
             {
                 ViewMode = PickerViewMode.List,
-                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+                SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
             };
+            picker.InitializeWithWindow();
 
             SetFileTypes(options, picker);
 
@@ -72,6 +73,7 @@ namespace Xamarin.Essentials
         static async Task<string> PlatformExportAsync(SaveOptions options, Action<DataWriter> writeAction)
         {
             var picker = new Windows.Storage.Pickers.FileSavePicker();
+            picker.InitializeWithWindow();
             if (options != null)
             {
                 if (!string.IsNullOrWhiteSpace(options.SuggestedFileName) && System.IO.Path.HasExtension(options.SuggestedFileName))

@@ -5,7 +5,7 @@ using Samples.Helpers;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 #if UNO_PLATFORM
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 #else
 using FrameworkElement = Xamarin.Forms.View;
 #endif

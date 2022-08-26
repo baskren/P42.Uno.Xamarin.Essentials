@@ -6,7 +6,8 @@ namespace DeviceTests
 {
     public class Utils
     {
-#if WINDOWS_UWP
+#if NET6_0_WINDOWS10_0_19041_0
+
         public static async Task OnMainThread(Windows.UI.Core.DispatchedHandler action)
         {
             var mainView = Windows.ApplicationModel.Core.CoreApplication.MainView;
