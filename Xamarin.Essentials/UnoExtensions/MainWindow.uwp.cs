@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
+using Windows.ApplicationModel;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage.Pickers;
 using WinRT.Interop;
@@ -28,6 +29,11 @@ namespace Xamarin.Essentials
 
 
         public IntPtr Handle => WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+        public MainWindow()
+        {
+            Title = Package.Current.DisplayName;
+        }
 
         public DataTransferManager GetDataTransferManager()
         {
