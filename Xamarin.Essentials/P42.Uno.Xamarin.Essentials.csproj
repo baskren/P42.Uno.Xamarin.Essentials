@@ -58,7 +58,7 @@
 
   <!-- TIZEN -->
   <ItemGroup Condition=" $(TargetFramework.ToLower().Contains('tizen')) ">
-    <PackageReference Include="Uno.UI.Runtime.Skia.Tizen" Version="4.3.8" />
+    <PackageReference Include="Uno.WinUI.Runtime.Skia.Tizen" Version="4.4.20" />
     <Compile Include="**\*.tizen.cs" />
     <Compile Include="**\*.tizen.*.cs" />
   </ItemGroup>
