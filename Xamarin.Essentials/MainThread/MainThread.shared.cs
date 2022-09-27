@@ -40,6 +40,24 @@ namespace Xamarin.Essentials
                 throw new InvalidOperationException("Unable to queue on the main thread.");
         }
 
+        public static void InvokeOnMainThread(Action action)
+        {
+            if (action is null)
+                return;
+
+            if (IsMainThread)
+            {
+                action();
+                return;
+            }
+
+            if (!Platform.MainThreadDispatchQueue.TryEnqueue(
+                    Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal,
+                    () => action.Invoke()
+                ))
+                throw new InvalidOperationException("Unable to queue on the main thread.");
+        }
+
         public static Task InvokeOnMainThreadAsync(Action action)
         {
             if (action is null)
@@ -72,6 +90,21 @@ namespace Xamarin.Essentials
             return tcs.Task;
         }
 
+
+
+        public static T InvokeOnMainThread<T>(Func<T> func)
+        {
+            if (func is null)
+                return default(T);
+
+            if (IsMainThread)
+                return func();
+
+            var task = Task.Run(async () => await InvokeOnMainThreadAsync(func));
+            var result = task.Result;
+            return result;
+        }
+
         public static Task<T> InvokeOnMainThreadAsync<T>(Func<T> func)
         {
             if (func is null)
@@ -100,6 +133,7 @@ namespace Xamarin.Essentials
 
             return tcs.Task;
         }
+
 
         public static Task InvokeOnMainThreadAsync(Func<Task> funcTask)
         {
@@ -130,6 +164,17 @@ namespace Xamarin.Essentials
             return tcs.Task;
         }
 
+
+        public static T InvokeOnMainThread<T>(Func<Task<T>> funcTask)
+        {
+            if (funcTask is null)
+                return default(T);
+
+            var task = Task.Run(async () => await InvokeOnMainThreadAsync(funcTask));
+            var result = task.Result;
+            return result;
+        }
+
         public static Task<T> InvokeOnMainThreadAsync<T>(Func<Task<T>> funcTask)
         {
             if (funcTask is null)
@@ -158,6 +203,8 @@ namespace Xamarin.Essentials
 
             return tcs.Task;
         }
+
+
 
     }
 }
