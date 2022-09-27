@@ -74,7 +74,7 @@ namespace DeviceTests
         {
 #if NET6_0_WINDOWS10_0_19041_0
 
-            Assert.Equal(DevicePlatform.UWP, DeviceInfo.Platform);
+            Assert.Equal(DevicePlatform.Windows, DeviceInfo.Platform);
 #elif __IOS__
             Assert.Equal(DevicePlatform.iOS, DeviceInfo.Platform);
 #elif __ANDROID__

@@ -49,7 +49,7 @@ namespace Xamarin.Essentials
             return version;
         }
 
-        static DevicePlatform GetPlatform() => DevicePlatform.UWP;
+        static DevicePlatform GetPlatform() => DevicePlatform.Windows;
 
         static DeviceIdiom GetIdiom()
         {

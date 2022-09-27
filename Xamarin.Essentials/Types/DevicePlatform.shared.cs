@@ -20,6 +20,8 @@ namespace Xamarin.Essentials
 
         public static DevicePlatform UWP { get; } = new DevicePlatform(nameof(UWP));
 
+        public static DevicePlatform Windows { get; } = new DevicePlatform(nameof(Windows));
+
         public static DevicePlatform watchOS { get; } = new DevicePlatform(nameof(watchOS));
 
         public static DevicePlatform Unknown { get; } = new DevicePlatform(nameof(Unknown));
