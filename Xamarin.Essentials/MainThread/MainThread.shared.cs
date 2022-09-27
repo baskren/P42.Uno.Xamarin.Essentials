@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -6,43 +7,54 @@ namespace Xamarin.Essentials
 {
     public static partial class MainThread
     {
-        public static bool IsMainThread =>
-            PlatformIsMainThread;
+        public static bool IsMainThread
+        {
+            get
+            {
+                // if there is no main window, then this is either a service
+                // or the UI is not yet constructed, so the main thread is the
+                // current thread
+                try
+                {
+                    if (Platform.MainThreadDispatchQueue == null)
+                        return true;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Unable to validate Window creation. {ex.Message}");
+                    return true;
+                }
+
+                return Platform.MainThreadDispatchQueue?.HasThreadAccess ?? false;
+            }
+
+        }
 
         public static void BeginInvokeOnMainThread(Action action)
         {
-            try
-            {
-                if (IsMainThread)
-                {
-                    action();
-                }
-                else
-                {
-                    PlatformBeginInvokeOnMainThread(action);
-                }
-            }
-            catch (System.InvalidOperationException ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"MainThread. {ex.Message} : ");
-            }
+            if (action is null)
+                return;
+
+            if (IsMainThread)
+                action.Invoke();
+            else
+                Platform.MainThreadDispatchQueue.TryEnqueue(() => action.Invoke());
         }
 
         public static Task InvokeOnMainThreadAsync(Action action)
         {
+            if (action is null)
+                return Task.CompletedTask;
+
             if (IsMainThread)
             {
                 action();
-#if NETSTANDARD1_0
-                return Task.FromResult(true);
-#else
                 return Task.CompletedTask;
-#endif
             }
 
             var tcs = new TaskCompletionSource<bool>();
 
-            BeginInvokeOnMainThread(() =>
+            Platform.MainThreadDispatchQueue.TryEnqueue(() =>
             {
                 try
                 {
@@ -60,14 +72,14 @@ namespace Xamarin.Essentials
 
         public static Task<T> InvokeOnMainThreadAsync<T>(Func<T> func)
         {
+            if (func is null)
+                return Task.FromResult(default(T));
+
             if (IsMainThread)
-            {
                 return Task.FromResult(func());
-            }
 
             var tcs = new TaskCompletionSource<T>();
-
-            BeginInvokeOnMainThread(() =>
+            Platform.MainThreadDispatchQueue.TryEnqueue(() =>
             {
                 try
                 {
@@ -85,14 +97,14 @@ namespace Xamarin.Essentials
 
         public static Task InvokeOnMainThreadAsync(Func<Task> funcTask)
         {
+            if (funcTask is null)
+                return Task.CompletedTask;
+
             if (IsMainThread)
-            {
                 return funcTask();
-            }
 
             var tcs = new TaskCompletionSource<object>();
-
-            BeginInvokeOnMainThread(
+            Platform.MainThreadDispatchQueue.TryEnqueue(
                 async () =>
                 {
                     try
@@ -111,14 +123,14 @@ namespace Xamarin.Essentials
 
         public static Task<T> InvokeOnMainThreadAsync<T>(Func<Task<T>> funcTask)
         {
+            if (funcTask is null)
+                return Task.FromResult(default(T));
+
             if (IsMainThread)
-            {
                 return funcTask();
-            }
 
             var tcs = new TaskCompletionSource<T>();
-
-            BeginInvokeOnMainThread(
+            Platform.MainThreadDispatchQueue.TryEnqueue(
                 async () =>
                 {
                     try
@@ -135,12 +147,5 @@ namespace Xamarin.Essentials
             return tcs.Task;
         }
 
-        public static async Task<SynchronizationContext> GetMainThreadSynchronizationContextAsync()
-        {
-            SynchronizationContext ret = null;
-            await InvokeOnMainThreadAsync(() =>
-                ret = SynchronizationContext.Current).ConfigureAwait(false);
-            return ret;
-        }
     }
 }
