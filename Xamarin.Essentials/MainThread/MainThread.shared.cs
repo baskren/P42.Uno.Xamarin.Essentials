@@ -1,31 +1,23 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.UI.Dispatching;
 
 namespace Xamarin.Essentials
 {
     public static partial class MainThread
     {
+
         public static bool IsMainThread
         {
             get
             {
-                // if there is no main window, then this is either a service
-                // or the UI is not yet constructed, so the main thread is the
-                // current thread
-                try
-                {
-                    if (Platform.MainThreadDispatchQueue == null)
-                        return true;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Unable to validate Window creation. {ex.Message}");
-                    return true;
-                }
+                if (Platform.MainThreadDispatchQueue == null)
+                    throw new Exception("Unable to find main thread.  Did you call Xamarin.Essentials.Platform.Init() ?");
 
-                return Platform.MainThreadDispatchQueue?.HasThreadAccess ?? false;
+                return Platform.MainThread == Thread.CurrentThread;
             }
 
         }
@@ -36,9 +28,16 @@ namespace Xamarin.Essentials
                 return;
 
             if (IsMainThread)
+            {
                 action.Invoke();
-            else
-                Platform.MainThreadDispatchQueue.TryEnqueue(() => action.Invoke());
+                return;
+            }
+
+            if (!Platform.MainThreadDispatchQueue.TryEnqueue(
+                Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, 
+                () => action.Invoke()
+                ) )
+                throw new InvalidOperationException("Unable to queue on the main thread.");
         }
 
         public static Task InvokeOnMainThreadAsync(Action action)
@@ -53,19 +52,22 @@ namespace Xamarin.Essentials
             }
 
             var tcs = new TaskCompletionSource<bool>();
-
-            Platform.MainThreadDispatchQueue.TryEnqueue(() =>
-            {
-                try
-                {
-                    action();
-                    tcs.TrySetResult(true);
-                }
-                catch (Exception ex)
-                {
-                    tcs.TrySetException(ex);
-                }
-            });
+            if (!Platform.MainThreadDispatchQueue.TryEnqueue(
+                Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, 
+                () =>
+                    {
+                        try
+                        {
+                            action();
+                            tcs.TrySetResult(true);
+                        }
+                        catch (Exception ex)
+                        {
+                            tcs.TrySetException(ex);
+                        }
+                    }
+                ))
+                throw new InvalidOperationException("Unable to queue on the main thread.");
 
             return tcs.Task;
         }
@@ -79,18 +81,22 @@ namespace Xamarin.Essentials
                 return Task.FromResult(func());
 
             var tcs = new TaskCompletionSource<T>();
-            Platform.MainThreadDispatchQueue.TryEnqueue(() =>
-            {
-                try
-                {
-                    var result = func();
-                    tcs.TrySetResult(result);
-                }
-                catch (Exception ex)
-                {
-                    tcs.TrySetException(ex);
-                }
-            });
+            if (!Platform.MainThreadDispatchQueue.TryEnqueue(
+                Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, 
+                () =>
+                    {
+                        try
+                        {
+                            var result = func();
+                            tcs.TrySetResult(result);
+                        }
+                        catch (Exception ex)
+                        {
+                            tcs.TrySetException(ex);
+                        }
+                    }
+                ))
+                throw new InvalidOperationException("Unable to queue on the main thread.");
 
             return tcs.Task;
         }
@@ -104,19 +110,22 @@ namespace Xamarin.Essentials
                 return funcTask();
 
             var tcs = new TaskCompletionSource<object>();
-            Platform.MainThreadDispatchQueue.TryEnqueue(
+            if (!Platform.MainThreadDispatchQueue.TryEnqueue(
+                Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal,
                 async () =>
-                {
-                    try
                     {
-                        await funcTask().ConfigureAwait(false);
-                        tcs.SetResult(null);
+                        try
+                        {
+                            await funcTask().ConfigureAwait(false);
+                            tcs.SetResult(null);
+                        }
+                        catch (Exception e)
+                        {
+                            tcs.SetException(e);
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        tcs.SetException(e);
-                    }
-                });
+                ))
+                throw new InvalidOperationException("Unable to queue on the main thread.");
 
             return tcs.Task;
         }
@@ -130,19 +139,22 @@ namespace Xamarin.Essentials
                 return funcTask();
 
             var tcs = new TaskCompletionSource<T>();
-            Platform.MainThreadDispatchQueue.TryEnqueue(
+            if (!Platform.MainThreadDispatchQueue.TryEnqueue(
+                Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal,
                 async () =>
-                {
-                    try
                     {
-                        var ret = await funcTask().ConfigureAwait(false);
-                        tcs.SetResult(ret);
+                        try
+                        {
+                            var ret = await funcTask().ConfigureAwait(false);
+                            tcs.SetResult(ret);
+                        }
+                        catch (Exception e)
+                        {
+                            tcs.SetException(e);
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        tcs.SetException(e);
-                    }
-                });
+                ))
+                throw new InvalidOperationException("Unable to queue on the main thread.");
 
             return tcs.Task;
         }

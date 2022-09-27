@@ -44,7 +44,7 @@ namespace Xamarin.Essentials
             if (IsMainThread)
                 action.Invoke();
             else
-                Platform.MainThreadDispatchQueue.TryEnqueue(()=>action.Invoke());
+                Platform.MainThreadDispatchQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, ()=>action.Invoke());
         }
     }
 }
