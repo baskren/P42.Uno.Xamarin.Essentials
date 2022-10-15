@@ -24,7 +24,7 @@
 
   <!-- WASM -->
   <ItemGroup>
-    <PackageReference Include="Uno.WinUI.WebAssembly" Version="4.5.9" />
+    <PackageReference Include="Uno.WinUI.WebAssembly" Version="4.5.14" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <Compile Include="**\*.unowasm.cs" />
     <Compile Include="**\*.unowasm.*.cs" />
