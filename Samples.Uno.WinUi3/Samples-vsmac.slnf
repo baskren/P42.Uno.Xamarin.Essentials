@@ -1,0 +1,14 @@
+{
+  "solution": {
+    "path": "Samples.sln",
+    "projects": [
+		"Samples.Shared\\Samples.Shared.shproj",
+
+		"Samples.Mobile\\Samples.Mobile.csproj",
+
+		"Samples.Wasm\\Samples.Wasm.csproj",
+
+		"Samples.Skia.Gtk\\Samples.Skia.Gtk.csproj",
+    ]
+  }
+}

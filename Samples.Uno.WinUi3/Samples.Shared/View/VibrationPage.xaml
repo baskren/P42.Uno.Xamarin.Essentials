@@ -1,0 +1,49 @@
+﻿<Page
+    x:Class="Samples.View.VibrationPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:Samples.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:Samples.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:Samples.ViewModel"
+    xmlns:views="using:Samples.View"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <viewmodels:VibrationViewModel />
+    </Page.DataContext>
+
+    <Page.Content>
+        <StackPanel>
+            <StackPanel.Children>
+                <TextBlock
+                    Margin="12"
+                    FontWeight="Bold"
+                    Text="Quickly and easily make the device vibrate." />
+
+                <ScrollViewer>
+                    <ScrollViewer.Content>
+                        <StackPanel Padding="12,0,12,12" Spacing="6">
+                            <StackPanel.Children>
+                                <Slider
+                                    Maximum="5000"
+                                    Minimum="0"
+                                    Value="{Binding Duration}" />
+                                <Button Command="{Binding VibrateCommand}" Content="Vibrate" />
+                                <Button Command="{Binding CancelCommand}" Content="Cancel" />
+                                <TextBlock
+                                    FontStyle="Italic"
+                                    Foreground="Red"
+                                    Text="Vibration is not supported."
+                                    Visibility="{Binding IsSupported, Converter={StaticResource InverseVisibilityConverter}}" />
+                            </StackPanel.Children>
+                        </StackPanel>
+                    </ScrollViewer.Content>
+                </ScrollViewer>
+            </StackPanel.Children>
+        </StackPanel>
+    </Page.Content>
+
+</Page>

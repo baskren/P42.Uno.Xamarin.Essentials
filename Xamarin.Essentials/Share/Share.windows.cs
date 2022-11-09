@@ -11,25 +11,30 @@ namespace Xamarin.Essentials
     {
         static Task PlatformRequestAsync(ShareTextRequest request)
         {
-            //var dataTransferManager = DataTransferManager.GetForCurrentView();
-            var dataTransferManager = MainWindow.Current.GetDataTransferManager();
-            dataTransferManager.DataRequested += ShareTextHandler;
-            dataTransferManager.ShowShareUI();
-
-            void ShareTextHandler(DataTransferManager sender, DataRequestedEventArgs e)
+            try
             {
-                var newRequest = e.Request;
-                newRequest.Data.Properties.Title = request.Title ?? AppInfo.Name;
+                var dataTransferManager = MainWindow.Current.GetDataTransferManager();
+                dataTransferManager.DataRequested += ShareTextHandler;
+                dataTransferManager.ShowShareUI();
 
-                if (!string.IsNullOrWhiteSpace(request.Text))
-                    newRequest.Data.SetText(request.Text);
+                void ShareTextHandler(DataTransferManager sender, DataRequestedEventArgs e)
+                {
+                    var newRequest = e.Request;
+                    newRequest.Data.Properties.Title = request.Title ?? AppInfo.Name;
 
-                if (!string.IsNullOrWhiteSpace(request.Uri))
-                    newRequest.Data.SetWebLink(new Uri(request.Uri));
+                    if (!string.IsNullOrWhiteSpace(request.Text))
+                        newRequest.Data.SetText(request.Text);
 
-                dataTransferManager.DataRequested -= ShareTextHandler;
+                    if (!string.IsNullOrWhiteSpace(request.Uri))
+                        newRequest.Data.SetWebLink(new Uri(request.Uri));
+
+                    dataTransferManager.DataRequested -= ShareTextHandler;
+                }
             }
-
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Share. : ");
+            }
             return Task.CompletedTask;
         }
 

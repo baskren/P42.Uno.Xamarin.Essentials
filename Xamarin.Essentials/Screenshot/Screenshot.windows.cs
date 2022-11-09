@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
 
         static async Task<ScreenshotResult> PlatformCaptureAsync()
         {
-            var element = Window.Current?.Content as FrameworkElement;
+            var element = Platform.Window?.Content as FrameworkElement; // Window.Current?.Content as FrameworkElement;
             if (element == null)
                 throw new InvalidOperationException("Unable to find main window content.");
 

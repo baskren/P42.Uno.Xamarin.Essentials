@@ -39,22 +39,22 @@ namespace Xamarin.Essentials
 
 #if !__WASM__
 
-        static void EnableShareOnTapped(this FrameworkElement element)
+        private static void EnableShareOnTapped(this FrameworkElement element)
         {
             element.Tapped += OnElementTappedAsync;
         }
 
-        static void DisableShareOnTapped(this FrameworkElement element)
+        private static void DisableShareOnTapped(this FrameworkElement element)
         {
             element.SetShareRequestPayload(null);
             element.Tapped -= OnElementTappedAsync;
         }
 
-        static async void OnElementTappedAsync(object sender, Microsoft.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private static async void OnElementTappedAsync(object sender, Microsoft.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             if (sender is FrameworkElement element && element.GetShareRequestPayload() is ShareRequestBase shareRequest)
             {
-                shareRequest.PresentationSourceBounds = ToSystemRectangle(element.GetAbsoluteBounds());
+                shareRequest.PresentationSourceBounds = RectangleExtensions.ToSystemRectangle(element.GetAbsoluteBounds());
 
                 if (shareRequest is ShareTextRequest shareTextRequest)
                 {
@@ -71,15 +71,13 @@ namespace Xamarin.Essentials
             }
         }
 
-        static Rect GetAbsoluteBounds(this FrameworkElement element)
+        private static Rect GetAbsoluteBounds(this FrameworkElement element)
         {
             var ttv = element.TransformToVisual(Platform.Window.Content);
             var location = ttv.TransformPoint(new Point(0, 0));
             return new Rect(location, new Size(element.ActualWidth, element.ActualHeight));
         }
 
-        static System.Drawing.Rectangle ToSystemRectangle(this Rect rect) =>
-            new System.Drawing.Rectangle((int)rect.X, (int)rect.Y, (int)rect.Width, (int)rect.Height);
 
 #endif
     }

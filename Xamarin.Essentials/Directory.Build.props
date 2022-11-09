@@ -3,7 +3,7 @@
   <PropertyGroup>
 
     <RootNamespace>Xamarin.Essentials</RootNamespace>
-    <Version>4.5.14-winui.0.4</Version>
+    <Version>4.6.19-winui.0.4</Version>
     <NoWarn>Uno0001;VSX1000;CA1416</NoWarn>
 
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
@@ -50,9 +50,11 @@
     <None Include="..\P42.icon.png" Pack="true" PackagePath="\" />
     <None Include="..\README.md" Pack="true" PackagePath="\" />
     <None Include="..\LICENSE" Pack="true" PackagePath="\" />
-    <Compile Include="**\*.shared.cs" />
-    <Compile Include="**\*.shared.*.cs" />
-    <PackageReference Include="Uno.WinUI" Version="4.5.14" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.shared.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.shared.*.cs" />
+    <UpToDateCheckInput Include="$(MSBuildThisFileDirectory)**\*.shared.cs" Exclude="$(DefaultItemExcludes)" />
+    <UpToDateCheckInput Include="$(MSBuildThisFileDirectory)**\*.shared.*.cs" Exclude="$(DefaultItemExcludes)" />
+    <PackageReference Include="Uno.WinUI" Version="4.6.19" />
   	<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
   </ItemGroup>
 

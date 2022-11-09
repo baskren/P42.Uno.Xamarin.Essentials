@@ -52,17 +52,18 @@ namespace Xamarin.Essentials
         {
             var interop = Windows.ApplicationModel.DataTransfer.DataTransferManager.As<IDataTransferManagerInterop>();
             // Show the Share UI
-            interop.ShowShareUIForWindow(MainWindow.Current.Handle);
+            // interop.ShowShareUIForWindow(MainWindow.Current.Handle);  // UWP approach
+            interop.ShowShareUIForWindow(WinRT.Interop.WindowNative.GetWindowHandle(Platform.Window));
         }
 
         public static void InitializeWithWindow(this FileOpenPicker picker)
-            => WinRT.Interop.InitializeWithWindow.Initialize(picker, MainWindow.Current.Handle);
+            => WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(Platform.Window));
 
         public static void InitializeWithWindow(this FileSavePicker picker)
-            => WinRT.Interop.InitializeWithWindow.Initialize(picker, MainWindow.Current.Handle);
+            => WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(Platform.Window));
 
         public static void InitializeWithWindow(this FolderPicker picker)
-            => WinRT.Interop.InitializeWithWindow.Initialize(picker, MainWindow.Current.Handle);
+            => WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(Platform.Window));
 
 
     }

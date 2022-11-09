@@ -4,7 +4,7 @@ using ERect = ElmSharp.Rect;
 
 namespace Xamarin.Essentials
 {
-    public static class RectangleExtensions
+    public static partial class RectangleExtensions
     {
         public static Rectangle ToSystemRectangle(this ERect rect) =>
             new Rectangle(rect.Left, rect.Top, rect.Width, rect.Height);

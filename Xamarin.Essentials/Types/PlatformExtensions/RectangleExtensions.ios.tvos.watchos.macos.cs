@@ -4,7 +4,7 @@ using iOSRectangle = CoreGraphics.CGRect;
 
 namespace Xamarin.Essentials
 {
-    public static class RectangleExtensions
+    public static partial class RectangleExtensions
     {
         public static Rectangle ToSystemRectangle(this iOSRectangle rect)
         {
