@@ -54,7 +54,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)**\*.shared.*.cs" />
     <UpToDateCheckInput Include="$(MSBuildThisFileDirectory)**\*.shared.cs" Exclude="$(DefaultItemExcludes)" />
     <UpToDateCheckInput Include="$(MSBuildThisFileDirectory)**\*.shared.*.cs" Exclude="$(DefaultItemExcludes)" />
-    <PackageReference Include="Uno.WinUI" Version="4.6.19" />
   	<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
   </ItemGroup>
 
