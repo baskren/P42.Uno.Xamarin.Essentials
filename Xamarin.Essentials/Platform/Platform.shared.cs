@@ -19,6 +19,15 @@ namespace Xamarin.Essentials
             Window = window;
             MainThread = Thread.CurrentThread;
             MainThreadDispatchQueue = DispatcherQueue.GetForCurrentThread();
+
+#if __ANDROID__
+            var propertyInfo = typeof(Microsoft.UI.Xaml.ApplicationActivity).GetProperty("Instance", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            var obj = propertyInfo.GetValue(null, null);
+            if (obj is Microsoft.UI.Xaml.ApplicationActivity activity) 
+            {
+                Xamarin.Essentials.Platform.Init(activity, null);
+            }
+#endif
         }
 
     }
