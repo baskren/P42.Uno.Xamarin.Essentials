@@ -44,14 +44,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(EventPermission.CheckPermissionStatus(EKEntityType.Event));
             }
 
             public override Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = EventPermission.CheckPermissionStatus(EKEntityType.Event);
                 if (status == PermissionStatus.Granted)
@@ -68,14 +68,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(EventPermission.CheckPermissionStatus(EKEntityType.Event));
             }
 
             public override Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = EventPermission.CheckPermissionStatus(EKEntityType.Event);
                 if (status == PermissionStatus.Granted)
@@ -92,14 +92,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(EventPermission.CheckPermissionStatus(EKEntityType.Reminder));
             }
 
             public override Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = EventPermission.CheckPermissionStatus(EKEntityType.Reminder);
                 if (status == PermissionStatus.Granted)
@@ -116,14 +116,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(GetSensorPermissionStatus());
             }
 
             public override Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = GetSensorPermissionStatus();
                 if (status == PermissionStatus.Granted)
@@ -189,14 +189,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(LocationWhenInUse.GetLocationStatus(false));
             }
 
             public override async Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = LocationWhenInUse.GetLocationStatus(false);
                 if (status == PermissionStatus.Granted)

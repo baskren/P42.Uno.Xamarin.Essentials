@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -8,6 +10,7 @@ using System.Xml.XPath;
 using Windows.ApplicationModel.Contacts;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Geolocation;
+using Windows.Storage;
 
 namespace Xamarin.Essentials
 {
@@ -15,7 +18,10 @@ namespace Xamarin.Essentials
     {
         public static bool IsCapabilityDeclared(string capabilityName)
         {
-            var doc = XDocument.Load(Platform.AppManifestFilename, LoadOptions.None);
+            throw new NotImplementedException();
+            //return IsCapabilityDeclaredAsync(capabilityName).Result;
+            /*
+            var doc = XDocument.Load("ms-appx:///" + Platform.AppManifestFilename, LoadOptions.None);
             var reader = doc.CreateReader();
             var namespaceManager = new XmlNamespaceManager(reader.NameTable);
             namespaceManager.AddNamespace("x", Platform.AppManifestXmlns);
@@ -25,26 +31,62 @@ namespace Xamarin.Essentials
             return (doc.Root.XPathSelectElements($"//x:DeviceCapability[@Name='{capabilityName}']", namespaceManager)?.Any() ?? false) ||
                 (doc.Root.XPathSelectElements($"//x:Capability[@Name='{capabilityName}']", namespaceManager)?.Any() ?? false) ||
                 (doc.Root.XPathSelectElements($"//uap:Capability[@Name='{capabilityName}']", namespaceManager)?.Any() ?? false);
+            */
+        }
+
+        public static async Task<bool> IsCapabilityDeclaredAsync(string capabilityName)
+        {
+            try
+            {
+                var xmlfile = await StorageFile.GetFileFromApplicationUriAsync(new Uri($"ms-appx:///{Platform.AppManifestFilename}"));
+                using (var storageStream = await xmlfile.OpenReadAsync())
+                {
+                    using (var stream = storageStream.AsStreamForRead())
+                    {
+                        var doc = await XDocument.LoadAsync(stream, LoadOptions.None, CancellationToken.None);
+                        var reader = doc.CreateReader();
+                        var namespaceManager = new XmlNamespaceManager(reader.NameTable);
+                        namespaceManager.AddNamespace("x", Platform.AppManifestXmlns);
+                        namespaceManager.AddNamespace("uap", Platform.AppManifestUapXmlns);
+
+                        try
+                        {
+                            var result = (doc.Root.XPathSelectElements($"//x:DeviceCapability[@Name='{capabilityName}']", namespaceManager)?.Any() ?? false) ||
+                            (doc.Root.XPathSelectElements($"//x:Capability[@Name='{capabilityName}']", namespaceManager)?.Any() ?? false) ||
+                            (doc.Root.XPathSelectElements($"//uap:Capability[@Name='{capabilityName}']", namespaceManager)?.Any() ?? false);
+                            return result;
+                        }
+                        catch (Exception ex)
+                        {
+                            Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw ex);
+                        }
+                    }
+                }
+            } catch (Exception ex1)
+            {
+                System.Diagnostics.Debug.WriteLine($"Permissions. : ");
+            }
+            return false;
         }
 
         public abstract partial class BasePlatformPermission : BasePermission
         {
             protected virtual Func<IEnumerable<string>> RequiredDeclarations { get; } = () => Array.Empty<string>();
 
-            public override Task<PermissionStatus> CheckStatusAsync()
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
-                return Task.FromResult(PermissionStatus.Granted);
+                await EnsureDeclaredAsync();
+                return PermissionStatus.Granted;
             }
 
             public override Task<PermissionStatus> RequestAsync()
                 => CheckStatusAsync();
 
-            public override void EnsureDeclared()
+            public override async Task EnsureDeclaredAsync()
             {
                 foreach (var d in RequiredDeclarations())
                 {
-                    if (!IsCapabilityDeclared(d))
+                    if (!await IsCapabilityDeclaredAsync(d))
                         throw new PermissionException($"You need to declare the capability `{d}` in your AppxManifest.xml file");
                 }
             }
@@ -79,7 +121,7 @@ namespace Xamarin.Essentials
 
             public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
                 var accessStatus = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
 
                 if (accessStatus == null)
@@ -96,7 +138,7 @@ namespace Xamarin.Essentials
 
             public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
                 var accessStatus = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
 
                 if (accessStatus == null)
@@ -121,7 +163,7 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
                 return RequestLocationPermissionAsync();
             }
 
@@ -150,7 +192,7 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
                 return LocationWhenInUse.RequestLocationPermissionAsync();
             }
         }

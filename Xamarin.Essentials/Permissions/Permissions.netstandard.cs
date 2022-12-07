@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
             public override Task<PermissionStatus> RequestAsync() =>
                 throw ExceptionUtils.NotSupportedOrImplementedException;
 
-            public override void EnsureDeclared() =>
+            public override Task EnsureDeclaredAsync() =>
                 throw ExceptionUtils.NotSupportedOrImplementedException;
 
             public override bool ShouldShowRationale() =>

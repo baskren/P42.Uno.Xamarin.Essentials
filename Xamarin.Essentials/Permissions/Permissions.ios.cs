@@ -50,14 +50,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(AVPermissions.CheckPermissionsStatus(AVAuthorizationMediaType.Video));
             }
 
             public override async Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = AVPermissions.CheckPermissionsStatus(AVAuthorizationMediaType.Video);
                 if (status == PermissionStatus.Granted)
@@ -76,14 +76,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(GetAddressBookPermissionStatus());
             }
 
             public override Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = GetAddressBookPermissionStatus();
                 if (status == PermissionStatus.Granted)
@@ -138,14 +138,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(ContactsRead.GetAddressBookPermissionStatus());
             }
 
             public override Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = ContactsRead.GetAddressBookPermissionStatus();
                 if (status == PermissionStatus.Granted)
@@ -164,14 +164,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(GetMediaPermissionStatus());
             }
 
             public override Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = GetMediaPermissionStatus();
                 if (status == PermissionStatus.Granted)
@@ -239,14 +239,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(AVPermissions.CheckPermissionsStatus(AVAuthorizationMediaType.Audio));
             }
 
             public override Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = AVPermissions.CheckPermissionsStatus(AVAuthorizationMediaType.Audio);
                 if (status == PermissionStatus.Granted)
@@ -265,14 +265,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(GetSpeechPermissionStatus());
             }
 
             public override Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = GetSpeechPermissionStatus();
                 if (status == PermissionStatus.Granted)

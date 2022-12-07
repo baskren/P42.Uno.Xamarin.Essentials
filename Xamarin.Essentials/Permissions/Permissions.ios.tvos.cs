@@ -20,14 +20,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(GetPhotoPermissionStatus());
             }
 
             public override Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = GetPhotoPermissionStatus();
                 if (status == PermissionStatus.Granted)

@@ -125,7 +125,7 @@ namespace Xamarin.Essentials
                 return result;
             }
 
-            public override void EnsureDeclared()
+            public override async Task EnsureDeclaredAsync()
             {
                 if (RequiredPermissions == null || RequiredPermissions.Length <= 0)
                     return;

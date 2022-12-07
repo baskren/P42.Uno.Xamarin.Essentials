@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
             public override Task<PermissionStatus> RequestAsync() =>
                 Task.FromResult(PermissionStatus.Granted);
 
-            public override void EnsureDeclared()
+            public override async Task EnsureDeclaredAsync()
             {
                 if (RequiredInfoPlistKeys == null)
                     return;
@@ -93,14 +93,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(GetLocationStatus(true));
             }
 
             public override async Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = GetLocationStatus(true);
                 if (status == PermissionStatus.Granted || status == PermissionStatus.Disabled)

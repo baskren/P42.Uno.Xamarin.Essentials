@@ -18,7 +18,7 @@ namespace Xamarin.Essentials
 
         internal static void EnsureDeclared<TPermission>()
             where TPermission : BasePermission, new() =>
-                new TPermission().EnsureDeclared();
+                new TPermission().EnsureDeclaredAsync();
 
         internal static async Task EnsureGrantedAsync<TPermission>()
             where TPermission : BasePermission, new()
@@ -40,7 +40,7 @@ namespace Xamarin.Essentials
 
             public abstract Task<PermissionStatus> RequestAsync();
 
-            public abstract void EnsureDeclared();
+            public abstract Task EnsureDeclaredAsync();
 
             public abstract bool ShouldShowRationale();
         }

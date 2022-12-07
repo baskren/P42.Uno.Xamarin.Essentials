@@ -27,7 +27,7 @@ namespace Xamarin.Essentials
 
             public override bool ShouldShowRationale() => false;
 
-            public override void EnsureDeclared()
+            public override async Task EnsureDeclaredAsync()
             {
                 var plistKeys = RequiredInfoPlistKeys?.Invoke();
                 if (plistKeys != null)
@@ -103,14 +103,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 return Task.FromResult(GetLocationStatus());
             }
 
             public override async Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
 
                 var status = GetLocationStatus();
                 if (status == PermissionStatus.Granted || status == PermissionStatus.Disabled)
