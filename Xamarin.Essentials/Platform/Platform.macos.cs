@@ -62,7 +62,7 @@ namespace Xamarin.Essentials
             if (result != 0 || handle == IntPtr.Zero)
                 return 0.0;
 
-#if NET6_0_MACOS
+#if NET6_0
             using (var dl = Marshal.PtrToStructure<CVDisplayLink>(handle))
 #else
             using (var dl = new CVDisplayLink(handle))
@@ -327,7 +327,7 @@ namespace Xamarin.Essentials
             if (sourceRef == default)
                 return null;
 
-#if NET6_0_MACOS
+#if NET6_0
             // this might be a big pile of poo.
             var runLoop = Marshal.PtrToStructure<CFRunLoopSource>(sourceRef);
             // Might need this? https://docs.microsoft.com/en-us/dotnet/standard/native-interop/best-practices#keeping-managed-objects-alive

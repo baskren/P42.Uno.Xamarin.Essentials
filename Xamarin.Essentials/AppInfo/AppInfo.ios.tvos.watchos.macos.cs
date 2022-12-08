@@ -31,7 +31,7 @@ namespace Xamarin.Essentials
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-#if NET6_0_MACOS
+#if __MACOS__
                 var prefsApp = ScriptingBridge.SBApplication.GetApplication("com.apple.systempreferences");
 #else
                 var prefsApp = ScriptingBridge.SBApplication.FromBundleIdentifier("com.apple.systempreferences");

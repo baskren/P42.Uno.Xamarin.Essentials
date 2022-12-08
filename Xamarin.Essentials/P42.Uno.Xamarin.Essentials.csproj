@@ -1,14 +1,10 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
   
-    <AssemblyName>P42.Uno.Xamarin.Essentials</AssemblyName>
-
-    <!--
-    Another example of how Micrsoft just doesn't care about those who don't use only their stuff
-    <TargetFrameworks>netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;MonoAndroid11.0;</TargetFrameworks>
-    -->
 	  <TargetFrameworks>net6.0;net6.0-android;net6.0-ios;net6.0-maccatalyst;net6.0-macos;</TargetFrameworks>
 	  <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net6.0-windows10.0.19041.0;$(TargetFrameworks)</TargetFrameworks>
+		<GenerateLibraryLayout>true</GenerateLibraryLayout>
 
  </PropertyGroup>
 
@@ -83,7 +79,7 @@
 
   <!-- NetStandard bait -->
   <ItemGroup Condition="  $(TargetFramework.ToLower().StartsWith('netstandard')) OR $(TargetFramework.ToLower().Equals('net6.0')) ">
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.netstandard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.netstandard.*.cs" />
     <PackageReference Include="Uno.WinUI" Version="4.6.19" />

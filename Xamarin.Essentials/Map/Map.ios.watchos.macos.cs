@@ -32,7 +32,7 @@ namespace Xamarin.Essentials
                 City = placemark.Locality,
                 Zip = placemark.PostalCode
             }.Dictionary;
-#elif NET6_0_MACOS
+#elif MACOS
             var address = new CNMutablePostalAddress
             { 
                 IsoCountryCode = placemark.CountryCode,

@@ -26,7 +26,7 @@
   <ItemGroup>
     <PackageReference Include="Uno.WinUI" Version="4.6.19" />
     <PackageReference Include="Uno.WinUI.WebAssembly" Version="4.6.19" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <Compile Include="**\*.unowasm.cs" />
     <Compile Include="**\*.unowasm.*.cs" />
     <EmbeddedResource Include="LinkerDefinition.Wasm.xml">
