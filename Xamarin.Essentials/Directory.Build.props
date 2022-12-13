@@ -62,7 +62,7 @@
     <Message Text=" " Importance="high"/>
     <Message Text=" " Importance="high"/>
     <Message Text=" " Importance="high"/>
-    <Message Text="===============================  [ $(AssemblyName) : $(TargetFramework) ] ===============================" Importance="high"/>
+    <Message Text="===============================  [ $(AssemblyName) : $(TargetFramework) : $(Configuration) : $(Version) ] ===============================" Importance="high"/>
   </Target>
   
   <Target Name="NuGetMove" AfterTargets="Pack" Condition=" $(LocalNuGet) != '' ">
