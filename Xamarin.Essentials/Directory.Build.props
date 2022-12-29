@@ -3,7 +3,7 @@
   <PropertyGroup>
 
     <RootNamespace>Xamarin.Essentials</RootNamespace>
-    <Version>4.6.19-winui.0.4</Version>
+    <Version>4.6.39-winui.0.4</Version>
     <NoWarn>Uno0001;VSX1000;CA1416</NoWarn>
 
     <GenerateLibraryLayout>true</GenerateLibraryLayout>

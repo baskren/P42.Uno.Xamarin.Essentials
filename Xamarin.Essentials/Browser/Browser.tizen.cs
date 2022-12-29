@@ -7,12 +7,12 @@ namespace Xamarin.Essentials
 {
     public static partial class Browser
     {
-        static Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchOptions launchMode)
+        static async Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchOptions launchMode)
         {
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
 
-            Permissions.EnsureDeclared<Permissions.LaunchApp>();
+            await Permissions.EnsureDeclaredAsync<Permissions.LaunchApp>();
 
             var appControl = new AppControl
             {
@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
             if (hasMatches)
                 AppControl.SendLaunchRequest(appControl);
 
-            return Task.FromResult(hasMatches);
+            return hasMatches;
         }
     }
 }

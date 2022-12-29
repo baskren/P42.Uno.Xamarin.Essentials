@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
             where TPermission : BasePermission, new() =>
                 new TPermission().ShouldShowRationale();
 
-        internal static void EnsureDeclared<TPermission>()
+        internal static Task EnsureDeclaredAsync<TPermission>()
             where TPermission : BasePermission, new() =>
                 new TPermission().EnsureDeclaredAsync();
 

@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
 
         static void StartListeners()
         {
-            Permissions.EnsureDeclared<Permissions.NetworkState>();
+            Permissions.EnsureDeclaredAsync<Permissions.NetworkState>();
 
             conectivityReceiver = new ConnectivityBroadcastReceiver(OnConnectivityChanged);
 
@@ -46,7 +46,7 @@ namespace Xamarin.Essentials
         {
             get
             {
-                Permissions.EnsureDeclared<Permissions.NetworkState>();
+                Permissions.EnsureDeclaredAsync<Permissions.NetworkState>();
 
                 try
                 {
@@ -139,7 +139,7 @@ namespace Xamarin.Essentials
         {
             get
             {
-                Permissions.EnsureDeclared<Permissions.NetworkState>();
+                Permissions.EnsureDeclaredAsync<Permissions.NetworkState>();
 
                 var manager = Platform.ConnectivityManager;
                 if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))

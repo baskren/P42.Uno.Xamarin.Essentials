@@ -10,7 +10,7 @@ namespace DeviceTests
         [Fact]
         public void Versions_Are_Correct()
         {
-#if NET6_0_WINDOWS10_0_19041_0
+#if NET7_0_WINDOWS10_0_19041_0
 
             Assert.Equal(10, DeviceInfo.Version.Major);
             Assert.Equal(0, DeviceInfo.Version.Minor);
@@ -29,7 +29,7 @@ namespace DeviceTests
         [Fact]
         public void DeviceModel_Is_Correct()
         {
-#if NET6_0_WINDOWS10_0_19041_0
+#if NET7_0_WINDOWS10_0_19041_0
 
             // Nothing right now.
 #elif __IOS__
@@ -57,7 +57,7 @@ namespace DeviceTests
         [Fact]
         public void AppPackageName_Is_Correct()
         {
-#if NET6_0_WINDOWS10_0_19041_0
+#if NET7_0_WINDOWS10_0_19041_0
 
             Assert.Equal("ec0cc741-fd3e-485c-81be-68815c480690", AppInfo.PackageName);
 #elif __IOS__
@@ -72,7 +72,7 @@ namespace DeviceTests
         [Fact]
         public void Platform_Is_Correct()
         {
-#if NET6_0_WINDOWS10_0_19041_0
+#if NET7_0_WINDOWS10_0_19041_0
 
             Assert.Equal(DevicePlatform.Windows, DeviceInfo.Platform);
 #elif __IOS__
@@ -87,7 +87,7 @@ namespace DeviceTests
         [Fact]
         public void App_Theme_Is_Correct()
         {
-#if NET6_0_WINDOWS10_0_19041_0
+#if NET7_0_WINDOWS10_0_19041_0
  || __IOS__ || __ANDROID__
             Assert.NotEqual(AppTheme.Unspecified, AppInfo.RequestedTheme);
 #else

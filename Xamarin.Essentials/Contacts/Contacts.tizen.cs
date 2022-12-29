@@ -17,8 +17,8 @@ namespace Xamarin.Essentials
 
         static async Task<Contact> PlatformPickContactAsync()
         {
-            Permissions.EnsureDeclared<Permissions.ContactsRead>();
-            Permissions.EnsureDeclared<Permissions.LaunchApp>();
+            await Permissions.EnsureDeclaredAsync<Permissions.ContactsRead>();
+            await Permissions.EnsureDeclaredAsync<Permissions.LaunchApp>();
             await Permissions.EnsureGrantedAsync<Permissions.ContactsRead>();
 
             var tcs = new TaskCompletionSource<Contact>();

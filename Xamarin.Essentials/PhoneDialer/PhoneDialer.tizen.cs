@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
 
         static void PlatformOpen(string number)
         {
-            Permissions.EnsureDeclared<Permissions.LaunchApp>();
+            Permissions.EnsureDeclaredAsync<Permissions.LaunchApp>();
 
             var appControl = new AppControl
             {

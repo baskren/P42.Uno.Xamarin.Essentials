@@ -51,6 +51,8 @@ namespace Xamarin.Essentials
                             Console.WriteLine($"You must set `{recommendedKey}` in your Info.plist file to enable a user-friendly message for the Permission: {GetType().Name}.");
                     }
                 }
+
+                await Task.Delay(1);
             }
 
             internal void EnsureMainThread()
@@ -101,16 +103,16 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RecommendedInfoPlistKeys =>
                 () => new string[] { "NSLocationWhenInUseUsageDescription" };
 
-            public override Task<PermissionStatus> CheckStatusAsync()
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
-                return Task.FromResult(GetLocationStatus());
+                return GetLocationStatus();
             }
 
             public override async Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
                 var status = GetLocationStatus();
                 if (status == PermissionStatus.Granted || status == PermissionStatus.Disabled)

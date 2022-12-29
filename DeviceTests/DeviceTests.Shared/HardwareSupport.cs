@@ -9,7 +9,7 @@
 #elif __IOS__
             // all iOS devices (and only devices) have an accelerometer
             Xamarin.Essentials.DeviceInfo.DeviceType == Xamarin.Essentials.DeviceType.Physical;
-#elif NET6_0_WINDOWS10_0_19041_0
+#elif NET7_0_WINDOWS10_0_19041_0
 
             // UWP does not emulate, and only some devices have, an accelerometer
             Windows.Devices.Sensors.Accelerometer.GetDefault() != null;
@@ -22,7 +22,7 @@
 #elif __IOS__
             // all iOS devices (and only devices) have a magnetometer
             Xamarin.Essentials.DeviceInfo.DeviceType == Xamarin.Essentials.DeviceType.Physical;
-#elif NET6_0_WINDOWS10_0_19041_0
+#elif NET7_0_WINDOWS10_0_19041_0
 
             // UWP does not emulate, and only some devices have, a magnetometer
             Windows.Devices.Sensors.Magnetometer.GetDefault() != null;
@@ -35,7 +35,7 @@
 #elif __IOS__
             // all iOS devices (and only devices) have a gyroscope
             Xamarin.Essentials.DeviceInfo.DeviceType == Xamarin.Essentials.DeviceType.Physical;
-#elif NET6_0_WINDOWS10_0_19041_0
+#elif NET7_0_WINDOWS10_0_19041_0
 
             // UWP does not emulate, and only some devices have, a gyroscope
             Windows.Devices.Sensors.Gyrometer.GetDefault() != null;
@@ -48,7 +48,7 @@
 #elif __IOS__
             // all iOS devices (and only devices) have a compass
             Xamarin.Essentials.DeviceInfo.DeviceType == Xamarin.Essentials.DeviceType.Physical;
-#elif NET6_0_WINDOWS10_0_19041_0
+#elif NET7_0_WINDOWS10_0_19041_0
 
             // UWP does not emulate, and only some devices have, a compass
             Windows.Devices.Sensors.Compass.GetDefault() != null;
@@ -61,7 +61,7 @@
 #elif __IOS__
             // all iOS devices (and only devices) have a battery
             Xamarin.Essentials.DeviceInfo.DeviceType == Xamarin.Essentials.DeviceType.Physical;
-#elif NET6_0_WINDOWS10_0_19041_0
+#elif NET7_0_WINDOWS10_0_19041_0
 
             // UWP appears to emulate a battery
             // TODO: verify this
@@ -75,7 +75,7 @@
 #elif __IOS__
             // all iOS devices (and only devices) have a camera
             Xamarin.Essentials.DeviceInfo.DeviceType == Xamarin.Essentials.DeviceType.Physical;
-#elif NET6_0_WINDOWS10_0_19041_0
+#elif NET7_0_WINDOWS10_0_19041_0
 
             // TODO: most UWP devices don't have a camera lamp (mobile devices do, we we don't care about those)
             false;
@@ -87,7 +87,7 @@
 #elif __IOS__
             // iphone 6 and never have a barometer. looking in how to test this.
             Xamarin.Essentials.DeviceInfo.DeviceType == Xamarin.Essentials.DeviceType.Physical;
-#elif NET6_0_WINDOWS10_0_19041_0
+#elif NET7_0_WINDOWS10_0_19041_0
 
             // TODO: most UWP devices don't have a barometer (mobile devices do, we we don't care about those)
             false;

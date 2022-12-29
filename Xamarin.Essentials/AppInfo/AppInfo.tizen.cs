@@ -19,7 +19,7 @@ namespace Xamarin.Essentials
 
         static void PlatformShowSettingsUI()
         {
-            Permissions.EnsureDeclared<Permissions.LaunchApp>();
+            Permissions.EnsureDeclaredAsync<Permissions.LaunchApp>();
             AppControl.SendLaunchRequest(new AppControl() { Operation = AppControlOperations.Setting });
         }
 

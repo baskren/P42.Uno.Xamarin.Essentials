@@ -8,9 +8,9 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => Platform.GetFeatureInfo<bool>("email");
 
-        static Task PlatformComposeAsync(EmailMessage message)
+        static async Task PlatformComposeAsync(EmailMessage message)
         {
-            Permissions.EnsureDeclared<Permissions.LaunchApp>();
+            await Permissions.EnsureDeclaredAsync<Permissions.LaunchApp>();
 
             var appControl = new AppControl
             {
@@ -31,7 +31,7 @@ namespace Xamarin.Essentials
 
             AppControl.SendLaunchRequest(appControl);
 
-            return Task.CompletedTask;
+            return;
         }
     }
 }

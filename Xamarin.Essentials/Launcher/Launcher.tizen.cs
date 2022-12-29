@@ -9,9 +9,9 @@ namespace Xamarin.Essentials
         static Task<bool> PlatformCanOpenAsync(Uri uri)
             => Task.FromResult(uri.IsWellFormedOriginalString());
 
-        static Task PlatformOpenAsync(Uri uri)
+        static async Task PlatformOpenAsync(Uri uri)
         {
-            Permissions.EnsureDeclared<Permissions.LaunchApp>();
+            await Permissions.EnsureDeclaredAsync<Permissions.LaunchApp>();
 
             var appControl = new AppControl
             {
@@ -32,15 +32,15 @@ namespace Xamarin.Essentials
 
             AppControl.SendLaunchRequest(appControl);
 
-            return Task.CompletedTask;
+            return;
         }
 
-        static Task PlatformOpenAsync(OpenFileRequest request)
+        static async Task PlatformOpenAsync(OpenFileRequest request)
         {
             if (string.IsNullOrEmpty(request.File.FullPath))
                 throw new ArgumentNullException(nameof(request.File.FullPath));
 
-            Permissions.EnsureDeclared<Permissions.LaunchApp>();
+            awai tPermissions.EnsureDeclaredAsync<Permissions.LaunchApp>();
 
             var appControl = new AppControl
             {
@@ -51,7 +51,7 @@ namespace Xamarin.Essentials
 
             AppControl.SendLaunchRequest(appControl);
 
-            return Task.CompletedTask;
+            return;
         }
 
         static async Task<bool> PlatformTryOpenAsync(Uri uri)

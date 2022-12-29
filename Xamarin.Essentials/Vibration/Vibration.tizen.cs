@@ -11,13 +11,13 @@ namespace Xamarin.Essentials
 
         static void PlatformVibrate(TimeSpan duration)
         {
-            Permissions.EnsureDeclared<Permissions.Vibrate>();
+            Permissions.EnsureDeclaredAsync<Permissions.Vibrate>();
             Vibrator.Vibrators.FirstOrDefault()?.Vibrate((int)duration.TotalMilliseconds, 100);
         }
 
         static void PlatformCancel()
         {
-            Permissions.EnsureDeclared<Permissions.Vibrate>();
+            Permissions.EnsureDeclaredAsync<Permissions.Vibrate>();
             Vibrator.Vibrators.FirstOrDefault()?.Stop();
         }
     }

@@ -6,7 +6,7 @@ using P42.Uno.AsyncNavigation;
 using Windows.Foundation;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-#if NET6_0_WINDOWS10_0_19041_0
+#if NET7_0_WINDOWS10_0_19041_0
 using Popup = Microsoft.UI.Xaml.Controls.Primitives.Popup;
 #else
 using Popup = Microsoft.UI.Xaml.Controls.Popup;

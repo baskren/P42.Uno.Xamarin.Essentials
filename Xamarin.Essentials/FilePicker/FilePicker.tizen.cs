@@ -13,7 +13,7 @@ namespace Xamarin.Essentials
     {
         static async Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
         {
-            Permissions.EnsureDeclared<Permissions.LaunchApp>();
+            await Permissions.EnsureDeclaredAsync<Permissions.LaunchApp>();
             await Permissions.EnsureGrantedAsync<Permissions.StorageRead>();
 
             var tcs = new TaskCompletionSource<IEnumerable<FileResult>>();

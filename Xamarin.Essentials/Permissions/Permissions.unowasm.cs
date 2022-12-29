@@ -31,16 +31,18 @@ namespace Xamarin.Essentials
         {
             protected virtual Func<IEnumerable<string>> RequiredDeclarations { get; } = () => Array.Empty<string>();
 
-            public override Task<PermissionStatus> CheckStatusAsync()
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
-                return Task.FromResult(PermissionStatus.Granted);
+                await EnsureDeclaredAsync();
+                return PermissionStatus.Granted;
             }
 
             public override Task<PermissionStatus> RequestAsync()
                 => CheckStatusAsync();
 
-            public override void EnsureDeclared()
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+            public override async Task EnsureDeclaredAsync()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
             {
                 foreach (var d in RequiredDeclarations())
                 {
@@ -79,7 +81,7 @@ namespace Xamarin.Essentials
 
             public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                await EnsureDeclaredAsync();
                 var accessStatus = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
 
                 if (accessStatus == null)
@@ -96,7 +98,7 @@ namespace Xamarin.Essentials
 
             public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                await EnsureDeclaredAsync();
                 var accessStatus = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
 
                 if (accessStatus == null)
@@ -119,10 +121,10 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredDeclarations => () =>
                 new[] { "location" };
 
-            public override Task<PermissionStatus> CheckStatusAsync()
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
-                return RequestLocationPermissionAsync();
+                await EnsureDeclaredAsync();
+                return await RequestLocationPermissionAsync();
             }
 
             internal static async Task<PermissionStatus> RequestLocationPermissionAsync()
@@ -147,10 +149,10 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredDeclarations => () =>
                 new[] { "location" };
 
-            public override Task<PermissionStatus> CheckStatusAsync()
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
-                return LocationWhenInUse.RequestLocationPermissionAsync();
+                await EnsureDeclaredAsync();
+                return await LocationWhenInUse.RequestLocationPermissionAsync();
             }
         }
 

@@ -2,9 +2,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
   
-	  <TargetFrameworks>net6.0;net6.0-android;net6.0-ios;net6.0-maccatalyst;net6.0-macos;</TargetFrameworks>
-	  <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net6.0-windows10.0.19041.0;$(TargetFrameworks)</TargetFrameworks>
-		<GenerateLibraryLayout>true</GenerateLibraryLayout>
+	  <TargetFrameworks>net7.0;net7.0-android;net7.0-ios;net7.0-maccatalyst;net7.0-macos;</TargetFrameworks>
+	  <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net7.0-windows10.0.19041.0;$(TargetFrameworks)</TargetFrameworks>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
  </PropertyGroup>
 
@@ -18,7 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)**\*.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.android.*.cs" />
     <AndroidResource Include="Resources\xml\*.xml" />
-    <PackageReference Include="Uno.WinUI" Version="4.6.19" />
+    <PackageReference Include="Uno.WinUI" Version="4.6.39" />
     <PackageReference Include="Xamarin.AndroidX.Browser" Version="1.3.0" />
     <PackageReference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics.Vectors" Version="4.5.0" />    
     <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics" />
@@ -28,7 +29,7 @@
   <ItemGroup Condition=" $(TargetFramework.ToLower().Contains('ios')) OR $(TargetFramework.ToLower().Contains('maccatalyst'))">
     <Compile Include="$(MSBuildThisFileDirectory)**\*.ios.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.ios.*.cs" />
-    <PackageReference Include="Uno.WinUI" Version="4.6.19" />
+    <PackageReference Include="Uno.WinUI" Version="4.6.39" />
     <PackageReference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics.Vectors" Version="4.5.0" />
     <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics" />
     <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="OpenTK-1.0" />
@@ -41,7 +42,7 @@
     <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics" />
     <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics.Vectors" />
     <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="OpenTK" />
-    <PackageReference Include="Uno.WinUI" Version="4.6.19" />
+    <PackageReference Include="Uno.WinUI" Version="4.6.39" />
   </ItemGroup>
 
   <!-- MacCatylst -->
@@ -52,10 +53,10 @@
 
   <!-- TIZEN -->
   <ItemGroup Condition=" $(TargetFramework.ToLower().Contains('tizen')) ">
-    <PackageReference Include="Uno.WinUI.Runtime.Skia.Tizen" Version="4.6.19" />
+    <PackageReference Include="Uno.WinUI.Runtime.Skia.Tizen" Version="4.6.39" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.tizen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.tizen.*.cs" />
-    <PackageReference Include="Uno.WinUI" Version="4.6.19" />
+    <PackageReference Include="Uno.WinUI" Version="4.6.39" />
   </ItemGroup>
 
   <!-- UWP -->
@@ -78,11 +79,11 @@
   </ItemGroup>
 
   <!-- NetStandard bait -->
-  <ItemGroup Condition="  $(TargetFramework.ToLower().StartsWith('netstandard')) OR $(TargetFramework.ToLower().Equals('net6.0')) ">
+  <ItemGroup Condition="  $(TargetFramework.ToLower().StartsWith('netstandard')) OR $(TargetFramework.ToLower().Equals('net7.0')) ">
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.netstandard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.netstandard.*.cs" />
-    <PackageReference Include="Uno.WinUI" Version="4.6.19" />
+    <PackageReference Include="Uno.WinUI" Version="4.6.39" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Types\PlatformExtensions\RectangleExtensions.windows.cs" />

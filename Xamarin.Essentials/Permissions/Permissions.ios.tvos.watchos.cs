@@ -39,6 +39,8 @@ namespace Xamarin.Essentials
                     if (!IsKeyDeclaredInInfoPlist(requiredInfoPlistKey))
                         throw new PermissionException($"You must set `{requiredInfoPlistKey}` in your Info.plist file to use the Permission: {GetType().Name}.");
                 }
+
+                await Task.Delay(1);
             }
 
             public override bool ShouldShowRationale() => false;
@@ -91,16 +93,16 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSLocationWhenInUseUsageDescription" };
 
-            public override Task<PermissionStatus> CheckStatusAsync()
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
-                return Task.FromResult(GetLocationStatus(true));
+                return GetLocationStatus(true);
             }
 
             public override async Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
                 var status = GetLocationStatus(true);
                 if (status == PermissionStatus.Granted || status == PermissionStatus.Disabled)

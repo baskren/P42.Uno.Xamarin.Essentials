@@ -121,7 +121,7 @@ namespace Xamarin.Essentials
 
             public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
                 var accessStatus = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
 
                 if (accessStatus == null)
@@ -138,7 +138,7 @@ namespace Xamarin.Essentials
 
             public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
                 var accessStatus = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
 
                 if (accessStatus == null)
@@ -161,10 +161,10 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredDeclarations => () =>
                 new[] { "location" };
 
-            public override Task<PermissionStatus> CheckStatusAsync()
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclaredAsync();
-                return RequestLocationPermissionAsync();
+                await EnsureDeclaredAsync();
+                return await RequestLocationPermissionAsync();
             }
 
             internal static async Task<PermissionStatus> RequestLocationPermissionAsync()
@@ -190,10 +190,10 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredDeclarations => () =>
                 new[] { "location" };
 
-            public override Task<PermissionStatus> CheckStatusAsync()
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclaredAsync();
-                return LocationWhenInUse.RequestLocationPermissionAsync();
+                await EnsureDeclaredAsync();
+                return await LocationWhenInUse.RequestLocationPermissionAsync();
             }
         }
 

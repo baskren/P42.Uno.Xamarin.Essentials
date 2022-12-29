@@ -44,7 +44,7 @@ namespace Xamarin.Essentials
         {
             get
             {
-                Permissions.EnsureDeclared<Permissions.NetworkState>();
+                Permissions.EnsureDeclaredAsync<Permissions.NetworkState>();
                 var currentAccess = ConnectionManager.CurrentConnection;
                 switch (currentAccess.Type)
                 {
@@ -68,7 +68,7 @@ namespace Xamarin.Essentials
 
         static void StartListeners()
         {
-            Permissions.EnsureDeclared<Permissions.NetworkState>();
+            Permissions.EnsureDeclaredAsync<Permissions.NetworkState>();
             ConnectionManager.ConnectionTypeChanged += OnChanged;
             GetProfileListAsync();
         }

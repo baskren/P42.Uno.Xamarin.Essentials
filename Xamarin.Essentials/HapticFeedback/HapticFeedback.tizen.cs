@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
 
         static void PlatformPerform(HapticFeedbackType type)
         {
-            Permissions.EnsureDeclared<Permissions.Vibrate>();
+            Permissions.EnsureDeclaredAsync<Permissions.Vibrate>();
             try
             {
                 var feedback = new Feedback();

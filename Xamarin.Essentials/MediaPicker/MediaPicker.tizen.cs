@@ -34,7 +34,7 @@ namespace Xamarin.Essentials
 
         static async Task<FileResult> PlatformMediaAsync(MediaPickerOptions options, bool photo)
         {
-            Permissions.EnsureDeclared<Permissions.LaunchApp>();
+            await Permissions.EnsureDeclaredAsync<Permissions.LaunchApp>();
 
             await Permissions.EnsureGrantedAsync<Permissions.StorageRead>();
 

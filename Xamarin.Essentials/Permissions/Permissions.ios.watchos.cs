@@ -42,22 +42,22 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSCalendarsUsageDescription" };
 
-            public override Task<PermissionStatus> CheckStatusAsync()
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
-                return Task.FromResult(EventPermission.CheckPermissionStatus(EKEntityType.Event));
+                return EventPermission.CheckPermissionStatus(EKEntityType.Event);
             }
 
-            public override Task<PermissionStatus> RequestAsync()
+            public override async Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
                 var status = EventPermission.CheckPermissionStatus(EKEntityType.Event);
                 if (status == PermissionStatus.Granted)
-                    return Task.FromResult(status);
+                    return status;
 
-                return EventPermission.RequestPermissionAsync(EKEntityType.Event);
+                return await EventPermission.RequestPermissionAsync(EKEntityType.Event);
             }
         }
 
@@ -66,22 +66,22 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSCalendarsUsageDescription" };
 
-            public override Task<PermissionStatus> CheckStatusAsync()
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
-                return Task.FromResult(EventPermission.CheckPermissionStatus(EKEntityType.Event));
+                return EventPermission.CheckPermissionStatus(EKEntityType.Event);
             }
 
-            public override Task<PermissionStatus> RequestAsync()
+            public override async Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
                 var status = EventPermission.CheckPermissionStatus(EKEntityType.Event);
                 if (status == PermissionStatus.Granted)
-                    return Task.FromResult(status);
+                    return status;
 
-                return EventPermission.RequestPermissionAsync(EKEntityType.Event);
+                return await EventPermission.RequestPermissionAsync(EKEntityType.Event);
             }
         }
 
@@ -90,22 +90,22 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSRemindersUsageDescription" };
 
-            public override Task<PermissionStatus> CheckStatusAsync()
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
-                return Task.FromResult(EventPermission.CheckPermissionStatus(EKEntityType.Reminder));
+                return EventPermission.CheckPermissionStatus(EKEntityType.Reminder);
             }
 
-            public override Task<PermissionStatus> RequestAsync()
+            public override async Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
                 var status = EventPermission.CheckPermissionStatus(EKEntityType.Reminder);
                 if (status == PermissionStatus.Granted)
-                    return Task.FromResult(status);
+                    return status;
 
-                return EventPermission.RequestPermissionAsync(EKEntityType.Reminder);
+                return await EventPermission.RequestPermissionAsync(EKEntityType.Reminder);
             }
         }
 
@@ -114,24 +114,24 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSMotionUsageDescription" };
 
-            public override Task<PermissionStatus> CheckStatusAsync()
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
-                return Task.FromResult(GetSensorPermissionStatus());
+                return GetSensorPermissionStatus();
             }
 
-            public override Task<PermissionStatus> RequestAsync()
+            public override async Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
                 var status = GetSensorPermissionStatus();
                 if (status == PermissionStatus.Granted)
-                    return Task.FromResult(status);
+                    return status;
 
                 EnsureMainThread();
 
-                return RequestSensorPermission();
+                return await RequestSensorPermission();
             }
 
             internal static PermissionStatus GetSensorPermissionStatus()
@@ -187,16 +187,16 @@ namespace Xamarin.Essentials
                     "NSLocationAlwaysUsageDescription"
                 };
 
-            public override Task<PermissionStatus> CheckStatusAsync()
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
-                return Task.FromResult(LocationWhenInUse.GetLocationStatus(false));
+                return LocationWhenInUse.GetLocationStatus(false);
             }
 
             public override async Task<PermissionStatus> RequestAsync()
             {
-                EnsureDeclaredAsync();
+                await EnsureDeclaredAsync();
 
                 var status = LocationWhenInUse.GetLocationStatus(false);
                 if (status == PermissionStatus.Granted)

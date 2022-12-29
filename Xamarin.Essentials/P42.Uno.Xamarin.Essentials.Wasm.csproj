@@ -3,8 +3,10 @@
 
     <AssemblyName>P42.Uno.Xamarin.Essentials.Wasm</AssemblyName>
 
-    <TargetFrameworks>net6.0</TargetFrameworks>
-	  <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net6.0</TargetFrameworks>
+    <TargetFrameworks>net7.0</TargetFrameworks>
+	  <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net7.0</TargetFrameworks>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
 
 
@@ -24,8 +26,8 @@
 
   <!-- WASM -->
   <ItemGroup>
-    <PackageReference Include="Uno.WinUI" Version="4.6.19" />
-    <PackageReference Include="Uno.WinUI.WebAssembly" Version="4.6.19" />
+    <PackageReference Include="Uno.WinUI" Version="4.6.39" />
+    <PackageReference Include="Uno.WinUI.WebAssembly" Version="4.6.39" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <Compile Include="**\*.unowasm.cs" />
     <Compile Include="**\*.unowasm.*.cs" />
