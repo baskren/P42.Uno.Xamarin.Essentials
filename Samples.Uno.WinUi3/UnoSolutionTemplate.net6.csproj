@@ -122,16 +122,16 @@
     <None Include="Wasm\wwwroot\web.config" />
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="UnoApp.net6.vstemplate">
+    <VSTemplate Include="UnoApp.net7.vstemplate">
       <SubType>Designer</SubType>
       <OutputSubPath>Uno Platform</OutputSubPath>
     </VSTemplate>
-    <None Include="Shared\Shared.net6.vstemplate" />
+    <None Include="Shared\Shared.net7.vstemplate" />
     <None Include="UWP\Properties\Default.rd.xml" />
     <None Include="UWP\Samples.Uwp.csproj">
       <SubType>Designer</SubType>
     </None>
-    <None Include="UWP\Uwp.net6.vstemplate">
+    <None Include="UWP\Uwp.net7.vstemplate">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -164,13 +164,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Skia.WPF\SkiaWpf.net6.vstemplate">
+    <None Include="Skia.WPF\SkiaWpf.net7.vstemplate">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Skia.Gtk\SkiaGtk.net6.vstemplate">
+    <None Include="Skia.Gtk\SkiaGtk.net7.vstemplate">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Skia.Linux.FrameBuffer\SkiaLinuxFrameBuffer.net6.vstemplate">
+    <None Include="Skia.Linux.FrameBuffer\SkiaLinuxFrameBuffer.net7.vstemplate">
       <SubType>Designer</SubType>
     </None>
     <Content Include="Mobile\Android\AndroidManifest.xml" />
@@ -201,7 +201,7 @@
     <Content Include="Mobile\iOS\Resources\Default-568h%402x.png" />
     <Content Include="Mobile\iOS\Resources\SplashScreen%402x.png" />
     <Content Include="Mobile\iOS\Resources\SplashScreen%403x.png" />
-    <None Include="Mobile\Mobile.net6.vstemplate" />
+    <None Include="Mobile\Mobile.net7.vstemplate" />
     <Content Include="Mobile\MacCatalyst\Media.xcassets\AppIcons.appiconset\Icon1024.png" />
     <Content Include="Mobile\MacCatalyst\Media.xcassets\AppIcons.appiconset\Icon120.png" />
     <Content Include="Mobile\MacCatalyst\Media.xcassets\AppIcons.appiconset\Icon152.png" />
@@ -241,7 +241,7 @@
     <Content Include="Wasm\WasmScripts\AppManifest.js" />
     <Content Include="__PreviewImage.png" />
     <Content Include="__TemplateIcon.png" />
-    <None Include="Wasm\Wasm.net6.vstemplate" />
+    <None Include="Wasm\Wasm.net7.vstemplate" />
     <Content Include="Wasm\Samples.Wasm.csproj" />
   </ItemGroup>
   <ItemGroup>

@@ -51,7 +51,7 @@ namespace UnoSamples
 			}
 #endif
 
-#if NET5_0 && WINDOWS
+#if NET7_0 && WINDOWS
 			var window = new Window();
 			window.Activate();
 #else
@@ -78,7 +78,7 @@ namespace UnoSamples
                 window.Content = rootFrame;
             }
 
-#if !(NET5_0 && WINDOWS)
+#if !(NET7_0 && WINDOWS)
             if (e.PrelaunchActivated == false)
 #endif
             {

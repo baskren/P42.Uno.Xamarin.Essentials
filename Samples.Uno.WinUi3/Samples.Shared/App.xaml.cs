@@ -1,10 +1,13 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using Samples.View;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Xamarin.Essentials;
 
 namespace Samples
 {
@@ -21,6 +24,9 @@ namespace Samples
         /// </summary>
         public App()
         {
+            AppDomain.CurrentDomain.FirstChanceException += OnCurrentDomain_FirstChanceException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             InitializeLogging();
 
             InitializeComponent();
@@ -29,6 +35,7 @@ namespace Samples
             Suspending += OnSuspending;
 #endif
         }
+
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -44,7 +51,7 @@ namespace Samples
             }
 #endif
 
-#if NET6_0_OR_GREATER && WINDOWS && !HAS_UNO
+#if NET7_0_OR_GREATER && WINDOWS && !HAS_UNO
             _window = new Xamarin.Essentials.MainWindow();
             _window.Activate();
 #else
@@ -73,7 +80,7 @@ namespace Samples
                 _window.Content = rootFrame;
             }
 
-#if !(NET6_0_OR_GREATER && WINDOWS)
+#if !(NET7_0_OR_GREATER && WINDOWS)
             if (args.UWPLaunchActivatedEventArgs.PrelaunchActivated == false)
 #endif
             {
@@ -182,6 +189,60 @@ namespace Samples
 
 #endif
 
-	    }
+        }
+
+        bool _exceptionShowing;
+        async void OnCurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
+        {
+            await ShowException(e.Exception);
+        }
+
+        async void CurrentDomain_UnhandledException(object sender, System.UnhandledExceptionEventArgs e) 
+            => await ShowException(e.ExceptionObject as Exception);
+
+        async Task ShowException(Exception e)
+        {
+            if (_exceptionShowing)
+                return;
+
+            //if (e.ExceptionObject is Exception exeception)
+            if (e!= null) 
+            {
+                _exceptionShowing = true;
+                
+                var dialog = new ContentDialog();
+
+                // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
+                dialog.XamlRoot = ((Frame)_window.Content).XamlRoot;
+                dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+                dialog.Title = "EXCEPTION";
+                dialog.CloseButtonText = "Cancel";
+                dialog.DefaultButton = ContentDialogButton.Primary;
+                dialog.Content = new Grid
+                {
+                    Children =
+                    {
+                        new TextBlock 
+                        { 
+                            Text = DumpException(e),
+                            TextWrapping= TextWrapping.WrapWholeWords
+                        }
+                    }
+                };
+                var result = await dialog.ShowAsync();
+                
+                _exceptionShowing = false;
+            }
+
+        }
+
+        string DumpException(Exception e)
+        {
+            if (e is null)
+                return null;
+            var result = e.Message + ".\n" + e.GetType() + e.StackTrace + "\n\n";
+            result += DumpException(e.InnerException);
+            return result;
+        }
     }
 }

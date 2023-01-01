@@ -29,8 +29,15 @@
     <PackageReference Include="Uno.WinUI" Version="4.6.39" />
     <PackageReference Include="Uno.WinUI.WebAssembly" Version="4.6.39" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    <Compile Include="**\*.unowasm.cs" />
-    <Compile Include="**\*.unowasm.*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="**\*.wasm.cs" />
+    <Compile Include="**\*.wasm.*.cs" />
+    <Compile Include="**\*.uno.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="LinkerDefinition.Wasm.xml">
       <LogicalName>P42.Uno.Xamarin.Essentials.xml</LogicalName>
     </EmbeddedResource>

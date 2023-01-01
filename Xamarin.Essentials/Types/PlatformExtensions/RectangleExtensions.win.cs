@@ -4,7 +4,7 @@ using Windows.Foundation;
 
 namespace Xamarin.Essentials
 {
-    public partial static class RectangleExtensions
+    public static partial class RectangleExtensions
     {
 
         public static Rect ToPlatformRectangle(this Rectangle rect) =>
