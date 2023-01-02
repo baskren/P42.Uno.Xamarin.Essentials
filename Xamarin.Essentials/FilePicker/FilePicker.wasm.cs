@@ -80,31 +80,31 @@ namespace Xamarin.Essentials
         static FilePickerFileType PlatformImageFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Windows, FileSystem.Extensions.AllImage }
+                { DevicePlatform.WASM, FileSystem.Extensions.AllImage }
             });
 
         static FilePickerFileType PlatformPngFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Windows, new[] { FileSystem.Extensions.Png } }
+                { DevicePlatform.WASM, new[] { FileSystem.Extensions.Png } }
             });
 
         static FilePickerFileType PlatformJpegFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Windows, FileSystem.Extensions.AllJpeg }
+                { DevicePlatform.WASM, FileSystem.Extensions.AllJpeg }
             });
 
         static FilePickerFileType PlatformVideoFileType() =>
            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
            {
-                { DevicePlatform.Windows, FileSystem.Extensions.AllVideo }
+                { DevicePlatform.WASM, FileSystem.Extensions.AllVideo }
            });
 
         static FilePickerFileType PlatformPdfFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Windows, new[] { FileSystem.Extensions.Pdf } }
+                { DevicePlatform.WASM, new[] { FileSystem.Extensions.Pdf } }
             });
     }
 }

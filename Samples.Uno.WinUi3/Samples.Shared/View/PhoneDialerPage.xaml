@@ -24,7 +24,7 @@
             <StackPanel Padding="12,0,12,12" Spacing="6">
                 <TextBlock Text="Phone number:" />
                 <!--
-                <TextBox Text="{Binding PhoneNumber}" Keyboard="Telephone" />
+                <TextBox Text="{Binding PhoneNumber}"  />
                 -->
                 <TextBox Text="{Binding PhoneNumber}" InputScope="TelephoneNumber"/>
                 <Button

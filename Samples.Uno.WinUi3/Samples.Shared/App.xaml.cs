@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
@@ -24,6 +27,7 @@ namespace Samples
         /// </summary>
         public App()
         {
+            BackloggedExceptions.CollectionChanged += BackloggedExecptions_CollectionChanged;
             AppDomain.CurrentDomain.FirstChanceException += OnCurrentDomain_FirstChanceException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
@@ -61,6 +65,8 @@ namespace Samples
             var rootFrame = _window.Content as Frame;
 
             Xamarin.Essentials.Platform.Init(this, _window);
+            if (BackloggedExceptions.Any())
+                BackloggedExecptions_CollectionChanged(null, null);
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -192,48 +198,58 @@ namespace Samples
         }
 
         bool _exceptionShowing;
-        async void OnCurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
+        void OnCurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
         {
-            await ShowException(e.Exception);
+            BackloggedExceptions.Insert(0, e.Exception);
+        }
+        
+
+        void CurrentDomain_UnhandledException(object sender, System.UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception ex)
+            {
+                BackloggedExceptions.Insert(0, ex);
+            }
         }
 
-        async void CurrentDomain_UnhandledException(object sender, System.UnhandledExceptionEventArgs e) 
-            => await ShowException(e.ExceptionObject as Exception);
+        ObservableCollection<Exception> BackloggedExceptions= new ObservableCollection<Exception>();
+        private void BackloggedExecptions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (Xamarin.Essentials.Platform.MainThread is null)
+                return;
+
+            if (!_exceptionShowing && BackloggedExceptions.Last() is Exception ex)
+                Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(async() => await ShowException(ex));
+        }
+
 
         async Task ShowException(Exception e)
         {
-            if (_exceptionShowing)
-                return;
+            _exceptionShowing = true;
 
-            //if (e.ExceptionObject is Exception exeception)
-            if (e!= null) 
+            var dialog = new ContentDialog();
+
+            // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
+            dialog.XamlRoot = ((Frame)_window.Content).XamlRoot;
+            dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+            dialog.Title = "EXCEPTION";
+            dialog.CloseButtonText = "Cancel";
+            dialog.DefaultButton = ContentDialogButton.Primary;
+            dialog.Content = new Grid
             {
-                _exceptionShowing = true;
-                
-                var dialog = new ContentDialog();
-
-                // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
-                dialog.XamlRoot = ((Frame)_window.Content).XamlRoot;
-                dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-                dialog.Title = "EXCEPTION";
-                dialog.CloseButtonText = "Cancel";
-                dialog.DefaultButton = ContentDialogButton.Primary;
-                dialog.Content = new Grid
+                Children =
+            {
+                new TextBlock
                 {
-                    Children =
-                    {
-                        new TextBlock 
-                        { 
-                            Text = DumpException(e),
-                            TextWrapping= TextWrapping.WrapWholeWords
-                        }
-                    }
-                };
-                var result = await dialog.ShowAsync();
-                
-                _exceptionShowing = false;
+                    Text = DumpException(e),
+                    TextWrapping= TextWrapping.WrapWholeWords
+                }
             }
+            };
+            var result = await dialog.ShowAsync();
 
+            _exceptionShowing = false;
+            BackloggedExceptions.Remove(e);
         }
 
         string DumpException(Exception e)

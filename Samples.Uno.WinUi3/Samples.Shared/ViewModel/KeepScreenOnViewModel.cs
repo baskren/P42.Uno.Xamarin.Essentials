@@ -13,6 +13,8 @@ namespace Samples.ViewModel
 
         public bool IsActive => DeviceDisplay.KeepScreenOn;
 
+        public bool IsNotActive => !IsActive;
+
         public ICommand RequestActiveCommand { get; }
 
         public ICommand RequestReleaseCommand { get; }

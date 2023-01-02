@@ -52,8 +52,6 @@
     <None Include="..\LICENSE" Pack="true" PackagePath="\" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.shared.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.shared.*.cs" />
-    <UpToDateCheckInput Include="$(MSBuildThisFileDirectory)**\*.shared.cs" Exclude="$(DefaultItemExcludes)" />
-    <UpToDateCheckInput Include="$(MSBuildThisFileDirectory)**\*.shared.*.cs" Exclude="$(DefaultItemExcludes)" />
   	<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
   </ItemGroup>
 
@@ -63,6 +61,7 @@
     <Message Text=" " Importance="high"/>
     <Message Text=" " Importance="high"/>
     <Message Text="===============================  [ $(AssemblyName) : $(TargetFramework) : $(Configuration) : $(Version) ] ===============================" Importance="high"/>
+    <Message Text="COMPILE: ($Compile)"/>
   </Target>
   
   <Target Name="NuGetMove" AfterTargets="Pack" Condition=" $(LocalNuGet) != '' ">

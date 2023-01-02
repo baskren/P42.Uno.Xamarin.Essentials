@@ -40,7 +40,7 @@ namespace Samples.ViewModel
             IsBusy = true;
             try
             {
-                var contact = await Contacts.PickContactAsync();
+                var contact = await Xamarin.Essentials.Contacts.PickContactAsync();
                 if (contact == null)
                     return;
 
@@ -68,7 +68,7 @@ namespace Samples.ViewModel
             ContactsList?.Clear();
             try
             {
-                var contacts = await Contacts.GetAllAsync();
+                var contacts = await Xamarin.Essentials.Contacts.GetAllAsync();
 
                 await Task.Run(() =>
                 {

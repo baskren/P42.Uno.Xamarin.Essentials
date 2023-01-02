@@ -101,6 +101,7 @@ namespace Samples.ViewModel
                     { DevicePlatform.Windows, new[] { ".cbr", ".cbz" } },
                     { DevicePlatform.Tizen, new[] { "*/*" } },
                     { DevicePlatform.macOS, new[] { "cbr", "cbz" } }, // or general UTType values
+                    { DevicePlatform.WASM, new[] { ".exe", ".dll" } }
                 });
 
             var options = new PickOptions

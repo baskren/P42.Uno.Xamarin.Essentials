@@ -7,6 +7,12 @@ namespace Xamarin.Essentials
 {
     public static partial class ColorExtensions
     {
+        public static Windows.UI.Color ToWinUiColor(this Color color)
+            => Windows.UI.Color.FromArgb(color.A, color.R, color.G, color.B);
+
+        public static Color ToSystemColor(this Windows.UI.Color color)
+            => Color.FromArgb(color.A, color.R, color.G, color.B);
+
         public static Color MultiplyAlpha(this Color color, float percentage)
         {
             return Color.FromArgb((int)(color.A * percentage), color.R, color.G, color.B);

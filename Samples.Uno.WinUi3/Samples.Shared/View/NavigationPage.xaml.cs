@@ -65,7 +65,7 @@ namespace Samples.View
                     return;
                 }
             }
-            if (Window.Current.Content is Frame rootFrame)
+            if (Microsoft.UI.Xaml.Window.Current.Content is Frame rootFrame)
             {
                 if (rootFrame.CanGoBack)
                 {

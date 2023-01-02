@@ -11,6 +11,7 @@
             <converters:InverseVisibilityConverter x:Key="InverseVisibilityConverter" />
             <converters:StringFormatConverter x:Key="StringFormatConverter" />
             <converters:VisibilityConverter x:Key="VisibilityConverter" />
+            <converters:SolidBrushConverter x:Key="SolidBrushConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
                 <!-- Add resource dictionaries here -->                

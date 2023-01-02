@@ -24,7 +24,6 @@ namespace Samples.ViewModel
                     typeof(AccelerometerPage),
                     "Retrieve acceleration data of the device in 3D space.",
                     new[] { "accelerometer", "sensors", "hardware", "device" }),
-                /*
                 new SampleItem(
                     "📏",
                     "All Sensors",
@@ -91,13 +90,14 @@ namespace Samples.ViewModel
                     typeof(DeviceInfoPage),
                     "Find out about the device with ease.",
                     new[] { "hardware", "device", "info", "screen", "display", "orientation", "rotation" }),
-                */
+                /*
                 new SampleItem(
                     "📧",
                     "Email",
                     typeof(EmailPage),
                     "Easily send email messages.",
                     new[] { "email", "share", "communication", "message" }),
+                */
                 new SampleItem(
                     "📁",
                     "File Picker",
@@ -110,7 +110,7 @@ namespace Samples.ViewModel
                     typeof(FileSystemPage),
                     "Easily save files to app data.",
                     new[] { "files", "directory", "filesystem", "storage" }),
-                /*
+                
                 new SampleItem(
                     "🔦",
                     "Flashlight",
@@ -159,7 +159,7 @@ namespace Samples.ViewModel
                     typeof(MapsPage),
                     "Easily launch maps with coordinates.",
                     new[] { "geocoding", "geolocation", "position", "address", "mapping", "maps", "route", "navigation" }),
-                */
+                
                 new SampleItem(
                     "📏",
                     "Orientation Sensor",

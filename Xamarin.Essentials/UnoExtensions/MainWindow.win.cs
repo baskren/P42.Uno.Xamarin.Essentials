@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using Windows.ApplicationModel;
+using Windows.ApplicationModel.Contacts;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage.Pickers;
 using WinRT.Interop;
@@ -65,7 +66,8 @@ namespace Xamarin.Essentials
         public static void InitializeWithWindow(this FolderPicker picker)
             => WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(Platform.Window));
 
-
+        public static void InitializeWithWindow(this ContactPicker picker)
+            => WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(Platform.Window));
     }
 
     [System.Runtime.InteropServices.ComImport]
