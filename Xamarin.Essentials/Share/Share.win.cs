@@ -33,7 +33,8 @@ namespace Xamarin.Essentials
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Share. : ");
+                System.Diagnostics.Debug.WriteLine($"Xamarin.Essentials.Share : {ex.GetType()} : {ex.Message} \n {ex.StackTrace}");
+                Console.WriteLine($"Xamarin.Essentials.Share : {ex.GetType()} : {ex.Message} \n {ex.StackTrace}");
             }
             return Task.CompletedTask;
         }

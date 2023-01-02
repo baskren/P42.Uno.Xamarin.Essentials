@@ -64,7 +64,8 @@ namespace Xamarin.Essentials
                 }
             } catch (Exception ex1)
             {
-                System.Diagnostics.Debug.WriteLine($"Permissions. : ");
+                System.Diagnostics.Debug.WriteLine($"Xamarin.Essentials.Share : {ex1.GetType()} : {ex1.Message} \n {ex1.StackTrace}");
+                Console.WriteLine($"Xamarin.Essentials.Share : {ex1.GetType()} : {ex1.Message} \n {ex1.StackTrace}");
             }
             return false;
         }

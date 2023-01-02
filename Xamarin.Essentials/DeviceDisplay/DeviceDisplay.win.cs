@@ -72,6 +72,9 @@ namespace Xamarin.Essentials
             }
             catch (Exception e)
             {
+                System.Diagnostics.Debug.WriteLine($"Xamarin.Essentials.Share : {e.GetType()} : {e.Message} \n {e.StackTrace}");
+                Console.WriteLine($"Xamarin.Essentials.Share : {e.GetType()} : {e.Message} \n {e.StackTrace}");
+
                 return new DisplayInfo(
                     width: 1920,
                     height: 1080,
