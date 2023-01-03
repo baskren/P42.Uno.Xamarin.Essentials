@@ -9,6 +9,8 @@ namespace Samples.ViewModel
 {
     public class EmailViewModel : BaseViewModel
     {
+        public bool PlatformAvailable => Xamarin.Essentials.Email.IsAvailable;
+
         string subject = "Hello World!";
         string body = "This is the email body.\nWe hope you like it!";
         string recipientsTo = "someone@example.org";
