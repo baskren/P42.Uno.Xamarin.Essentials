@@ -39,7 +39,7 @@
 
   <ItemGroup>
 
-    <EmbeddedResource Include="LinkerConfig.xml">
+    <EmbeddedResource Include="LinkerConfig.Wasm.xml">
       <LogicalName>$(AssemblyName).xml</LogicalName>
     </EmbeddedResource>
 
