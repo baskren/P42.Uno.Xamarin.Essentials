@@ -14,7 +14,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-#if NET7_0_WINDOWS10_0_19041_0
+#if !HAS_UNO
 using Popup = Microsoft.UI.Xaml.Controls.Primitives.Popup;
 #else
 using Popup = Microsoft.UI.Xaml.Controls.Popup;

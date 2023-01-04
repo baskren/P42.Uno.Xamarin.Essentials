@@ -10,7 +10,7 @@ namespace DeviceTests
     {
         public Geocoding_Tests()
         {
-#if NET7_0_WINDOWS10_0_19041_0
+#if !HAS_UNO
 
             Platform.MapServiceToken = "RJHqIE53Onrqons5CNOx~FrDr3XhjDTyEXEjng-CRoA~Aj69MhNManYUKxo6QcwZ0wmXBtyva0zwuHB04rFYAPf7qqGJ5cHb03RCDw1jIW8l";
 #endif

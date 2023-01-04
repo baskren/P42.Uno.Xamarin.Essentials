@@ -4,7 +4,7 @@ namespace Xamarin.Essentials
 {
     static class ExceptionUtils
     {
-#if NETSTANDARD1_0 || NETSTANDARD2_0
+#if NETSTANDARD1_0 || NET7_0
         internal static NotImplementedInReferenceAssemblyException NotSupportedOrImplementedException =>
             new NotImplementedInReferenceAssemblyException();
 #else

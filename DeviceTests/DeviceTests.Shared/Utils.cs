@@ -6,7 +6,7 @@ namespace DeviceTests
 {
     public class Utils
     {
-#if NET7_0_WINDOWS10_0_19041_0
+#if !HAS_UNO
 
         public static async Task OnMainThread(Windows.UI.Core.DispatchedHandler action)
         {
