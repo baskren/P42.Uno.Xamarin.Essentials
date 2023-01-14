@@ -9,6 +9,7 @@ using Foundation;
 using SafariServices;
 #endif
 using UIKit;
+using WebKit;
 
 namespace Xamarin.Essentials
 {
@@ -36,8 +37,12 @@ namespace Xamarin.Essentials
         static SFAuthenticationSession sf;
 #endif
 
-        internal static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
+        internal static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(WebAuthenticatorOptions webAuthenticatorOptions)
         {
+            var url = webAuthenticatorOptions?.Url;
+            var callbackUrl = webAuthenticatorOptions?.CallbackUrl;
+            var prefersEphemeralWebBrowserSession = webAuthenticatorOptions?.PrefersEphemeralWebBrowserSession ?? false;
+
             if (!VerifyHasUrlSchemeOrDoesntRequire(callbackUrl.Scheme))
                 throw new InvalidOperationException("You must register your URL Scheme handler in your app's Info.plist.");
 
@@ -50,6 +55,20 @@ namespace Xamarin.Essentials
             var scheme = redirectUri.Scheme;
 
 #if __IOS__
+            static void AuthSessionCallback(NSUrl cbUrl, NSError error)
+            {
+                if (error == null)
+                    OpenUrl(cbUrl);
+                else if (error.Domain == asWebAuthenticationSessionErrorDomain && error.Code == asWebAuthenticationSessionErrorCodeCanceledLogin)
+                    tcsResponse.TrySetCanceled();
+                else if (error.Domain == sfAuthenticationErrorDomain && error.Code == sfAuthenticationErrorCanceledLogin)
+                    tcsResponse.TrySetCanceled();
+                else
+                    tcsResponse.TrySetException(new NSErrorException(error));
+
+                was = null;
+                sf = null;
+            }
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
             {
@@ -59,6 +78,11 @@ namespace Xamarin.Essentials
                 {
                     var ctx = new ContextProvider(Platform.GetCurrentWindow());
                     void_objc_msgSend_IntPtr(was.Handle, ObjCRuntime.Selector.GetHandle("setPresentationContextProvider:"), ctx.Handle);
+                    was.PrefersEphemeralWebBrowserSession = prefersEphemeralWebBrowserSession;
+                }
+                else if (prefersEphemeralWebBrowserSession)
+                {
+                    ClearCookies();
                 }
 
                 using (was)
@@ -67,6 +91,9 @@ namespace Xamarin.Essentials
                     return await tcsResponse.Task;
                 }
             }
+
+            if (prefersEphemeralWebBrowserSession)
+                ClearCookies();
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
             {
@@ -103,22 +130,23 @@ namespace Xamarin.Essentials
             return await tcsResponse.Task;
         }
 
-#if __IOS__
-        static void AuthSessionCallback(NSUrl cbUrl, NSError error)
+        static void ClearCookies()
         {
-            if (error == null)
-                OpenUrl(cbUrl);
-            else if (error.Domain == asWebAuthenticationSessionErrorDomain && error.Code == asWebAuthenticationSessionErrorCodeCanceledLogin)
-                tcsResponse.TrySetCanceled();
-            else if (error.Domain == sfAuthenticationErrorDomain && error.Code == sfAuthenticationErrorCanceledLogin)
-                tcsResponse.TrySetCanceled();
-            else
-                tcsResponse.TrySetException(new NSErrorException(error));
+            NSUrlCache.SharedCache.RemoveAllCachedResponses();
 
-            was = null;
-            sf = null;
-        }
+#if __IOS__
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.GetAllCookies((cookies) =>
+                {
+                    foreach (var cookie in cookies)
+                    {
+                        WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.DeleteCookie(cookie, null);
+                    }
+                });
+            }
 #endif
+        }
 
         internal static bool OpenUrl(Uri uri)
         {
