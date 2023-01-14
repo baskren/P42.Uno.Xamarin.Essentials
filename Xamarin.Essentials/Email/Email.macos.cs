@@ -13,11 +13,9 @@ namespace Xamarin.Essentials
         {
             var url = GetMailToUri(message);
 
-            using (var nsurl = NSUrl.FromString(url))
-            {
-                NSWorkspace.SharedWorkspace.OpenUrl(nsurl);
-                return Task.CompletedTask;
-            }
+            using var nsurl = NSUrl.FromString(url);
+            NSWorkspace.SharedWorkspace.OpenUrl(nsurl);
+            return Task.CompletedTask;
         }
     }
 }

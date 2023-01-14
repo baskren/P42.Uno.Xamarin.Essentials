@@ -1,0 +1,1 @@
+HapticFeedback.uwp.cs

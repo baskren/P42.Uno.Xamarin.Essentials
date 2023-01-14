@@ -8,7 +8,7 @@ namespace Xamarin.Essentials
     {
         static bool PlatformIsAvailable => true;
 
-        static Task<string> PlatformGetAsync(string key, string accessGroup)
+        static Task<string> PlatformGetAsync(string key)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static Task PlatformSetAsync(string key, string data, string accessGroup)
+        static Task PlatformSetAsync(string key, string data)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static void PlatformRemoveAll(string accessGroup)
+        static void PlatformRemoveAll()
         {
             try
             {
@@ -71,7 +71,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static bool PlatformRemove(string key, string accessGroup)
+        static bool PlatformRemove(string key)
         {
             try
             {

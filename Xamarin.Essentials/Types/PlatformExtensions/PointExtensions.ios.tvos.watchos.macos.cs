@@ -4,7 +4,7 @@ using iOSPoint = CoreGraphics.CGPoint;
 
 namespace Xamarin.Essentials
 {
-    public static class PointExtensions
+    public static partial class PointExtensions
     {
         public static Point ToSystemPoint(this iOSPoint point)
         {

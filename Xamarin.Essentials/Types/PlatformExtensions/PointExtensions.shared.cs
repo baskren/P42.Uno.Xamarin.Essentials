@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Drawing;
-using WindowsPoint = Windows.Foundation.Point;
+using Windows.Foundation;
 
 namespace Xamarin.Essentials
 {
-    public static class PointExtensions
+    public static partial class PointExtensions
     {
         public static Point ToSystemPoint(this WindowsPoint point)
         {
@@ -20,10 +20,10 @@ namespace Xamarin.Essentials
         public static PointF ToSystemPointF(this WindowsPoint point) =>
             new PointF((float)point.X, (float)point.Y);
 
-        public static WindowsPoint ToPlatformPoint(this Point point) =>
+        public static WindowsPoint ToWindowsPoint(this Point point) =>
             new WindowsPoint(point.X, point.Y);
 
-        public static WindowsPoint ToPlatformPoint(this PointF point) =>
+        public static WindowsPoint ToWindowsPoint(this PointF point) =>
             new WindowsPoint(point.X, point.Y);
     }
 }

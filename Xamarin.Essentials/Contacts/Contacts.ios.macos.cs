@@ -39,6 +39,14 @@ namespace Xamarin.Essentials
                 })
             };
 
+            if (picker.PresentationController != null)
+            {
+                picker.PresentationController.Delegate = new Platform.UIPresentationControllerDelegate
+                {
+                    DismissHandler = () => source?.TrySetResult(null)
+                };
+            }
+
             uiView.PresentViewController(picker, true, null);
 
             return source.Task;
@@ -71,16 +79,14 @@ namespace Xamarin.Essentials
             {
                 foreach (var container in containers)
                 {
-                    using (var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier))
-                    {
-                        var contacts = store.GetUnifiedContacts(pred, keys, out var error);
-                        if (contacts == null)
-                            continue;
+                    using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
+                    var contacts = store.GetUnifiedContacts(pred, keys, out var error);
+                    if (contacts == null)
+                        continue;
 
-                        foreach (var contact in contacts)
-                        {
-                            yield return ConvertContact(contact);
-                        }
+                    foreach (var contact in contacts)
+                    {
+                        yield return ConvertContact(contact);
                     }
                 }
             }

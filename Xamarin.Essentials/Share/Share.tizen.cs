@@ -6,9 +6,9 @@ namespace Xamarin.Essentials
 {
     public static partial class Share
     {
-        static async Task PlatformRequestAsync(ShareTextRequest request)
+        static Task PlatformRequestAsync(ShareTextRequest request)
         {
-            await Permissions.EnsureDeclaredAsync<Permissions.LaunchApp>();
+            Permissions.EnsureDeclared<Permissions.LaunchApp>();
 
             var appControl = new AppControl
             {
@@ -26,12 +26,12 @@ namespace Xamarin.Essentials
 
             AppControl.SendLaunchRequest(appControl);
 
-            return;
+            return Task.CompletedTask;
         }
 
-        static async Task PlatformRequestAsync(ShareMultipleFilesRequest request)
+        static Task PlatformRequestAsync(ShareMultipleFilesRequest request)
         {
-            await Permissions.EnsureDeclaredAsync<Permissions.LaunchApp>();
+            Permissions.EnsureDeclared<Permissions.LaunchApp>();
 
             var appControl = new AppControl
             {
@@ -46,11 +46,7 @@ namespace Xamarin.Essentials
 
             AppControl.SendLaunchRequest(appControl);
 
-            return;
+            return Task.CompletedTask;
         }
-
-        static bool PlatformCanShare(ShareRequestBase request) => true;
-
-        static bool PlatformIsAvailable() => true;
     }
 }

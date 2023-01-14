@@ -11,9 +11,9 @@ namespace Xamarin.Essentials
     {
         static async Task<Contact> PlatformPickContactAsync()
         {
-            var picker = new ContactPicker();
-            picker.InitializeWithWindow();
-            var contactSelected = await picker.PickContactAsync();
+            var contactPicker = new ContactPicker();
+            contactPicker.InitializeWithWindow();
+            var contactSelected = await contactPicker.PickContactAsync();
             return ConvertContact(contactSelected);
         }
 

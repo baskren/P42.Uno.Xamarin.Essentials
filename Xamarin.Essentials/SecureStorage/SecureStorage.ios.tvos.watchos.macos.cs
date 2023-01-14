@@ -15,88 +15,70 @@ namespace Xamarin.Essentials
         static bool PlatformIsAvailable => true;
 
         public static Task SetAsync(string key, string value, SecAccessible accessible)
-             => SetAsync(key, value, accessible, null);
-
-        public static Task SetAsync(string key, string value, SecAccessible accessible, string accessGroup)
         {
-            var alias = GetAlias(accessGroup);
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentNullException(nameof(key));
 
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
-            var kc = new KeyChain(accessible, accessGroup);
-            kc.SetValueForKey(value, key, alias);
+            var kc = new KeyChain(accessible);
+            kc.SetValueForKey(value, key, Alias);
 
             return Task.CompletedTask;
         }
 
-        static Task<string> PlatformGetAsync(string key, string accessGroup)
+        static Task<string> PlatformGetAsync(string key)
         {
-            var alias = GetAlias(accessGroup);
-            var kc = new KeyChain(DefaultAccessible, accessGroup);
-            var value = kc.ValueForKey(key, alias);
+            var kc = new KeyChain(DefaultAccessible);
+            var value = kc.ValueForKey(key, Alias);
 
             return Task.FromResult(value);
         }
 
-        static Task PlatformSetAsync(string key, string data, string accessGroup) =>
-            SetAsync(key, data, DefaultAccessible, accessGroup);
+        static Task PlatformSetAsync(string key, string data) =>
+            SetAsync(key, data, DefaultAccessible);
 
-        static bool PlatformRemove(string key, string accessGroup)
+        static bool PlatformRemove(string key)
         {
-            var alias = GetAlias(accessGroup);
-            var kc = new KeyChain(DefaultAccessible, accessGroup);
+            var kc = new KeyChain(DefaultAccessible);
 
-            return kc.Remove(key, alias);
+            return kc.Remove(key, Alias);
         }
 
-        static void PlatformRemoveAll(string accessGroup)
+        static void PlatformRemoveAll()
         {
-            var alias = GetAlias(accessGroup);
-            var kc = new KeyChain(DefaultAccessible, accessGroup);
+            var kc = new KeyChain(DefaultAccessible);
 
-            kc.RemoveAll(alias);
+            kc.RemoveAll(Alias);
         }
     }
 
     class KeyChain
     {
-        readonly SecAccessible accessible;
-        readonly string accessGroup;
+        SecAccessible accessible;
 
-        internal KeyChain(SecAccessible accessible, string accessGroup)
-        {
+        internal KeyChain(SecAccessible accessible) =>
             this.accessible = accessible;
-            this.accessGroup = accessGroup;
-        }
 
         SecRecord ExistingRecordForKey(string key, string service)
         {
-            var rec = new SecRecord(SecKind.GenericPassword)
+            return new SecRecord(SecKind.GenericPassword)
             {
                 Account = key,
                 Service = service
             };
-
-            if (!string.IsNullOrWhiteSpace(accessGroup))
-                rec.AccessGroup = accessGroup;
-
-            return rec;
         }
 
         internal string ValueForKey(string key, string service)
         {
             using (var record = ExistingRecordForKey(key, service))
+            using (var match = SecKeyChain.QueryAsRecord(record, out var resultCode))
             {
-                using (var match = SecKeyChain.QueryAsRecord(record, out var resultCode))
-                {
-                    if (resultCode == SecStatusCode.Success)
-                        return NSString.FromData(match.ValueData, NSStringEncoding.UTF8);
-                    else
-                        return null;
-                }
+                if (resultCode == SecStatusCode.Success)
+                    return NSString.FromData(match.ValueData, NSStringEncoding.UTF8);
+                else
+                    return null;
             }
         }
 
@@ -166,16 +148,13 @@ namespace Xamarin.Essentials
         {
             using (var query = new SecRecord(SecKind.GenericPassword) { Service = service })
             {
-                if (!string.IsNullOrWhiteSpace(accessGroup))
-                    query.AccessGroup = accessGroup;
-
                 SecKeyChain.Remove(query);
             }
         }
 
         SecRecord CreateRecordForNewKeyValue(string key, string value, string service)
         {
-            var rec = new SecRecord(SecKind.GenericPassword)
+            return new SecRecord(SecKind.GenericPassword)
             {
                 Account = key,
                 Service = service,
@@ -183,11 +162,6 @@ namespace Xamarin.Essentials
                 Accessible = accessible,
                 ValueData = NSData.FromString(value, NSStringEncoding.UTF8),
             };
-
-            if (!string.IsNullOrWhiteSpace(accessGroup))
-                rec.AccessGroup = accessGroup;
-
-            return rec;
         }
 
         bool RemoveRecord(SecRecord record)

@@ -40,7 +40,7 @@ namespace Xamarin.Essentials
                         throw new PermissionException($"You must set `{requiredInfoPlistKey}` in your Info.plist file to use the Permission: {GetType().Name}.");
                 }
 
-                await Task.Delay(1);
+                await Task.CompletedTask;
             }
 
             public override bool ShouldShowRationale() => false;
@@ -118,19 +118,16 @@ namespace Xamarin.Essentials
                 if (!CLLocationManager.LocationServicesEnabled)
                     return PermissionStatus.Disabled;
 
-                switch (CLLocationManager.Status)
+                var status = CLLocationManager.Status;
+
+                return status switch
                 {
-                    case CLAuthorizationStatus.AuthorizedAlways:
-                        return PermissionStatus.Granted;
-                    case CLAuthorizationStatus.AuthorizedWhenInUse:
-                        return whenInUse ? PermissionStatus.Granted : PermissionStatus.Denied;
-                    case CLAuthorizationStatus.Denied:
-                        return PermissionStatus.Denied;
-                    case CLAuthorizationStatus.Restricted:
-                        return PermissionStatus.Restricted;
-                    default:
-                        return PermissionStatus.Unknown;
-                }
+                    CLAuthorizationStatus.AuthorizedAlways => PermissionStatus.Granted,
+                    CLAuthorizationStatus.AuthorizedWhenInUse => whenInUse ? PermissionStatus.Granted : PermissionStatus.Denied,
+                    CLAuthorizationStatus.Denied => PermissionStatus.Denied,
+                    CLAuthorizationStatus.Restricted => PermissionStatus.Restricted,
+                    _ => PermissionStatus.Unknown,
+                };
             }
 
             static CLLocationManager locationManager;
@@ -191,9 +188,9 @@ namespace Xamarin.Essentials
                         }
 
                         del.AuthorizationStatusChanged -= LocationAuthCallback;
-                        tcs.TrySetResult(GetLocationStatus(whenInUse));
                         locationManager?.Dispose();
                         locationManager = null;
+                        tcs.TrySetResult(GetLocationStatus(whenInUse));
                     }
                     catch (Exception ex)
                     {

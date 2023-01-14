@@ -4,7 +4,7 @@ using iOSSize = CoreGraphics.CGSize;
 
 namespace Xamarin.Essentials
 {
-    public static class SizeExtensions
+    public static partial class SizeExtensions
     {
         public static Size ToSystemSize(this iOSSize size)
         {

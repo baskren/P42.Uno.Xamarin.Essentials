@@ -6,16 +6,16 @@ namespace Xamarin.Essentials
     {
         static bool PlatformIsAvailable => false;
 
-        static Task<string> PlatformGetAsync(string key, string accessGroup) =>
+        static Task<string> PlatformGetAsync(string key) =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static Task PlatformSetAsync(string key, string data, string accessGroup) =>
+        static Task PlatformSetAsync(string key, string data) =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static bool PlatformRemove(string key, string accessGroup) =>
+        static bool PlatformRemove(string key) =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static void PlatformRemoveAll(string accessGroup) =>
+        static void PlatformRemoveAll() =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

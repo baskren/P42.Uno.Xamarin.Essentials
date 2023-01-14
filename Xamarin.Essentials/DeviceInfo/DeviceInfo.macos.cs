@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 
@@ -28,7 +27,9 @@ namespace Xamarin.Essentials
 
             try
             {
-                return CFString.FromHandle(computerNameHandle); // NSString.FromHandle(computerNameHandle);
+#pragma warning disable CS0618 // Type or member is obsolete
+                return NSString.FromHandle(computerNameHandle);
+#pragma warning restore CS0618 // Type or member is obsolete
             }
             finally
             {
@@ -38,10 +39,8 @@ namespace Xamarin.Essentials
 
         static string GetVersionString()
         {
-            using (var info = new NSProcessInfo())
-            {
-                return info.OperatingSystemVersion.ToString();
-            }
+            using var info = new NSProcessInfo();
+            return info.OperatingSystemVersion.ToString();
         }
 
         static DevicePlatform GetPlatform() => DevicePlatform.macOS;

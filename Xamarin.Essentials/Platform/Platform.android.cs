@@ -27,6 +27,8 @@ namespace Xamarin.Essentials
 
         public static event EventHandler<ActivityStateChangedEventArgs> ActivityStateChanged;
 
+        internal const string EssentialsConnectivityChanged = "com.xamarin.essentials.ESSENTIALS_CONNECTIVITY_CHANGED";
+
         internal const int requestCodeFilePicker = 11001;
         internal const int requestCodeMediaPicker = 11002;
         internal const int requestCodeMediaCapture = 11003;
@@ -75,7 +77,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        public static Activity GetCurrentActivity(bool throwOnNull)
+        internal static Activity GetCurrentActivity(bool throwOnNull)
         {
             var activity = lifecycleListener?.Activity;
             if (throwOnNull && activity == null)
@@ -110,8 +112,11 @@ namespace Xamarin.Essentials
 
         static void CheckAppActions(AndroidIntent intent)
         {
-            if (intent?.Action == Intent.ActionAppAction)
+            if (intent?.Action == Intent.ActionAppAction && !intent.GetBooleanExtra(AppActions.extraAppActionHandled, false))
             {
+                // prevent launch intent getting handled on activity resume
+                intent.PutExtra(AppActions.extraAppActionHandled, true);
+
                 var appAction = intent.ToAppAction();
 
                 if (!string.IsNullOrEmpty(appAction?.Id))

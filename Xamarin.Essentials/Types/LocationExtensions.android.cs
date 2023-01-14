@@ -36,12 +36,7 @@ namespace Xamarin.Essentials
 #endif
                 Course = location.HasBearing ? location.Bearing : default(double?),
                 Speed = location.HasSpeed ? location.Speed : default(double?),
-                IsFromMockProvider =
-#if __ANDROID_31__
-                    location.Mock,
-#else
-                    Platform.HasApiLevel(global::Android.OS.BuildVersionCodes.JellyBeanMr2) && location.IsFromMockProvider,
-#endif
+                IsFromMockProvider = Platform.HasApiLevel(global::Android.OS.BuildVersionCodes.JellyBeanMr2) ? location.IsFromMockProvider : false,
                 AltitudeReferenceSystem = AltitudeReferenceSystem.Ellipsoid
             };
 

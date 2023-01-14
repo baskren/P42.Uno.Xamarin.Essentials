@@ -39,25 +39,25 @@ namespace Xamarin.Essentials
 
         static DisplayOrientation GetOrientation()
         {
-            switch( Platform.MainWindow.Rotation )
+            return Platform.MainWindow.Rotation switch
             {
-                case 0: return DisplayOrientation.Portrait;
-                case 90: return DisplayOrientation.Landscape;
-                case 180: return DisplayOrientation.Portrait;
-                case 270: return DisplayOrientation.Landscape;
-                default: return DisplayOrientation.Unknown;
+                0 => DisplayOrientation.Portrait,
+                90 => DisplayOrientation.Landscape,
+                180 => DisplayOrientation.Portrait,
+                270 => DisplayOrientation.Landscape,
+                _ => DisplayOrientation.Unknown,
             };
         }
 
         static DisplayRotation GetRotation()
         {
-            switch( Platform.MainWindow.Rotation)
+            return Platform.MainWindow.Rotation switch
             {
-                case 0 : return DisplayRotation.Rotation0;
-                case 90 : return DisplayRotation.Rotation90;
-                case 180 : return DisplayRotation.Rotation180;
-                case 270 : return DisplayRotation.Rotation270;
-                default: return DisplayRotation.Unknown;
+                0 => DisplayRotation.Rotation0,
+                90 => DisplayRotation.Rotation90,
+                180 => DisplayRotation.Rotation180,
+                270 => DisplayRotation.Rotation270,
+                _ => DisplayRotation.Unknown,
             };
         }
 

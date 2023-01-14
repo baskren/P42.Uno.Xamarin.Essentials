@@ -22,40 +22,29 @@ namespace Xamarin.Essentials
 
             var tcs = new TaskCompletionSource<IEnumerable<FileResult>>();
 
-            try
+            // Use Open instead of Import so that we can attempt to use the original file.
+            // If the file is from an external provider, then it will be downloaded.
+            using var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Open);
+            if (Platform.HasOSVersion(11, 0))
+                documentPicker.AllowsMultipleSelection = allowMultiple;
+            documentPicker.Delegate = new PickerDelegate
             {
-                // Use Open instead of Import so that we can attempt to use the original file.
-                // If the file is from an external provider, then it will be downloaded.
-                using (var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Open))
+                PickHandler = urls => GetFileResults(urls, tcs)
+            };
+
+            if (documentPicker.PresentationController != null)
+            {
+                documentPicker.PresentationController.Delegate = new Platform.UIPresentationControllerDelegate
                 {
-                    if (Platform.HasOSVersion(11, 0))
-                        documentPicker.AllowsMultipleSelection = allowMultiple;
-                    documentPicker.Delegate = new PickerDelegate
-                    {
-                        PickHandler = urls => GetFileResults(urls, tcs)
-                    };
-
-                    if (documentPicker.PresentationController != null)
-                    {
-                        documentPicker.PresentationController.Delegate = new PickerPresentationControllerDelegate
-                        {
-                            PickHandler = urls => GetFileResults(urls, tcs)
-                        };
-                    }
-
-                    var parentController = Platform.GetCurrentViewController();
-
-                    parentController.PresentViewController(documentPicker, true, null);
-
-                    return await tcs.Task;
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine($"FilePicker Exception: " + e.Message);
+                    DismissHandler = () => GetFileResults(null, tcs)
+                };
             }
 
-            return null;
+            var parentController = Platform.GetCurrentViewController();
+
+            parentController.PresentViewController(documentPicker, true, null);
+
+            return await tcs.Task;
         }
 
         static async void GetFileResults(NSUrl[] urls, TaskCompletionSource<IEnumerable<FileResult>> tcs)

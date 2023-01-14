@@ -52,7 +52,7 @@ namespace Xamarin.Essentials
                     }
                 }
 
-                await Task.Delay(1);
+                await Task.CompletedTask;
             }
 
             internal void EnsureMainThread()
@@ -128,19 +128,16 @@ namespace Xamarin.Essentials
                 if (!CLLocationManager.LocationServicesEnabled)
                     return PermissionStatus.Disabled;
 
-                switch (CLLocationManager.Status)
+                var status = CLLocationManager.Status;
+
+                return status switch
                 {
-                    case CLAuthorizationStatus.AuthorizedAlways:
-                        return PermissionStatus.Granted;
-                    case CLAuthorizationStatus.AuthorizedWhenInUse:
-                        return PermissionStatus.Granted;
-                    case CLAuthorizationStatus.Denied:
-                        return PermissionStatus.Denied;
-                    case CLAuthorizationStatus.Restricted:
-                        return PermissionStatus.Restricted;
-                    default:
-                        return PermissionStatus.Unknown;
-                }
+                    CLAuthorizationStatus.AuthorizedAlways => PermissionStatus.Granted,
+                    CLAuthorizationStatus.AuthorizedWhenInUse => PermissionStatus.Granted,
+                    CLAuthorizationStatus.Denied => PermissionStatus.Denied,
+                    CLAuthorizationStatus.Restricted => PermissionStatus.Restricted,
+                    _ => PermissionStatus.Unknown,
+                };
             }
 
             static CLLocationManager locationManager;

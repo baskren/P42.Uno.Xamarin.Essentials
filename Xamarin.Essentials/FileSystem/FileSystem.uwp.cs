@@ -16,7 +16,6 @@ namespace Xamarin.Essentials
 
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
         {
-            System.Diagnostics.Debug.WriteLine("FileSystem.PlatformOpenAppPackageFileAsync UWP ENTER");
             if (filename == null)
                 throw new ArgumentNullException(nameof(filename));
 
@@ -29,18 +28,32 @@ namespace Xamarin.Essentials
 
     public partial class FileBase
     {
-        // we can't do anything here, but shared method has a fallback that will take care of it
-        internal static string PlatformGetContentType(string extension) => null;
+        internal FileBase(IStorageFile file)
+            : this(file?.Path)
+        {
+            File = file;
+            ContentType = file?.ContentType;
+        }
 
         internal void PlatformInit(FileBase file)
         {
+            File = file.File;
         }
 
-        internal virtual Task<Stream> PlatformOpenReadAsync()
+        internal IStorageFile File { get; set; }
+
+        // we can't do anything here, but Windows will take care of it
+        internal static string PlatformGetContentType(string extension) => null;
+
+        internal virtual Task<Stream> PlatformOpenReadAsync() =>
+            File.OpenStreamForReadAsync();
+    }
+
+    public partial class FileResult
+    {
+        internal FileResult(IStorageFile file)
+            : base(file)
         {
-            if (StorageFile != null)
-                return StorageFile.OpenStreamForReadAsync();
-            return Task.FromResult((Stream)File.OpenRead(FullPath));
         }
     }
 }

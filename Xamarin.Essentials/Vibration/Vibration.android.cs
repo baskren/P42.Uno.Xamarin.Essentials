@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
 
         static void PlatformVibrate(TimeSpan duration)
         {
-            Permissions.EnsureDeclaredAsync<Permissions.Vibrate>();
+            Permissions.EnsureDeclared<Permissions.Vibrate>();
 
             var time = (long)duration.TotalMilliseconds;
 #if __ANDROID_26__
@@ -30,7 +30,8 @@ namespace Xamarin.Essentials
 
         static void PlatformCancel()
         {
-            Permissions.EnsureDeclaredAsync<Permissions.Vibrate>();
+            Permissions.EnsureDeclared<Permissions.Vibrate>();
+
             Platform.Vibrator.Cancel();
         }
     }

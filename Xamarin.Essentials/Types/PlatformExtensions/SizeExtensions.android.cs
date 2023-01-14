@@ -4,7 +4,7 @@ using AndroidSizeF = Android.Util.SizeF;
 
 namespace Xamarin.Essentials
 {
-    public static class SizeExtensions
+    public static partial class SizeExtensions
     {
         public static Size ToSystemSize(this AndroidSize size) =>
             new Size(size.Width, size.Height);

@@ -14,17 +14,14 @@ namespace Xamarin.Essentials
         {
             internal static PermissionStatus CheckPermissionStatus(EKEntityType entityType)
             {
-                switch (EKEventStore.GetAuthorizationStatus(entityType))
+                var status = EKEventStore.GetAuthorizationStatus(entityType);
+                return status switch
                 {
-                    case EKAuthorizationStatus.Authorized:
-                        return PermissionStatus.Granted;
-                    case EKAuthorizationStatus.Denied:
-                        return PermissionStatus.Denied;
-                    case EKAuthorizationStatus.Restricted:
-                        return PermissionStatus.Restricted;
-                    default:
-                        return PermissionStatus.Unknown;
-                }
+                    EKAuthorizationStatus.Authorized => PermissionStatus.Granted,
+                    EKAuthorizationStatus.Denied => PermissionStatus.Denied,
+                    EKAuthorizationStatus.Restricted => PermissionStatus.Restricted,
+                    _ => PermissionStatus.Unknown,
+                };
             }
 
             internal static async Task<PermissionStatus> RequestPermissionAsync(EKEntityType entityType)

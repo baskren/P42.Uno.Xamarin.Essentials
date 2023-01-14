@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
-using Windows.Storage.Streams;
 
 namespace Xamarin.Essentials
 {
@@ -16,9 +15,8 @@ namespace Xamarin.Essentials
             var picker = new FileOpenPicker
             {
                 ViewMode = PickerViewMode.List,
-                SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
+                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
             };
-            picker.InitializeWithWindow();
 
             SetFileTypes(options, picker);
 
@@ -63,42 +61,6 @@ namespace Xamarin.Essentials
             if (!hasAtLeastOneType)
                 picker.FileTypeFilter.Add("*");
         }
-
-        static async Task<string> PlatformExportAsync(byte[] bytes, SaveOptions options)
-            => await PlatformExportAsync(options, (writer) => writer.WriteBytes(bytes));
-
-        static async Task<string> PlatformExportAsync(string text, SaveOptions options)
-            => await PlatformExportAsync(options, (writer) => writer.WriteString(text));
-
-        static async Task<string> PlatformExportAsync(SaveOptions options, Action<DataWriter> writeAction)
-        {
-            var picker = new Windows.Storage.Pickers.FileSavePicker();
-            picker.InitializeWithWindow();
-            if (options != null)
-            {
-                if (!string.IsNullOrWhiteSpace(options.SuggestedFileName) && System.IO.Path.HasExtension(options.SuggestedFileName))
-                {
-                    picker.SuggestedFileName = options.SuggestedFileName;
-                    var extension = System.IO.Path.GetExtension(options.SuggestedFileName);
-                    picker.DefaultFileExtension = extension;
-                    picker.FileTypeChoices.Add(options.FileTypeDisplayName ?? extension, new List<string> { extension });
-                }
-            }
-            if (await picker.PickSaveFileAsync() is Windows.Storage.StorageFile windowsFile)
-            {
-                Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(windowsFile, windowsFile.Path);
-                using (var stream = await windowsFile.OpenAsync(FileAccessMode.ReadWrite, StorageOpenOptions.AllowReadersAndWriters))
-                {
-                    using (var writer = new DataWriter(stream))
-                    {
-                        writeAction?.Invoke(writer);
-                        await writer.StoreAsync();
-                    }
-                }
-                return windowsFile.Path;
-            }
-            return null;
-        }
     }
 
     public partial class FilePickerFileType
@@ -106,31 +68,31 @@ namespace Xamarin.Essentials
         static FilePickerFileType PlatformImageFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Windows, FileSystem.Extensions.AllImage }
+                { DevicePlatform.UWP, FileSystem.Extensions.AllImage }
             });
 
         static FilePickerFileType PlatformPngFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Windows, new[] { FileSystem.Extensions.Png } }
+                { DevicePlatform.UWP, new[] { FileSystem.Extensions.Png } }
             });
 
         static FilePickerFileType PlatformJpegFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Windows, FileSystem.Extensions.AllJpeg }
+                { DevicePlatform.UWP, FileSystem.Extensions.AllJpeg }
             });
 
         static FilePickerFileType PlatformVideoFileType() =>
            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
            {
-                { DevicePlatform.Windows, FileSystem.Extensions.AllVideo }
+                { DevicePlatform.UWP, FileSystem.Extensions.AllVideo }
            });
 
         static FilePickerFileType PlatformPdfFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Windows, new[] { FileSystem.Extensions.Pdf } }
+                { DevicePlatform.UWP, new[] { FileSystem.Extensions.Pdf } }
             });
     }
 }

@@ -109,18 +109,23 @@ namespace Xamarin.Essentials
             if (tcsUtterances?.Task != null)
                 await tcsUtterances.Task;
 
-            cancelToken.Register(() =>
-            {
-                try
-                {
-                    tts?.Stop();
+            tcsUtterances = new TaskCompletionSource<bool>();
 
-                    tcsUtterances?.TrySetResult(true);
-                }
-                catch
+            if (cancelToken != null)
+            {
+                cancelToken.Register(() =>
                 {
-                }
-            });
+                    try
+                    {
+                        tts?.Stop();
+
+                        tcsUtterances?.TrySetResult(true);
+                    }
+                    catch
+                    {
+                    }
+                });
+            }
 
             if (options?.Locale?.Language != null)
             {
@@ -147,7 +152,6 @@ namespace Xamarin.Essentials
             var parts = text.SplitSpeak(max);
 
             numExpectedUtterances = parts.Count;
-            tcsUtterances = new TaskCompletionSource<bool>();
 
             var guid = Guid.NewGuid().ToString();
 

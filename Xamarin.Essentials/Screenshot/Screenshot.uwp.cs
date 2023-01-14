@@ -4,8 +4,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Xamarin.Essentials
 {
@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
 
         static async Task<ScreenshotResult> PlatformCaptureAsync()
         {
-            var element = Platform.Window?.Content as FrameworkElement; // Window.Current?.Content as FrameworkElement;
+            var element = Window.Current?.Content as FrameworkElement;
             if (element == null)
                 throw new InvalidOperationException("Unable to find main window content.");
 
@@ -50,9 +50,11 @@ namespace Xamarin.Essentials
 
         internal async Task<Stream> PlatformOpenReadAsync(ScreenshotFormat format)
         {
-            var f = BitmapEncoder.PngEncoderId;
-            if (format == ScreenshotFormat.Jpeg)
-                f = BitmapEncoder.JpegEncoderId;
+            var f = format switch
+            {
+                ScreenshotFormat.Jpeg => BitmapEncoder.JpegEncoderId,
+                _ => BitmapEncoder.PngEncoderId
+            };
 
             var ms = new InMemoryRandomAccessStream();
 

@@ -19,32 +19,31 @@ namespace Xamarin.Essentials
             var opts = NSFileCoordinatorReadingOptions.WithoutChanges;
             var intents = urls.Select(x => NSFileAccessIntent.CreateReadingIntent(x, opts)).ToArray();
 
-            using (var coordinator = new NSFileCoordinator())
+            using var coordinator = new NSFileCoordinator();
+
+            var tcs = new TaskCompletionSource<FileResult[]>();
+
+            coordinator.CoordinateAccess(intents, new NSOperationQueue(), error =>
             {
-                var tcs = new TaskCompletionSource<FileResult[]>();
-
-                coordinator.CoordinateAccess(intents, new NSOperationQueue(), error =>
+                if (error != null)
                 {
-                    if (error != null)
-                    {
-                        tcs.TrySetException(new NSErrorException(error));
-                        return;
-                    }
+                    tcs.TrySetException(new NSErrorException(error));
+                    return;
+                }
 
-                    var bookmarks = new List<FileResult>();
+                var bookmarks = new List<FileResult>();
 
-                    foreach (var intent in intents)
-                    {
-                        var url = intent.Url;
-                        var result = new BookmarkDataFileResult(url);
-                        bookmarks.Add(result);
-                    }
+                foreach (var intent in intents)
+                {
+                    var url = intent.Url;
+                    var result = new BookmarkDataFileResult(url);
+                    bookmarks.Add(result);
+                }
 
-                    tcs.TrySetResult(bookmarks.ToArray());
-                });
+                tcs.TrySetResult(bookmarks.ToArray());
+            });
 
-                return await tcs.Task;
-            }
+            return await tcs.Task;
         }
 
         public static async Task<FileResult> EnsurePhysicalFileResultAsync(Uri uri)

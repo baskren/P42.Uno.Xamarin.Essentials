@@ -3,7 +3,7 @@ using ESize = ElmSharp.Size;
 
 namespace Xamarin.Essentials
 {
-    public static class SizeExtensions
+    public static partial class SizeExtensions
     {
         public static Size ToSystemSize(this ESize size) =>
             new Size(size.Width, size.Height);

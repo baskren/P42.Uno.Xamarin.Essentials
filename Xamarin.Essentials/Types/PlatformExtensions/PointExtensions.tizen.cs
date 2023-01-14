@@ -3,7 +3,7 @@ using EPoint = ElmSharp.Point;
 
 namespace Xamarin.Essentials
 {
-    public static class PointExtensions
+    public static partial class PointExtensions
     {
         public static Point ToSystemPoint(this EPoint point) =>
             new Point(point.X, point.Y);

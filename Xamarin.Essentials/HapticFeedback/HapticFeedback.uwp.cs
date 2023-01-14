@@ -44,15 +44,11 @@ namespace Xamarin.Essentials
             return null;
         }
 
-        static ushort ConvertType(HapticFeedbackType type)
-        {
-            switch (type)
+        static ushort ConvertType(HapticFeedbackType type) =>
+            type switch
             {
-                case HapticFeedbackType.LongPress:
-                    return KnownSimpleHapticsControllerWaveforms.Press;
-                default:
-                    return KnownSimpleHapticsControllerWaveforms.Click;
-            }
-        }
+                HapticFeedbackType.LongPress => KnownSimpleHapticsControllerWaveforms.Press,
+                _ => KnownSimpleHapticsControllerWaveforms.Click
+            };
     }
 }

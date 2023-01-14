@@ -24,13 +24,11 @@ namespace Xamarin.Essentials
             }
         }
 
-        static string ConvertType(HapticFeedbackType type)
-        {
-            switch (type )
+        static string ConvertType(HapticFeedbackType type) =>
+            type switch
             {
-                case HapticFeedbackType.LongPress: return "Hold";
-                default: return "Tap";
+                HapticFeedbackType.LongPress => "Hold",
+                _ => "Tap"
             };
-        }
     }
 }

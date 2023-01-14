@@ -23,20 +23,10 @@ namespace Xamarin.Essentials
             callbackHelper.Register();
         }
 
-        static void AuthSessionCallback(NSUrl cbUrl, NSError error)
+        internal static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(WebAuthenticatorOptions webAuthenticatorOptions)
         {
-            if (error == null)
-                OpenUrl(cbUrl);
-            else if (error.Domain == asWebAuthenticationSessionErrorDomain && error.Code == asWebAuthenticationSessionErrorCodeCanceledLogin)
-                tcsResponse.TrySetCanceled();
-            else
-                tcsResponse.TrySetException(new NSErrorException(error));
-
-            was = null;
-        }
-
-        internal static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
-        {
+            var url = webAuthenticatorOptions?.Url;
+            var callbackUrl = webAuthenticatorOptions?.CallbackUrl;
             if (!AppInfo.VerifyHasUrlScheme(callbackUrl.Scheme))
                 throw new InvalidOperationException("You must register your URL Scheme handler in your app's Info.plist!");
 
@@ -50,12 +40,26 @@ namespace Xamarin.Essentials
 
             if (DeviceInfo.Version >= new Version(10, 15))
             {
+                static void AuthSessionCallback(NSUrl cbUrl, NSError error)
+                {
+                    if (error == null)
+                        OpenUrl(cbUrl);
+                    else if (error.Domain == asWebAuthenticationSessionErrorDomain && error.Code == asWebAuthenticationSessionErrorCodeCanceledLogin)
+                        tcsResponse.TrySetCanceled();
+                    else
+                        tcsResponse.TrySetException(new NSErrorException(error));
+
+                    was = null;
+                }
+
                 was = new ASWebAuthenticationSession(WebUtils.GetNativeUrl(url), scheme, AuthSessionCallback);
 
                 using (was)
                 {
                     var ctx = new ContextProvider(Platform.GetCurrentWindow());
                     was.PresentationContextProvider = ctx;
+
+                    was.PrefersEphemeralWebBrowserSession = webAuthenticatorOptions?.PrefersEphemeralWebBrowserSession ?? false;
 
                     was.Start();
                     return await tcsResponse.Task;

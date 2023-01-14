@@ -11,9 +11,9 @@ namespace Xamarin.Essentials
     {
         static bool PlatformIsAvailable => true;
 
-        static async Task<string> PlatformGetAsync(string key, string accessGroup)
+        static async Task<string> PlatformGetAsync(string key)
         {
-            var settings = GetSettings(GetAlias(accessGroup));
+            var settings = GetSettings(Alias);
 
             var encBytes = settings.Values[key] as byte[];
 
@@ -27,9 +27,9 @@ namespace Xamarin.Essentials
             return Encoding.UTF8.GetString(buffer.ToArray());
         }
 
-        static async Task PlatformSetAsync(string key, string data, string accessGroup)
+        static async Task PlatformSetAsync(string key, string data)
         {
-            var settings = GetSettings(GetAlias(accessGroup));
+            var settings = GetSettings(Alias);
 
             var bytes = Encoding.UTF8.GetBytes(data);
 
@@ -43,9 +43,9 @@ namespace Xamarin.Essentials
             settings.Values[key] = encBytes;
         }
 
-        static bool PlatformRemove(string key, string accessGroup)
+        static bool PlatformRemove(string key)
         {
-            var settings = GetSettings(GetAlias(accessGroup));
+            var settings = GetSettings(Alias);
 
             if (settings.Values.ContainsKey(key))
             {
@@ -56,9 +56,9 @@ namespace Xamarin.Essentials
             return false;
         }
 
-        static void PlatformRemoveAll(string accessGroup)
+        static void PlatformRemoveAll()
         {
-            var settings = GetSettings(GetAlias(accessGroup));
+            var settings = GetSettings(Alias);
 
             settings.Values.Clear();
         }

@@ -35,8 +35,8 @@
 
   <!-- MACOS -->
   <ItemGroup Condition=" $(TargetFramework.ToLower().Contains('macos')) OR $(TargetFramework.ToLower().Contains('xamarin.mac'))">
-    <Compile Include="$(MSBuildThisFileDirectory)**\*.mac.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)**\*.mac.*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.macos.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.macos.*.cs" />
     <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics" />
     <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics.Vectors" />
     <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="OpenTK" />

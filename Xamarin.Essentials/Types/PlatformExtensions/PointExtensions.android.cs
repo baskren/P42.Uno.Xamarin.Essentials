@@ -4,7 +4,7 @@ using AndroidPointF = Android.Graphics.PointF;
 
 namespace Xamarin.Essentials
 {
-    public static class PointExtensions
+    public static partial class PointExtensions
     {
         public static Point ToSystemPoint(this AndroidPoint point) =>
             new Point(point.X, point.Y);

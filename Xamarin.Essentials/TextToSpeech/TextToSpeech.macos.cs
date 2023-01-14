@@ -52,7 +52,10 @@ namespace Xamarin.Essentials
 
             void TryCancel()
             {
-                ss.StopSpeaking(NSSpeechBoundary.Word);
+#pragma warning disable 0618
+                // hWord is obsolete, but only just the latest release
+                ss.StopSpeaking(NSSpeechBoundary.hWord);
+#pragma warning restore 0618
                 tcs.TrySetResult(true);
             }
 

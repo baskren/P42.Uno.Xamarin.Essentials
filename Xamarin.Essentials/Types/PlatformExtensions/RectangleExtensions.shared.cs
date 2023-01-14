@@ -26,5 +26,11 @@ namespace Xamarin.Essentials
         public static RectangleF ToSystemRectangleF(this Rect rect) =>
             new RectangleF((float)rect.X, (float)rect.Y, (float)rect.Width, (float)rect.Height);
 
+        public static Rect ToWindowsRectangle(this Rectangle rect) =>
+            new Rect(rect.X, rect.Y, rect.Width, rect.Height);
+
+        public static Rect ToWindowsRectangle(this RectangleF rect) =>
+            new Rect(rect.X, rect.Y, rect.Width, rect.Height);
+
     }
 }
