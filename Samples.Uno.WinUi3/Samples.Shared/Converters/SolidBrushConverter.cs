@@ -16,7 +16,7 @@ namespace Samples.Converters
                 return new Microsoft.UI.Xaml.Media.SolidColorBrush(v);
 
             if (value is System.Drawing.Color c)
-                return new Microsoft.UI.Xaml.Media.SolidColorBrush(c.ToWinUiColor());
+                return new Microsoft.UI.Xaml.Media.SolidColorBrush(c.ToWindowsColor());
 
             return null;
         }

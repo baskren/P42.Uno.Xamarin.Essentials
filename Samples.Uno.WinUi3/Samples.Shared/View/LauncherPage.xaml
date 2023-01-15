@@ -22,7 +22,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding LaunchUri}" />
+                <TextBox Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding LaunchUri, Mode=TwoWay}" />
                 <Button Grid.Row="1" Content="Check Launch" Command="{Binding CanLaunchCommand}"/>
                 <Button Grid.Row="1" Grid.Column="1"  Content=" Launch" Command="{Binding LaunchCommand}"/>
                 <Button Grid.Row="2" Grid.Column="0" Content="Launch Browser" Command="{Binding LaunchBrowserCommand}"/>
@@ -31,9 +31,9 @@
                 <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
                     <TextBlock Text="Open File" FontWeight="Bold" Margin="0,6,0,0" />
                     <TextBlock Text="File Name:" />
-                    <TextBox Text="{Binding FileAttachmentName}" />
+                    <TextBox Text="{Binding FileAttachmentName, Mode=TwoWay}" />
                     <TextBlock Text="File Contents:" />
-                    <TextBox Text="{Binding FileAttachmentContents}" TextWrapping="WrapWholeWords" AcceptsReturn="True" />
+                    <TextBox Text="{Binding FileAttachmentContents, Mode=TwoWay}" TextWrapping="WrapWholeWords" AcceptsReturn="True" />
 
                     <Button Content="Open File" Command="{Binding LaunchFileCommand}"
                             CommandParameter="{Binding Source={RelativeSource Self}}" />

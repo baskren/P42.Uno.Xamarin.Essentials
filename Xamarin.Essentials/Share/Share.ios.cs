@@ -8,6 +8,11 @@ namespace Xamarin.Essentials
 {
     public static partial class Share
     {
+
+        static bool PlatformCanShare(ShareRequestBase request) => true;
+
+        static bool PlatformIsAvailable() => true;
+
         static async Task PlatformRequestAsync(ShareTextRequest request)
         {
             var src = new TaskCompletionSource<bool>();
@@ -81,6 +86,7 @@ namespace Xamarin.Essentials
             await vc.PresentViewControllerAsync(activityController, true);
             await src.Task;
         }
+
     }
 
     class ShareActivityItemSource : UIActivityItemSource

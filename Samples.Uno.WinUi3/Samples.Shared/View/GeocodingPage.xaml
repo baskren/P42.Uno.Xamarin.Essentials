@@ -17,9 +17,9 @@
 
                 <TextBlock Text="Geocoding:" FontWeight="Bold" Margin="0,6,0,0" />
                 <TextBlock Text="Latitude:" />
-                <TextBox Text="{Binding Latitude}"  />
+                <TextBox Text="{Binding Latitude, Mode=TwoWay}"  />
                 <TextBlock Text="Longitude:" />
-                <TextBox Text="{Binding Longitude}"  />
+                <TextBox Text="{Binding Longitude, Mode=TwoWay}"  />
                 <Button Content="Detect Placemarks" Command="{Binding GetAddressCommand}" IsEnabled="{Binding IsNotBusy}" />
                 <TextBlock Text="{Binding GeocodeAddress}" />
 

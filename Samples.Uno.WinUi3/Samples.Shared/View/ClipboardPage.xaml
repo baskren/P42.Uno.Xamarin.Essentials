@@ -14,7 +14,7 @@
         <ScrollViewer>
             <StackPanel Padding="12,0,12,12" Spacing="6">
                 <TextBlock Text="Enter some text:" />
-                <TextBox PlaceholderText="Enter text..." Text="{Binding FieldValue}" />
+                <TextBox PlaceholderText="Enter text..." Text="{Binding FieldValue, Mode=TwoWay}" />
                 <Button Content="Copy to clipboard" Command="{Binding CopyCommand}" />
                 <Button Content="Paste from clipboard" Command="{Binding PasteCommand}" />
                 <Button Content="Check Status" Command="{Binding CheckCommand}" />

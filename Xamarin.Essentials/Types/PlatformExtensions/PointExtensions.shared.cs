@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Drawing;
-using Windows.Foundation;
+using WindowsPoint = Windows.Foundation.Point;
 
 namespace Xamarin.Essentials
 {

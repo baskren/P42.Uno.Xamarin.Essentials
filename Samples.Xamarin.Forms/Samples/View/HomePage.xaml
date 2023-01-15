@@ -3,7 +3,7 @@
                 xmlns:views="clr-namespace:Samples.View"
                 xmlns:viewmodels="clr-namespace:Samples.ViewModel"
                 x:Class="Samples.View.HomePage"
-                Title="Xamarin.Essentials">
+                Title="P42.Uno.Xamarin.Essentials">
     <views:BasePage.BindingContext>
         <viewmodels:HomeViewModel />
     </views:BasePage.BindingContext>

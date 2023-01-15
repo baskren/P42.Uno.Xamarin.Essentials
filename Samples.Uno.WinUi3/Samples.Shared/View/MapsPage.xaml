@@ -21,21 +21,21 @@
             <TextBox Text="{Binding Name}"/>
 
             <TextBlock Text="Latitude" Margin="0,24,0,0" />
-            <TextBox  Text="{Binding Latitude}" />
+            <TextBox  Text="{Binding Latitude, Mode=TwoWay}" />
             <TextBlock Text="Longitude" />
-            <TextBox  Text="{Binding Longitude}" />
+            <TextBox  Text="{Binding Longitude, Mode=TwoWay}" />
             <Button Content="Open coordinates" Command="{Binding MapsCommand}"/>
 
             <TextBlock Text="Thoroughfare" Margin="0,24,0,0"/>
-            <TextBox Text="{Binding Thoroughfare}"/>
+            <TextBox Text="{Binding Thoroughfare, Mode=TwoWay}"/>
             <TextBlock Text="Locality"/>
-            <TextBox Text="{Binding Locality}"/>
+            <TextBox Text="{Binding Locality, Mode=TwoWay}"/>
             <TextBlock Text="Admin Area"/>
-            <TextBox Text="{Binding AdminArea}"/>
+            <TextBox Text="{Binding AdminArea, Mode=TwoWay}"/>
             <TextBlock Text="Country Name"/>
-            <TextBox Text="{Binding Country}"/>
+            <TextBox Text="{Binding Country, Mode=TwoWay}"/>
             <TextBlock Text="Zip Code"/>
-            <TextBox Text="{Binding ZipCode}" />
+            <TextBox Text="{Binding ZipCode, Mode=TwoWay}" />
 
             <Button Content="Open address" Command="{Binding LaunchPlacemarkCommand}"/>
         </StackPanel>

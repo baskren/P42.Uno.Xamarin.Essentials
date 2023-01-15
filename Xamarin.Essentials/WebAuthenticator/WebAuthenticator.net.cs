@@ -1,1 +1,0 @@
-WebAuthenticator.netstandard.watchos.tizen.cs

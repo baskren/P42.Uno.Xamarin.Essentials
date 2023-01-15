@@ -39,5 +39,51 @@
 	<false/>
 	-->
 
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Access to your location is required for cool things to happen!</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>appcenter-APP-SECRET</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>xamarinessentials</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>xamarinessentials</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera Photos</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Calendar Access</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Get Location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Get Location</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Pick Photos</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Pick Photos</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Catpure Video</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Contacts</string>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>mailto</string>
+	</array>
+
+
+
   </dict>
 </plist>

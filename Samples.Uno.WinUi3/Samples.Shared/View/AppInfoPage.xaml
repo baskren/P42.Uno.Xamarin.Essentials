@@ -12,7 +12,7 @@
         <TextBlock Text="Find out about the app with ease." FontWeight="Bold" Margin="12" />
 
         <ScrollViewer>
-            <StackPanel Padding="12,0,12,12" Spacing="6">
+            <StackPanel x:Name="_stackPanel" Padding="12,0,12,12" Spacing="6">
                 <TextBlock Text="App Info:" FontWeight="Bold" Margin="0,6,0,0" />
                 <TextBlock Text="{Binding AppName, Converter={StaticResource StringFormatConverter}, ConverterParameter='Name: {0}'}" />
                 <TextBlock Text="{Binding AppPackageName,  Converter={StaticResource StringFormatConverter}, ConverterParameter='Package Name: {0}'}"  />
@@ -23,6 +23,8 @@
                 <TextBlock Text="{Binding AppBuild,  Converter={StaticResource StringFormatConverter}, ConverterParameter='Build: {0}'}"  />
 
                 <Button Content="Open Settings" Command="{Binding ShowSettingsUICommand}"/>
+
+                <TextBlock Text="Windows.ApplicationModel.Package.Current:"/>
             </StackPanel>
         </ScrollViewer>
     </StackPanel>

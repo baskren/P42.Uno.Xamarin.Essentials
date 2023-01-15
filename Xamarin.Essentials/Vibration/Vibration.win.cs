@@ -11,12 +11,12 @@ namespace Xamarin.Essentials
 
         static void PlatformVibrate(TimeSpan duration)
         {
-            throw new NotSupportedExecption();
+            throw new NotSupportedException();
         }
 
         static void PlatformCancel()
         {
-            throw new NotSupportedExecption();
+            throw new NotSupportedException();
         }
     }
 }

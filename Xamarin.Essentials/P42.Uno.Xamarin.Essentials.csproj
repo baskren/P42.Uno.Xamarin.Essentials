@@ -58,8 +58,8 @@
   <!-- NetStandard bait -->
   <ItemGroup Condition="  $(TargetFramework.ToLower().StartsWith('netstandard')) OR $(TargetFramework.ToLower().Equals('net7.0')) ">
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    <Compile Include="$(MSBuildThisFileDirectory)**\*.net.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)**\*.net.*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.netstandard.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.netstandard.*.cs" />
   </ItemGroup>
 
   <!-- WinUI Windows -->

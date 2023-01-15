@@ -11,7 +11,7 @@ namespace Samples.ViewModel
     public class BrowserViewModel : BaseViewModel
     {
         string browserStatus;
-        string uri = "http://xamarin.com";
+        string uri = "http://platform.uno";
         int browserType = (int)BrowserLaunchMode.SystemPreferred;
         int browserTitleType = (int)BrowserTitleMode.Default;
         int controlColor = 0;

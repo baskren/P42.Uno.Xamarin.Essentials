@@ -14,7 +14,7 @@
         <ScrollViewer>
             <StackPanel Padding="12,0,12,12" Spacing="6">
                 <TextBlock Text="Enter URI:" />
-                <TextBox PlaceholderText="https://..." Text="{Binding Uri}" />
+                <TextBox PlaceholderText="https://..." Text="{Binding Uri, Mode=TwoWay}" />
 
                 <Button Content="Open URI"
                         Command="{Binding OpenUriCommand}"

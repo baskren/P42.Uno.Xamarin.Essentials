@@ -34,10 +34,10 @@
                 Spacing="6">
 
                 <TextBlock Text="Key:" />
-                <TextBox PlaceholderText="Enter key..." Text="{Binding Key}" />
+                <TextBox PlaceholderText="Enter key..." Text="{Binding Key, Mode=TwoWay}" />
 
                 <TextBlock Text="Value:" />
-                <TextBox PlaceholderText="Enter text..." Text="{Binding SecuredValue}" />
+                <TextBox PlaceholderText="Enter text..." Text="{Binding SecuredValue, Mode=TwoWay}" />
 
                 <Button
                     Command="{Binding LoadCommand}"

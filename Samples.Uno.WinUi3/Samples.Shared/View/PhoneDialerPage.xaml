@@ -23,10 +23,7 @@
         <ScrollViewer>
             <StackPanel Padding="12,0,12,12" Spacing="6">
                 <TextBlock Text="Phone number:" />
-                <!--
-                <TextBox Text="{Binding PhoneNumber}"  />
-                -->
-                <TextBox Text="{Binding PhoneNumber}" InputScope="TelephoneNumber"/>
+                <TextBox Text="{Binding PhoneNumber, Mode=TwoWay}" InputScope="TelephoneNumber"/>
                 <Button
                     Command="{Binding OpenPhoneDialerCommand}"
                     Content="Open Phone Dialer"
