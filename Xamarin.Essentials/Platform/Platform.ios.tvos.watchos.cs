@@ -54,6 +54,7 @@ namespace Xamarin.Essentials
             if (propertyLength == 0)
             {
                 Marshal.FreeHGlobal(lengthPtr);
+                Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Unable to read length of property."));
                 throw new InvalidOperationException("Unable to read length of property.");
             }
 
@@ -101,7 +102,10 @@ namespace Xamarin.Essentials
                     .FirstOrDefault(w => w.RootViewController != null && w.WindowLevel == UIWindowLevel.Normal);
 
                 if (window == null && throwIfNull)
-                    throw new InvalidOperationException("Could not find current view controller.");
+                {
+                    Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Could not find current UIWindow."));
+                    throw new InvalidOperationException("Could not find current UIWindow.");
+                }
                 else
                     viewController = window?.RootViewController;
             }
@@ -110,8 +114,10 @@ namespace Xamarin.Essentials
                 viewController = viewController.PresentedViewController;
 
             if (throwIfNull && viewController == null)
-                throw new InvalidOperationException("Could not find current view controller.");
-
+            {
+                Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Could not find current UIViewController."));
+                throw new InvalidOperationException("Could not find current UIViewController.");
+            }
             return viewController;
         }
 
@@ -131,7 +137,10 @@ namespace Xamarin.Essentials
             }
 
             if (throwIfNull && window == null)
-                throw new InvalidOperationException("Could not find current window.");
+            {
+                Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Could not find current UIWindow."));
+                throw new InvalidOperationException("Could not find current UIWindow.");
+            }
 
             return window;
         }

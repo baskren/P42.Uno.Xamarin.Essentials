@@ -18,7 +18,10 @@ namespace Xamarin.Essentials
         {
             var element = Window.Current?.Content as FrameworkElement;
             if (element == null)
+            {
+                Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Unable to find main window content."));
                 throw new InvalidOperationException("Unable to find main window content.");
+            }
 
             var bmp = new RenderTargetBitmap();
 

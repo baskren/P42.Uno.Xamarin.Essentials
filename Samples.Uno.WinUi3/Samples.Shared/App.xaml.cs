@@ -56,6 +56,7 @@ namespace Samples
 #endif
 
 #if NET7_0_OR_GREATER && WINDOWS && !HAS_UNO
+            //_window = new Window();
             _window = new Xamarin.Essentials.MainWindow();
             _window.Activate();
 #else

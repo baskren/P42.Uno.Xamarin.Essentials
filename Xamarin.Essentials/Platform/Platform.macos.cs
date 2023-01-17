@@ -15,7 +15,10 @@ namespace Xamarin.Essentials
             var window = NSApplication.SharedApplication.MainWindow;
 
             if (throwIfNull && window == null)
-                throw new InvalidOperationException("Could not find current window.");
+            {
+                Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Could not find current NSWindow."));
+                throw new InvalidOperationException("Could not find current NSWindow.");
+            }
 
             return window;
         }

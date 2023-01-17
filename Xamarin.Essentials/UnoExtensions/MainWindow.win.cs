@@ -12,7 +12,7 @@ using WinRT.Interop;
 
 namespace Xamarin.Essentials
 {
-    public sealed partial class MainWindow : Window
+    public partial class MainWindow : Window
     {
 
         public static new MainWindow Current
@@ -21,6 +21,7 @@ namespace Xamarin.Essentials
             {
                 if (Platform.Window is MainWindow window)
                     return window;
+                MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Cannot show Share UI unless Window in App.xaml.cs is of type Xamarin.Essentials.MainPage"));
                 throw new InvalidOperationException("Cannot show Share UI unless Window in App.xaml.cs is of type Xamarin.Essentials.MainPage");
             }
         }
