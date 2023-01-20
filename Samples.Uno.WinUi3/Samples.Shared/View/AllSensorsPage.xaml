@@ -2,7 +2,6 @@
     x:Class="Samples.View.AllSensorsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="using:CommunityToolkit.WinUI.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Samples.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,9 +9,6 @@
     xmlns:views="using:Samples.View"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
-    <Page.Resources>
-        <converters:StringFormatConverter x:Key="StringFormatConverter" />
-    </Page.Resources>
 
     <StackPanel>
         <TextBlock
@@ -320,21 +316,21 @@
                     <TextBlock
                         Grid.Row="0"
                         Grid.ColumnSpan="2"
-                        Text="{Binding BaromterValue, Converter={StaticResource StringFormatConverter}, ConverterParameter='Barometer pressure (hPA): {0:N}'}" />
+                        Text="{Binding Pressure, Converter={StaticResource StringFormatConverter}, ConverterParameter='Barometer pressure (hPA): {0:N}'}" />
 
                     <Button
                         Grid.Row="1"
                         Grid.Column="0"
-                        Command="{Binding StartBarometerComand}"
+                        Command="{Binding StartCommand}"
                         Content="Start"
-                        IsEnabled="{Binding BarometerIsActive, Converter={StaticResource NegativeConverter}}" />
+                        IsEnabled="{Binding IsActive, Converter={StaticResource NegativeConverter}}" />
 
                     <Button
                         Grid.Row="1"
                         Grid.Column="1"
-                        Command="{Binding StopBarometerCommand}"
+                        Command="{Binding StopCommand}"
                         Content="Stop"
-                        IsEnabled="{Binding BarometerIsActive}" />
+                        IsEnabled="{Binding IsActive}" />
                 </Grid>
             </StackPanel>
         </ScrollViewer>

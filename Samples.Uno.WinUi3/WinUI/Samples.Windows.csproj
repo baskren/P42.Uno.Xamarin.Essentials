@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
+		<TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
 		<TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
 		<RootNamespace>Samples</RootNamespace>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
@@ -10,14 +10,6 @@
 		<PublishProfile>win10-$(Platform).pubxml</PublishProfile>
 		<UseWinUI>true</UseWinUI>
 		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
-	</PropertyGroup>
-	
-	<PropertyGroup>
-		<!-- Bundles the WinAppSDK binaries (Uncomment for unpackaged builds) -->
-		<!-- <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained> -->
-		<!-- This bundles the .NET Core libraries (Uncomment for packaged builds)  -->
-		<SelfContained>true</SelfContained>
-		<DefaultLanguage>en</DefaultLanguage>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -43,12 +35,9 @@
        Tools extension to be activated for this project even if the Windows App SDK Nuget
        package has not yet been restored -->
 	<ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnablePreviewMsixTooling)'=='true'">
-		<ProjectCapability Include="Msix" />
+		<ProjectCapability Include="Msix"/>
 	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.csproj" />
-	</ItemGroup>
-
+	
 	<ItemGroup>
 		<!--
 		If you encounter this error message:
@@ -59,9 +48,9 @@
 		the "Microsoft.Windows.SDK.BuildTools" package above, and the "revision" version number
 		must be the highest found in https://www.nuget.org/packages/Microsoft.Windows.SDK.NET.Ref.
 		-->
-		<FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" RuntimeFrameworkVersion="10.0.22000.27" />
-		<FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" TargetingPackVersion="10.0.22000.27" />
+		<FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" RuntimeFrameworkVersion="10.0.22000.25" />
+		<FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" TargetingPackVersion="10.0.22000.25" />
 	</ItemGroup>
-
+	
 	<Import Project="..\Samples.Shared\Samples.Shared.projitems" Label="Shared" />
 </Project>

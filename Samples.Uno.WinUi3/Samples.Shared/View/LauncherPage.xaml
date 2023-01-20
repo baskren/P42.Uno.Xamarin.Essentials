@@ -27,14 +27,17 @@
                 <Button Grid.Row="1" Grid.Column="1"  Content=" Launch" Command="{Binding LaunchCommand}"/>
                 <Button Grid.Row="2" Grid.Column="0" Content="Launch Browser" Command="{Binding LaunchBrowserCommand}"/>
                 <Button Grid.Row="2" Grid.Column="1" Content="Launch Mail" Command="{Binding LaunchMailCommand}"/>
-                
+
                 <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
                     <TextBlock Text="Open File" FontWeight="Bold" Margin="0,6,0,0" />
                     <TextBlock Text="File Name:" />
                     <TextBox Text="{Binding FileAttachmentName, Mode=TwoWay}" />
                     <TextBlock Text="File Contents:" />
+                    <TextBox Text="{Binding FileAttachmentContents, Mode=TwoWay}" TextWrapping="Wrap" AcceptsReturn="True" />
+                    <!--
                     <TextBox Text="{Binding FileAttachmentContents, Mode=TwoWay}" TextWrapping="WrapWholeWords" AcceptsReturn="True" />
 
+                -->
                     <Button Content="Open File" Command="{Binding LaunchFileCommand}"
                             CommandParameter="{Binding Source={RelativeSource Self}}" />
                 </StackPanel>
