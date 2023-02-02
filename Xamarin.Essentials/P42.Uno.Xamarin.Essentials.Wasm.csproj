@@ -40,7 +40,7 @@
   <ItemGroup>
 
     <EmbeddedResource Include="LinkerConfig.Wasm.xml">
-      <LogicalName>$(AssemblyName).xml</LogicalName>
+      <LogicalName>P42.Uno.Xamarin.Essentials.Wasm.xml</LogicalName>
     </EmbeddedResource>
 
     <EmbeddedResource Include="WasmScripts\FileSaver.min.js" />

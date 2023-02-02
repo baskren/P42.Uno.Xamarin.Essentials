@@ -32,8 +32,6 @@ namespace Xamarin.Essentials
 #pragma warning restore CS0618 // Type or member is obsolete
             }
 
-            var filter = new IntentFilter();
-
             if (Platform.HasApiLevelN)
             {
                 RegisterNetworkCallback();
