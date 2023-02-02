@@ -85,8 +85,6 @@ namespace Xamarin.Essentials
 
             var result = await tcs.Task;
 
-            await vc.DismissViewControllerAsync(true);
-
             picker?.Dispose();
             picker = null;
 
@@ -169,14 +167,6 @@ namespace Xamarin.Essentials
                 CompletedHandler?.Invoke(info);
 
             public override void Canceled(UIImagePickerController picker) =>
-                CompletedHandler?.Invoke(null);
-        }
-
-        class PhotoPickerPresentationControllerDelegate : UIAdaptivePresentationControllerDelegate
-        {
-            public Action<NSDictionary> CompletedHandler { get; set; }
-
-            public override void DidDismiss(UIPresentationController presentationController) =>
                 CompletedHandler?.Invoke(null);
         }
     }

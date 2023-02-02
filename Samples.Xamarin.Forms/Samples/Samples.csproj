@@ -11,16 +11,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.1" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.5.1" />
-    <PackageReference Include="Microsoft.AppCenter.Distribute" Version="4.5.1" />
-    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1821" />
-    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="4.8.0.1821" />
+    <PackageReference Include="Microsoft.AppCenter" Version="4.5.3" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.3" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.5.3" />
+    <PackageReference Include="Microsoft.AppCenter.Distribute" Version="4.5.3" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2083" />
+    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2083" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.NetStandard.csproj" />
+    <ProjectReference Include="..\..\Xamarin.Essentials\Xamarin.Essentials.csproj" />
   </ItemGroup>
 
 </Project>

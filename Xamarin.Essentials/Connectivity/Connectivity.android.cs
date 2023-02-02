@@ -32,6 +32,20 @@ namespace Xamarin.Essentials
 #pragma warning restore CS0618 // Type or member is obsolete
             }
 
+            var filter = new IntentFilter();
+
+            if (Platform.HasApiLevelN)
+            {
+                RegisterNetworkCallback();
+                filter.AddAction(Platform.EssentialsConnectivityChanged);
+            }
+            else
+            {
+#pragma warning disable CS0618 // Type or member is obsolete
+                filter.AddAction(ConnectivityManager.ConnectivityAction);
+#pragma warning restore CS0618 // Type or member is obsolete
+            }
+
             conectivityReceiver = new ConnectivityBroadcastReceiver(OnConnectivityChanged);
 
             Platform.AppContext.RegisterReceiver(conectivityReceiver, filter);
