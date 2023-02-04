@@ -68,7 +68,7 @@ namespace Xamarin.Essentials
             string?[] mimeTypes = null;
 
             if ((DeviceInfo.Platform == DevicePlatform.iOS && DeviceInfo.Version.Major >= 14)
-                || (DeviceInfo.Platform == DevicePlatform.macCatylst && DeviceInfo.Version.Major >= 14)
+                || (DeviceInfo.Platform == DevicePlatform.macCatalyst && DeviceInfo.Version.Major >= 14)
                 || (DeviceInfo.Platform == DevicePlatform.macOS && DeviceInfo.Version.Major >= 11)
                 )
             {

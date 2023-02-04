@@ -42,10 +42,10 @@
     <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="OpenTK" />
   </ItemGroup>
 
-  <!-- MacCatylst -->
+  <!-- maccatalyst -->
   <ItemGroup Condition=" $(TargetFramework.ToLower().Contains('maccatalyst')) ">
-    <Compile Include="$(MSBuildThisFileDirectory)**\*.maccatylst.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)**\*.maccatylst.*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.maccatalyst.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.maccatalyst.*.cs" />
   </ItemGroup>  
 
   <!-- TIZEN -->
