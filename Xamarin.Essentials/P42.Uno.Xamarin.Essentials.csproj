@@ -7,8 +7,21 @@
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
- </PropertyGroup>
+    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.android')) ">net7.0-android</TargetFrameworks>
+    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.ios')) ">net7.0-ios</TargetFrameworks>
+    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.macos')) ">net7.0-macos</TargetFrameworks>
+    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.maccatalyst')) ">net7.0-macos</TargetFrameworks>
+    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.gtk')) ">net7.0</TargetFrameworks>
+    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.wpf')) ">net7.0</TargetFrameworks>
+    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.windows')) ">net7.0-windows10.0.18362</TargetFrameworks>
 
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" $(SolutionName.ToLower().Contains('.wasm')) OR $(P42TargetPlatform.ToLower.Contains('wasm')) ">
+    <TargetFrameworks>net7.0</TargetFrameworks>
+    <DefineConstants >__WASM__;$(DefineConstants);</DefineConstants>
+    <P42TargetPlatform>wasm</P42TargetPlatform>
+  </PropertyGroup>
 
 
   <!-- ANDROID -->
@@ -55,13 +68,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)**\*.tizen.*.cs" />
   </ItemGroup>
 
-  <!-- NetStandard bait -->
-  <ItemGroup Condition="  $(TargetFramework.ToLower().StartsWith('netstandard')) OR $(TargetFramework.ToLower().Equals('net7.0')) ">
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    <Compile Include="$(MSBuildThisFileDirectory)**\*.netstandard.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)**\*.netstandard.*.cs" />
-  </ItemGroup>
-
   <!-- WinUI Windows -->
   <ItemGroup Condition=" $(TargetFramework.Contains('windows')) ">
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.3" />
@@ -75,5 +81,38 @@
     <Compile Include="**\*.uno.cs" />
   </ItemGroup>
 
+  <!-- NetStandard bait -->
+  <ItemGroup Condition=" !$(P42TargetPlatform.ToLower().Contains('wasm')) AND $(TargetFramework.ToLower().Equals('net7.0')) ">
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.netstandard.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.netstandard.*.cs" />
+  </ItemGroup>
+
+  <!-- WASM -->
+  <ItemGroup Condition=" $(P42TargetPlatform.ToLower().Contains('wasm')) ">
+    <PackageReference Include="Uno.WinUI.WebAssembly" Version="4.7.37" />
+
+    <Compile Include="**\*.wasm.cs" />
+    <Compile Include="**\*.wasm.*.cs" />
+
+    <EmbeddedResource Include="LinkerConfig.Wasm.xml">
+      <LogicalName>P42.Uno.Xamarin.Essentials.xml</LogicalName>
+    </EmbeddedResource>
+
+    <EmbeddedResource Include="WasmScripts\FileSaver.min.js" />
+    <EmbeddedResource Include="WasmScripts\html2canvas.min.js" />
+    <EmbeddedResource Include="WasmScripts\jquery-3.5.1.slim.min.js" />
+    <EmbeddedResource Include="WasmScripts\UnoFilePicker.js" />
+    <EmbeddedResource Include="WasmScripts\UnoFileSystem.js" />
+    <EmbeddedResource Include="WasmScripts\UnoMimeTypes.js" />
+    <EmbeddedResource Include="WasmScripts\UnoOrientation.js" />
+    <EmbeddedResource Include="WasmScripts\UnoPathExtentions.js" />
+    <EmbeddedResource Include="WasmScripts\UnoScreenshot.js" />
+    <EmbeddedResource Include="WasmScripts\UnoShare.js" />
+    <EmbeddedResource Include="WasmScripts\UnoSms.js" />
+    <EmbeddedResource Include="WasmScripts\UnoTextToSpeech.js" />
+    <EmbeddedResource Include="WasmScripts\UnoUtils.js" />
+    <EmbeddedResource Include="WasmScripts\UnoUuid.js" />
+    <EmbeddedResource Include="WasmScripts\UnoVibration.js" />
+  </ItemGroup>
 
 </Project>
