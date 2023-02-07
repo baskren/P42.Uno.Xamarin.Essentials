@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
@@ -12,6 +13,37 @@ using WinRT.Interop;
 
 namespace Xamarin.Essentials
 {
+
+    public static class MainWindowExtensions
+    {
+        static readonly Guid dtm_iid =
+            new Guid(0xa5caee9b, 0x8708, 0x49d1, 0x8d, 0x36, 0x67, 0xd2, 0x5a, 0x8d, 0xa0, 0x0c);
+
+
+        public static IntPtr GetHandle(this Window window) 
+            => WinRT.Interop.WindowNative.GetWindowHandle(window);
+
+        public static DataTransferManager GetDataTransferManager(this Window window)
+        {
+            var interop = Windows.ApplicationModel.DataTransfer.DataTransferManager.As<IDataTransferManagerInterop>();
+            var result = interop.GetForWindow(window.GetHandle(), dtm_iid);
+            var dataTransferManager = WinRT.MarshalInterface<Windows.ApplicationModel.DataTransfer.DataTransferManager>.FromAbi(result);
+            return dataTransferManager;
+        }
+
+
+        public static void LoadIcon(this Window window, string iconName)
+        {
+            //Get the Window's HWND
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(window);
+            var hIcon = PInvoke.User32.LoadImage(System.IntPtr.Zero, iconName,
+                      PInvoke.User32.ImageType.IMAGE_ICON, 16, 16, PInvoke.User32.LoadImageFlags.LR_LOADFROMFILE);
+
+            PInvoke.User32.SendMessage(hwnd, PInvoke.User32.WindowMessage.WM_SETICON, (System.IntPtr)0, hIcon);
+        }
+
+    }
+    /*
     public partial class MainWindow : Window
     {
 
@@ -19,7 +51,7 @@ namespace Xamarin.Essentials
         {
             get
             {
-                if (Platform.Window is MainWindow window)
+                if (Platform.MainWindow is MainWindow window)
                     return window;
                 MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Cannot show Share UI unless Window in App.xaml.cs is of type Xamarin.Essentials.MainPage"));
                 throw new InvalidOperationException("Cannot show Share UI unless Window in App.xaml.cs is of type Xamarin.Essentials.MainPage");
@@ -46,6 +78,7 @@ namespace Xamarin.Essentials
         }
 
     }
+    */
 
     static class WinUiWindowInteropExtensions
     {
@@ -55,20 +88,20 @@ namespace Xamarin.Essentials
             var interop = Windows.ApplicationModel.DataTransfer.DataTransferManager.As<IDataTransferManagerInterop>();
             // Show the Share UI
             // interop.ShowShareUIForWindow(MainWindow.Current.Handle);  // UWP approach
-            interop.ShowShareUIForWindow(WinRT.Interop.WindowNative.GetWindowHandle(Platform.Window));
+            interop.ShowShareUIForWindow(WinRT.Interop.WindowNative.GetWindowHandle(Platform.MainWindow));
         }
 
         public static void InitializeWithWindow(this FileOpenPicker picker)
-            => WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(Platform.Window));
+            => WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(Platform.MainWindow));
 
         public static void InitializeWithWindow(this FileSavePicker picker)
-            => WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(Platform.Window));
+            => WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(Platform.MainWindow));
 
         public static void InitializeWithWindow(this FolderPicker picker)
-            => WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(Platform.Window));
+            => WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(Platform.MainWindow));
 
         public static void InitializeWithWindow(this ContactPicker picker)
-            => WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(Platform.Window));
+            => WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(Platform.MainWindow));
     }
 
     [System.Runtime.InteropServices.ComImport]

@@ -73,7 +73,7 @@ namespace Xamarin.Essentials
 
         private static Rect GetAbsoluteBounds(this FrameworkElement element)
         {
-            var ttv = element.TransformToVisual(Platform.Window.Content);
+            var ttv = element.TransformToVisual(Platform.MainWindow.Content);
             var location = ttv.TransformPoint(new Point(0, 0));
             return new Rect(location, new Size(element.ActualWidth, element.ActualHeight));
         }

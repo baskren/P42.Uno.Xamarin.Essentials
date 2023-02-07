@@ -71,6 +71,7 @@
   <!-- WinUI Windows -->
   <ItemGroup Condition=" $(TargetFramework.Contains('windows')) ">
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.3" />
+    <PackageReference Include="PInvoke.User32" Version="0.7.104" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.win.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.win.*.cs" />
   </ItemGroup>

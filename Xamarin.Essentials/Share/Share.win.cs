@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
         {
             try
             {
-                var dataTransferManager = MainWindow.Current.GetDataTransferManager();
+                var dataTransferManager = Platform.MainWindow.GetDataTransferManager();
                 dataTransferManager.DataRequested += ShareTextHandler;
                 dataTransferManager.ShowShareUI();
 
@@ -45,7 +45,7 @@ namespace Xamarin.Essentials
                 storageFiles.Add(file.StorageFile ?? await StorageFile.GetFileFromPathAsync(file.FullPath));
 
             //var dataTransferManager = DataTransferManager.GetForCurrentView();
-            var dataTransferManager = MainWindow.Current.GetDataTransferManager();
+            var dataTransferManager = Platform.MainWindow.GetDataTransferManager();
             dataTransferManager.DataRequested += ShareTextHandler;
             dataTransferManager.ShowShareUI();
 

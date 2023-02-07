@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Microsoft.UI.Dispatching;
 
 namespace Xamarin.Essentials
@@ -7,7 +8,20 @@ namespace Xamarin.Essentials
     {
         public static Microsoft.UI.Xaml.Application Application { get; private set; }
 
-        public static Microsoft.UI.Xaml.Window Window { get; private set; }
+        static Microsoft.UI.Xaml.Window mainWindow;
+        public static Microsoft.UI.Xaml.Window MainWindow 
+        {
+            get
+            {
+                if (mainWindow != null)
+                    return mainWindow;
+                var message =
+                    "Cannot show Xamarin.Essentials Share UI unless Xamarin.Essentials is first initialized using .Platform.Init(Application, Window)";
+                Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException(message));
+                throw new InvalidOperationException(message);
+            }
+            private set => mainWindow = value; 
+        }
 
         public static Thread MainThread { get; private set; }
 
@@ -16,7 +30,7 @@ namespace Xamarin.Essentials
         public static void Init(Microsoft.UI.Xaml.Application application, Microsoft.UI.Xaml.Window window)
         {
             Application = application;
-            Window = window;
+            MainWindow = window;
             MainThread = Thread.CurrentThread;
             MainThreadDispatchQueue = DispatcherQueue.GetForCurrentThread();
 
