@@ -2,17 +2,11 @@
   <PropertyGroup>
     <OutputType Condition="'$(Configuration)'=='Release'">WinExe</OutputType>
     <OutputType Condition="'$(Configuration)'=='Debug'">Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup Condition="exists('..\Samples.Windows')">
     <EmbeddedResource Include="..\Samples.Windows\Package.appxmanifest" LogicalName="Package.appxmanifest" />
-    <Content Include="..\Samples.Windows\Images\StoreLogo.png" Link="Assets\StoreLogo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Fonts\uno-fluentui-assets.ttf" />
-  </ItemGroup>
-  <ItemGroup>
-    <UpToDateCheckInput Include="..\Samples.Shared\**\*.xaml" />
+    <Content Include="..\Samples.Windows\Images\StoreLogo.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
@@ -23,5 +17,8 @@
     <PackageReference Include="SkiaSharp.Views.Uno.WinUI" Version="2.88.3" />
     <PackageReference Include="SkiaSharp.Skottie" Version="2.88.3" />
   </ItemGroup>
-  <Import Project="..\Samples.Shared\Samples.Shared.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\Samples\Samples.csproj" />
+  </ItemGroup>
+  <Import Project="..\Samples.Base\base.props" />
 </Project>

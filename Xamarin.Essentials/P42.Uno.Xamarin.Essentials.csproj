@@ -10,7 +10,7 @@
     <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.android')) ">net7.0-android</TargetFrameworks>
     <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.ios')) ">net7.0-ios</TargetFrameworks>
     <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.macos')) ">net7.0-macos</TargetFrameworks>
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.maccatalyst')) ">net7.0-macos</TargetFrameworks>
+    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.maccatalyst')) ">net7.0-maccatalyst</TargetFrameworks>
     <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.gtk')) ">net7.0</TargetFrameworks>
     <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.wpf')) ">net7.0</TargetFrameworks>
     <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.windows')) ">net7.0-windows10.0.18362</TargetFrameworks>
@@ -19,7 +19,7 @@
 
   <PropertyGroup Condition=" $(SolutionName.ToLower().Contains('.wasm')) OR $(P42TargetPlatform.ToLower.Contains('wasm')) ">
     <TargetFrameworks>net7.0</TargetFrameworks>
-    <DefineConstants >__WASM__;$(DefineConstants);</DefineConstants>
+    <DefineConstants>__WASM__;$(DefineConstants);</DefineConstants>
     <P42TargetPlatform>wasm</P42TargetPlatform>
   </PropertyGroup>
 

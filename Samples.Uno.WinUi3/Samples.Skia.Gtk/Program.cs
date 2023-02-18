@@ -4,7 +4,7 @@ using Uno.UI.Runtime.Skia;
 
 namespace Samples.Skia.Gtk
 {
-	class Program
+	public sealed class Program
 	{
 		static void Main(string[] args)
 		{
@@ -14,7 +14,7 @@ namespace Samples.Skia.Gtk
 				expArgs.ExitApplication = true;
 			};
 
-			var host = new GtkHost(() => new App());
+			var host = new GtkHost(() => new AppHead());
 
 			host.Run();
 		}

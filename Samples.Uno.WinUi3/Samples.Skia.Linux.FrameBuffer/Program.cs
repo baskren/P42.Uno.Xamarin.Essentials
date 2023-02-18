@@ -5,7 +5,7 @@ using Windows.UI.Core;
 
 namespace Samples
 {
-	class Program
+	public sealed class Program
 	{
 		static void Main(string[] args)
 		{
@@ -28,7 +28,7 @@ namespace Samples
 						}
 					};
 
-					return new App();
+					return new AppHead();
 				});
 				host.Run();
 			}

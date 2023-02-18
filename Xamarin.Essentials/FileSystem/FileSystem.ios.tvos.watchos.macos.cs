@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
 #if __MACOS__
             root = Path.Combine(root, "Contents", "Resources");
 #endif
-            var file = Path.Combine(root, filename);
+            var file = Path.Combine(root, "Contents", "Resources", filename);
             return Task.FromResult((Stream)File.OpenRead(file));
         }
 

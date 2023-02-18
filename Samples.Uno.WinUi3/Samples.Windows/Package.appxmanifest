@@ -1,14 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-  xmlns:uap6="http://schemas.microsoft.com/appx/manifest/uap/windows10/6"
-  IgnorableNamespaces="uap rescap uap6">
+  IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="B8A7A41B-17C2-4980-AE13-F1F03F8211C8"
+    Name="7DBAED71-FFD1-45F1-91CC-095E57B2A5A1"
     Publisher="O=Samples"
     Version="1.0.0.0" />
 
@@ -45,17 +44,5 @@
 
   <Capabilities>
     <rescap:Capability Name="runFullTrust" />
-    <uap:Capability Name="appointments"/>
-    <uap:Capability Name="chat"/>
-    <uap:Capability Name="contacts"/>
-    <uap6:Capability Name="graphicsCapture"/>
-    <Capability Name="internetClient"/>
-    <uap:Capability Name="phoneCall"/>
-    <uap:Capability Name="picturesLibrary"/>
-    <uap:Capability Name="videosLibrary"/>
-    <DeviceCapability Name="location"/>
-    <DeviceCapability Name="microphone"/>
-    <DeviceCapability Name="webcam"/>
   </Capabilities>
-
 </Package>

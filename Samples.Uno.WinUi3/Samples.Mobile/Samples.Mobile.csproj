@@ -1,37 +1,62 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net7.0-android;net7.0-ios;net7.0-maccatalyst;net7.0-macos</TargetFrameworks>
+<!--
+		<TargetFrameworks>net7.0-android</TargetFrameworks>
+		<TargetFrameworks>net7.0-ios</TargetFrameworks>
+		<TargetFrameworks>net7.0-macos</TargetFrameworks>
+		<TargetFrameworks>net7.0-maccatalyst</TargetFrameworks>
+-->
+		<TargetFrameworks>net7.0-maccatalyst</TargetFrameworks>
+
+
+  	</PropertyGroup>
+  <PropertyGroup>
     <SingleProject>true</SingleProject>
     <OutputType>Exe</OutputType>
-    <!--
-    <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net7.0-android'">android-arm64</RuntimeIdentifier>
-    -->
-    <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net7.0-android'">android-x64</RuntimeIdentifier>
-    <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net7.0-ios'">iossimulator-x64</RuntimeIdentifier>
-    <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net7.0-maccatalyst'">maccatalyst-x64</RuntimeIdentifier>
-    <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net7.0-macos'">osx-x64</RuntimeIdentifier>
-    <!-- Debugger workaround https://github.com/dotnet/maui-samples/blob/8aa6b8780b12e97b157514c3bdc54bb4a13001cd/HelloMacCatalyst/HelloMacCatalyst.csproj#L7 -->
-    <!-- <MtouchExtraArgs Condition="'$(TargetFramework)' == 'net7.0-maccatalyst'">$(MtouchExtraArgs) -setenv:MONO_THREADS_SUSPEND=preemptive</MtouchExtraArgs> -->
-    <!-- Required for C# Hot Reload, except for macOS which uses CoreCLR (not Mono) -->
-    <UseInterpreter Condition="'$(Configuration)' == 'Debug' and '$(TargetFramework)' != 'net7.0-maccatalyst' and '$(TargetFramework)' != 'net7.0-macos'">True</UseInterpreter>
+    <!-- Display name -->
+    <ApplicationTitle>Samples</ApplicationTitle>
+    <!-- App Identifier -->
+    <ApplicationId>com.companyname.Samples</ApplicationId>
+    <ApplicationIdGuid>7DBAED71-FFD1-45F1-91CC-095E57B2A5A1</ApplicationIdGuid>
+    <!-- Versions -->
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
     <IsUnoHead>true</IsUnoHead>
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net7.0-ios'">14.2</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net7.0-maccatalyst'">14.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net7.0-android'">21.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net7.0-macos'">10.14</SupportedOSPlatformVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(RuntimeIdentifier)'==''">
+    <!-- Default values for command line builds -->
+    <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net7.0-ios'">iossimulator-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net7.0-maccatalyst'">maccatalyst-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net7.0-macos'">osx-arm64</RuntimeIdentifier>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <CreatePackage>false</CreatePackage>
+    <UseSGen>false</UseSGen>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <CreatePackage>false</CreatePackage>
+    <UseSGen>false</UseSGen>
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Uno.CommunityToolkit.WinUI.UI" Version="7.1.100" />
     <PackageReference Include="Uno.WinUI" Version="4.7.37" />
     <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.7.37" Condition="'$(Configuration)'=='Debug'" />
     <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.7.37" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.csproj" />
+    <PackageReference Include="Uno.WinUI.Lottie" Version="4.7.37" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(TargetFramework)'=='net7.0-android'">
+      <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <!-- Workaround for .NET Android issue https://github.com/xamarin/xamarin-android/issues/7736 -->
+        <RuntimeIdentifier>android-arm64</RuntimeIdentifier>
+      </PropertyGroup>
       <ItemGroup>
         <PackageReference Include="Xamarin.Google.Android.Material" Version="1.4.0.4" />
         <PackageReference Include="Uno.UniversalImageLoader" Version="1.9.36" />
@@ -39,8 +64,6 @@
       <ItemGroup>
         <AndroidEnvironment Include="Android/environment.conf" />
       </ItemGroup>
-
-    
     </When>
     <When Condition="'$(TargetFramework)'=='net7.0-ios'">
       <PropertyGroup Condition="'$(TargetFramework)'=='net7.0-ios'">
@@ -69,11 +92,28 @@
         <PackageReference Include="Uno.Extensions.Logging.OSLog" Version="1.4.0" />
       </ItemGroup>
     </When>
-    <When Condition="'$(TargetFramework)'=='net7.0-macos'">
-      <PropertyGroup>
-        <TrimMode Condition="'$(Configuration)'=='Release'">link</TrimMode>
-      </PropertyGroup>
-    </When>
-  </Choose>
-  <Import Project="..\Samples.Shared\Samples.Shared.projitems" Label="Shared" />
+
+	</Choose>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.csproj" />
+    <ProjectReference Include="..\Samples\Samples.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Update="MacOS\Assets.xcassets\AppIcon.appiconset\AppIcon-512%402x.png">
+      <Link>Assets.xcassets\AppIcon.appiconset\AppIcon-512%402x.png</Link>
+    </ImageAsset>
+    <ImageAsset Update="MacOS\Assets.xcassets\AppIcon.appiconset\AppIcon-32%402x.png">
+      <Link>Assets.xcassets\AppIcon.appiconset\AppIcon-32%402x.png</Link>
+    </ImageAsset>
+    <ImageAsset Update="MacOS\Assets.xcassets\AppIcon.appiconset\AppIcon-16%402x.png">
+      <Link>Assets.xcassets\AppIcon.appiconset\AppIcon-16%402x.png</Link>
+    </ImageAsset>
+    <ImageAsset Update="MacOS\Assets.xcassets\AppIcon.appiconset\AppIcon-256%402x.png">
+      <Link>Assets.xcassets\AppIcon.appiconset\AppIcon-256%402x.png</Link>
+    </ImageAsset>
+    <ImageAsset Update="MacOS\Assets.xcassets\AppIcon.appiconset\AppIcon-128%402x.png">
+      <Link>Assets.xcassets\AppIcon.appiconset\AppIcon-128%402x.png</Link>
+    </ImageAsset>
+  </ItemGroup>
+  <Import Project="..\Samples.Base\base.props" />
 </Project>
