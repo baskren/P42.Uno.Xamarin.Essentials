@@ -1,1 +1,0 @@
-AppleSignInAuthenticator.netstandard.android.tvos.watchos.uwp.tizen.macos.cs

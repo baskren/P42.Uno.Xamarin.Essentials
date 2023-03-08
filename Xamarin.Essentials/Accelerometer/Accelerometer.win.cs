@@ -1,1 +1,0 @@
-Accelerometer.uwp.cs

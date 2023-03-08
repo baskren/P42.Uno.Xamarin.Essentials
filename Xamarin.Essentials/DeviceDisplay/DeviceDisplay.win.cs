@@ -1,1 +1,0 @@
-DeviceDisplay.uwp.cs

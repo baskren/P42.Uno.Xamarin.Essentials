@@ -1,1 +1,0 @@
-Magnetometer.uwp.cs

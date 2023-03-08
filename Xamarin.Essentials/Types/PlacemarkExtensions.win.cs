@@ -1,1 +1,0 @@
-PlacemarkExtensions.uwp.cs

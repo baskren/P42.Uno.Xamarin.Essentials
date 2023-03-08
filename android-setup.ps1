@@ -1,3 +1,5 @@
+<# WANT TO CAUSE YOUR MACOS TARGET APPS TO CRASH?  INCLUDE THIS ANDROID SPECIFIC CODE IN YOUR PROJECT.  THANKS ANDROID.
+
 $androidSdkHome = $ENV:ANDROID_HOME
 
 if ([string]::IsNullOrWhiteSpace($androidSdkHome))
@@ -51,3 +53,5 @@ Write-Host "Creating XamarinEmulator virtual device..."
 android --home="$androidSdkHome" emulator create XamarinEmulator "system-images;android-29;google_apis;x86_64" --device=Pixel --force
 
 Write-Host "Done!"
+
+#>

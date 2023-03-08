@@ -1,1 +1,0 @@
-Barometer.uwp.cs

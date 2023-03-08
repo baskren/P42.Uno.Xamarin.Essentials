@@ -6,7 +6,7 @@
 		<TargetFrameworks>net7.0-macos</TargetFrameworks>
 		<TargetFrameworks>net7.0-maccatalyst</TargetFrameworks>
 -->
-		<TargetFrameworks>net7.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks>net7.0-macos</TargetFrameworks>
 
 
   	</PropertyGroup>
@@ -44,11 +44,11 @@
     <UseSGen>false</UseSGen>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Uno.WinUI" Version="4.7.37" />
-    <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.7.37" Condition="'$(Configuration)'=='Debug'" />
-    <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.7.37" />
+    <PackageReference Include="Uno.WinUI" Version="4.7.44" />
+    <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.7.44" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.7.44" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
-    <PackageReference Include="Uno.WinUI.Lottie" Version="4.7.37" />
+    <PackageReference Include="Uno.WinUI.Lottie" Version="4.7.44" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
   <Choose>
@@ -95,25 +95,8 @@
 
 	</Choose>
   <ItemGroup>
-    <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.csproj" />
     <ProjectReference Include="..\Samples\Samples.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ImageAsset Update="MacOS\Assets.xcassets\AppIcon.appiconset\AppIcon-512%402x.png">
-      <Link>Assets.xcassets\AppIcon.appiconset\AppIcon-512%402x.png</Link>
-    </ImageAsset>
-    <ImageAsset Update="MacOS\Assets.xcassets\AppIcon.appiconset\AppIcon-32%402x.png">
-      <Link>Assets.xcassets\AppIcon.appiconset\AppIcon-32%402x.png</Link>
-    </ImageAsset>
-    <ImageAsset Update="MacOS\Assets.xcassets\AppIcon.appiconset\AppIcon-16%402x.png">
-      <Link>Assets.xcassets\AppIcon.appiconset\AppIcon-16%402x.png</Link>
-    </ImageAsset>
-    <ImageAsset Update="MacOS\Assets.xcassets\AppIcon.appiconset\AppIcon-256%402x.png">
-      <Link>Assets.xcassets\AppIcon.appiconset\AppIcon-256%402x.png</Link>
-    </ImageAsset>
-    <ImageAsset Update="MacOS\Assets.xcassets\AppIcon.appiconset\AppIcon-128%402x.png">
-      <Link>Assets.xcassets\AppIcon.appiconset\AppIcon-128%402x.png</Link>
-    </ImageAsset>
-  </ItemGroup>
+
   <Import Project="..\Samples.Base\base.props" />
 </Project>
