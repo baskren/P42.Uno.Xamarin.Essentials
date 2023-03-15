@@ -37,7 +37,7 @@ namespace Xamarin.Essentials
         public static void SetShareRequestPayload(this UIElement element, ShareRequestBase value)
             => element.SetValue(ShareRequestPayloadProperty, value);
 
-#if !__WASM__
+#if !__P42WASM__
 
         private static void EnableShareOnTapped(this FrameworkElement element)
         {
