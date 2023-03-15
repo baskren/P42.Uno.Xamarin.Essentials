@@ -43,7 +43,7 @@ namespace Xamarin.Essentials
             return info.OperatingSystemVersion.ToString();
         }
 
-        static DevicePlatform GetPlatform() => DevicePlatform.macOS;
+        static DevicePlatform GetPlatform() => DevicePlatform.MacOS;
 
         static DeviceIdiom GetIdiom() => DeviceIdiom.Desktop;
 

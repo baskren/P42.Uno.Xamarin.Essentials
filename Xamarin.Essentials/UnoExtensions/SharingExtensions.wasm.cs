@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Windows.Foundation;
+using Microsoft.UI.Xaml;
 using Newtonsoft.Json;
 using Uno.Foundation;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 
 namespace Xamarin.Essentials
 {
     public static partial class SharingExtensions
     {
-
         static readonly Dictionary<string, WeakReference<FrameworkElement>> shareRequestElements = new Dictionary<string, WeakReference<FrameworkElement>>();
 
         public static string GetShareRequestJsonForHtmlElement(string id)
@@ -83,6 +79,5 @@ namespace Xamarin.Essentials
             var javascript = $"$('#{id}')[0].onclick = null; ";
             WebAssemblyRuntime.InvokeJS(javascript);
         }
-
     }
 }

@@ -107,9 +107,9 @@ namespace Xamarin.Essentials
             if (fullPath == null)
                 throw new ArgumentNullException(nameof(fullPath));
             if (string.IsNullOrWhiteSpace(fullPath))
-                throw new ArgumentException("The file path cannot be an empty string.", nameof(fullPath));
+                throw new ArgumentException("The file Path cannot be an empty string.", nameof(fullPath));
             if (string.IsNullOrWhiteSpace(Path.GetFileName(fullPath)))
-                throw new ArgumentException("The file path must be a file path.", nameof(fullPath));
+                throw new ArgumentException("The file Path must be a file Path.", nameof(fullPath));
             FullPath = fullPath;
         }
 
@@ -174,11 +174,11 @@ namespace Xamarin.Essentials
             if (!string.IsNullOrWhiteSpace(fileName))
                 return fileName;
 
-            // try get from the path
+            // try get from the Path
             if (!string.IsNullOrWhiteSpace(FullPath))
                 return Path.GetFileName(FullPath);
 
-            // this should never happen as the path is validated in the constructor
+            // this should never happen as the Path is validated in the constructor
             throw new InvalidOperationException($"Unable to determine the file name from '{FullPath}'.");
         }
 

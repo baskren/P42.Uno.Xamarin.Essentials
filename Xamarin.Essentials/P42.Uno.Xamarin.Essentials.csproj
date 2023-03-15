@@ -1,28 +1,114 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-  
-	  <TargetFrameworks>net7.0;net7.0-android;net7.0-ios;net7.0-maccatalyst;net7.0-macos;</TargetFrameworks>
-	  <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net7.0-windows10.0.18362;$(TargetFrameworks)</TargetFrameworks>
+    <AssemblyName>P42.Uno.Xamarin.Essentials</AssemblyName>
+    <RootNamespace>Xamarin.Essentials</RootNamespace>
+    <NoWarn>Uno0001;VSX1000;CA1416</NoWarn>
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DebugType>portable</DebugType>
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.android')) ">net7.0-android</TargetFrameworks>
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.ios')) ">net7.0-ios</TargetFrameworks>
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.macos')) ">net7.0-macos</TargetFrameworks>
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.maccatalyst')) ">net7.0-maccatalyst</TargetFrameworks>
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.gtk')) ">net7.0</TargetFrameworks>
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.wpf')) ">net7.0</TargetFrameworks>
-    <TargetFrameworks Condition=" $(SolutionName.ToLower().Contains('.windows')) ">net7.0-windows10.0.18362</TargetFrameworks>
-
   </PropertyGroup>
 
-  <PropertyGroup Condition=" $(SolutionName.ToLower().Contains('.wasm')) OR $(P42TargetPlatform.ToLower.Contains('wasm')) ">
-    <TargetFrameworks>net7.0</TargetFrameworks>
-    <DefineConstants>__WASM__;$(DefineConstants);</DefineConstants>
+  <!-- CORE TARGETS -->
+  <PropertyGroup>
+	  <TargetFrameworks>net7.0;net7.0-android;net7.0-ios;net7.0-maccatalyst;net7.0-macos;</TargetFrameworks>
+	  <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net7.0-windows10.0.18362;$(TargetFrameworks)</TargetFrameworks>
+  </PropertyGroup>
+
+  <!-- TARGET FRAMEWORK FILTERING -->
+  <PropertyGroup Condition=" $(SolutionName.ToLower().Contains('.android')) ">
+    <P42TargetPlatform>android</P42TargetPlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" $(SolutionName.ToLower().Contains('.ios')) ">
+    <P42TargetPlatform>ios</P42TargetPlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" $(SolutionName.ToLower().Contains('.macos')) ">
+    <P42TargetPlatform>macos</P42TargetPlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" $(SolutionName.ToLower().Contains('.maccatalyst')) ">
+    <P42TargetPlatform>maccatalyst</P42TargetPlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" $(SolutionName.ToLower().Contains('.gtk')) ">
+    <P42TargetPlatform>gtk</P42TargetPlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" $(SolutionName.ToLower().Contains('.wpf')) ">
+    <P42TargetPlatform>wpf</P42TargetPlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" $(SolutionName.ToLower().Contains('.windows')) ">
+    <P42TargetPlatform>windows</P42TargetPlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" $(SolutionName.ToLower().Contains('.wasm')) ">
     <P42TargetPlatform>wasm</P42TargetPlatform>
   </PropertyGroup>
+  <PropertyGroup>
+		<TargetFrameworks Condition=" $(P42TargetPlatform.ToLower().Contains('android')) ">net7.0-android</TargetFrameworks>
+		<TargetFrameworks Condition=" $(P42TargetPlatform.ToLower().Contains('ios')) ">net7.0-ios</TargetFrameworks>
+		<TargetFrameworks Condition=" $(P42TargetPlatform.ToLower().Contains('macos')) ">net7.0-macos</TargetFrameworks>
+		<TargetFrameworks Condition=" $(P42TargetPlatform.ToLower().Contains('maccatalyst')) ">net7.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition=" $(P42TargetPlatform.ToLower().Contains('gtk')) ">net7.0</TargetFrameworks>
+		<TargetFrameworks Condition=" $(P42TargetPlatform.ToLower().Contains('wpf')) ">net7.0</TargetFrameworks>
+		<TargetFrameworks Condition=" $(P42TargetPlatform.ToLower().Contains('windows')) ">net7.0-windows10.0.18362</TargetFrameworks>
+		<TargetFrameworks Condition=" $(P42TargetPlatform.ToLower().Contains('wasm')) ">net7.0</TargetFrameworks>
+  </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+	  <DefineConstants>TRACE;DEBUG;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <Optimize>true</Optimize>
+	  <DefineConstants>RELEASE;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <!-- NUGET PACKAGE GENERATION -->
+  <PropertyGroup Condition=" $(P42LocalNuGet) != '' AND !$(P42TargetPlatform.ToLower().Contains('android')) AND !$(P42TargetPlatform.ToLower().Contains('ios')) AND !$(P42TargetPlatform.ToLower().Contains('mac')) AND !$(P42TargetPlatform.ToLower().Contains('windows')) AND !$(P42TargetPlatform.ToLower().Contains('tizen')) ">
+    <P42SaveNuGet>true</P42SaveNuGet>
+    <Version>4.7.44</Version>
+    <!--
+    <PackageId Condition=" $(SolutionName.ToLower().Contains('.wasm')) OR $(P42TargetPlatform.ToLower.Contains('wasm')) ">$(MSBuildProjectName).Wasm</PackageId>
+    -->
+    <PackageId Condition=" $(P42TargetPlatform.ToLower.Contains('wasm')) ">$(MSBuildProjectName).Wasm</PackageId>
+    <!--
+    Force all projects of this folder to use a different output
+    path to avoid intermediate output collisions
+    -->
+  	<BaseOutputPath>bin\$(MSBuildProjectName)</BaseOutputPath>
+  	<BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+  	<DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
+  
+  	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+  	<EmbedUntrackedSources>true</EmbedUntrackedSources>
+  	<IncludeSymbols>true</IncludeSymbols>
+  	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Microsoft, 42nd Parallel</Authors>
+    <Description>Xamarin.Essentials with limited Uno Platform support</Description>
+    <Copyright>2022, Microsoft</Copyright>
+    <PackageProjectUrl>https://github.com/baskren/P42.Uno.Xamarin.Essentials</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/baskren/P42.Uno.Xamarin.Essentials</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>Refactor WASM into separate project</PackageReleaseNotes>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageIcon>P42.icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>Uno.Platform Uno Xamarin.Essentials</PackageTags>
+  </PropertyGroup>
+
+  <!-- SHARED RESOURCES -->
+  <ItemGroup>
+    <None Include="..\P42.icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\LICENSE" Pack="true" PackagePath="\" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.shared.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.shared.*.cs" />
+  	<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+  </ItemGroup>
 
   <!-- ANDROID -->
   <PropertyGroup Condition=" $(TargetFramework.ToLower().Contains('android')) And '$(Configuration)'=='Debug' ">
@@ -33,26 +119,18 @@
     <Compile Include="$(MSBuildThisFileDirectory)**\*.android.*.cs" />
     <AndroidResource Include="Resources\xml\*.xml" />
     <PackageReference Include="Xamarin.AndroidX.Browser" Version="[1.3.0.5,1.4.0.3)" />
-    <PackageReference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics.Vectors" Version="4.5.0" />    
-    <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics" />
   </ItemGroup>
 
   <!-- IOS -->
   <ItemGroup Condition=" $(TargetFramework.ToLower().Contains('ios')) OR $(TargetFramework.ToLower().Contains('maccatalyst'))">
     <Compile Include="$(MSBuildThisFileDirectory)**\*.ios.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.ios.*.cs" />
-    <PackageReference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics.Vectors" Version="4.5.0" />
-    <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics" />
-    <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="OpenTK-1.0" />
   </ItemGroup>  
 
   <!-- MACOS -->
-  <ItemGroup Condition=" $(TargetFramework.ToLower().Contains('macos')) OR $(TargetFramework.ToLower().Contains('xamarin.mac'))">
+  <ItemGroup Condition=" $(TargetFramework.ToLower().Contains('macos')) ">
     <Compile Include="$(MSBuildThisFileDirectory)**\*.macos.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)**\*.macos.*.cs" />
-    <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics" />
-    <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="System.Numerics.Vectors" />
-    <Reference Condition=" !$(TargetFramework.ToLower().Contains('net')) " Include="OpenTK" />
   </ItemGroup>
 
   <!-- maccatalyst -->
@@ -69,6 +147,9 @@
   </ItemGroup>
 
   <!-- WinUI Windows -->
+  <PropertyGroup Condition=" $(TargetFramework.Contains('windows')) ">
+    <DefineConstants>WINDOWS;$(DefineConstants);</DefineConstants>
+  </PropertyGroup>
   <ItemGroup Condition=" $(TargetFramework.Contains('windows')) ">
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.3" />
     <PackageReference Include="PInvoke.User32" Version="0.7.104" />
@@ -89,6 +170,9 @@
   </ItemGroup>
 
   <!-- WASM -->
+  <PropertyGroup Condition=" $(P42TargetPlatform.ToLower().Contains('wasm')) ">
+    <DefineConstants>__WASM__;$(DefineConstants);</DefineConstants>
+  </PropertyGroup>
   <ItemGroup Condition=" $(P42TargetPlatform.ToLower().Contains('wasm')) ">
     <PackageReference Include="Uno.WinUI.WebAssembly" Version="4.7.44" />
 

@@ -40,11 +40,11 @@ namespace Xamarin.Essentials
             var json = await WebAssemblyRuntime.InvokeAsync($"UnoFileSystem_FileForAsset('{filename}')");
             var result = JsonConvert.DeserializeObject<FileForAssetResult>(json);
 
-            if (result.abort || !string.IsNullOrWhiteSpace(result.error))
+            if (result.Abort || !string.IsNullOrWhiteSpace(result.Error))
                 return null;
 
             // return Package.Current.InstalledLocation.OpenStreamForReadAsync(NormalizePath(filename));
-            return File.OpenRead(result.path);
+            return File.OpenRead(result.Path);
         }
 
         internal static string NormalizePath(string path)
@@ -53,13 +53,13 @@ namespace Xamarin.Essentials
 
     public class FileForAssetResult
     {
-        public string error { get; set; }
+        public string Error { get; set; }
 
-        public bool abort { get; set; }
+        public bool Abort { get; set; }
 
-        public string path { get; set; }
+        public string Path { get; set; }
 
-        public string isText { get; set; }
+        public string IsText { get; set; }
 
         [Preserve]
         public FileForAssetResult()
@@ -85,7 +85,7 @@ namespace Xamarin.Essentials
 
         public override string ToString()
         {
-            return "{ type: " + GetType() + ", path: " + FullPath + ", contentType: " + contentType + ", name: " + FileName + " }";
+            return "{ type: " + GetType() + ", Path: " + FullPath + ", contentType: " + contentType + ", name: " + FileName + " }";
         }
     }
 }

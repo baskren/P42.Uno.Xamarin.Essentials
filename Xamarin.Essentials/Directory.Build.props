@@ -1,80 +1,25 @@
 <Project ToolsVersion="15.0">
 
-  <PropertyGroup>
 
-    <RootNamespace>Xamarin.Essentials</RootNamespace>
-    <PackageId Condition=" $(SolutionName.ToLower().Contains('.wasm')) OR $(P42TargetPlatform.ToLower.Contains('wasm')) ">$(MSBuildProjectName).Wasm</PackageId>
-    <Version>4.7.44</Version>
-    <NoWarn>Uno0001;VSX1000;CA1416</NoWarn>
-
-    <GenerateLibraryLayout>true</GenerateLibraryLayout>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-
-
-	<!--
-	Force all projects of this folder to use a different output
-	path to avoid intermediate output collisions
-	-->
-  	<BaseOutputPath>bin\$(MSBuildProjectName)</BaseOutputPath>
-  	<BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-  	<DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
-  
-  	<PublishRepositoryUrl>true</PublishRepositoryUrl>
-  	<EmbedUntrackedSources>true</EmbedUntrackedSources>
-  	<IncludeSymbols>true</IncludeSymbols>
-  	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-
-    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <DebugType>portable</DebugType>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Authors>Microsoft, 42nd Parallel</Authors>
-    <Description>Xamarin.Essentials with limited Uno Platform support</Description>
-    <Copyright>2022, Microsoft</Copyright>
-    <PackageProjectUrl>https://github.com/baskren/P42.Uno.Xamarin.Essentials</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/baskren/P42.Uno.Xamarin.Essentials</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Refactor WASM into separate project</PackageReleaseNotes>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageIcon>P42.icon.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>Uno.Platform Uno Xamarin.Essentials</PackageTags>
-
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="..\P42.icon.png" Pack="true" PackagePath="\" />
-    <None Include="..\README.md" Pack="true" PackagePath="\" />
-    <None Include="..\LICENSE" Pack="true" PackagePath="\" />
-    <Compile Include="$(MSBuildThisFileDirectory)**\*.shared.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)**\*.shared.*.cs" />
-  	<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-  </ItemGroup>
 
   <!-- https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-targets?view=vs-2022#default-build-targets -->
   <Target Name="B1" BeforeTargets="BeforeBuild">
     <Message Text=" " Importance="high"/>
     <Message Text=" " Importance="high"/>
     <Message Text=" " Importance="high"/>
-    <Message Text="===============================  [ $(AssemblyName) : $(TargetFramework) : $(Configuration) : $(P42TargetPlatform) : $(Version) ] ===============================" Importance="high"/>
+    <Message Text="===============================  [ AssemblyName:[$(AssemblyName)] | TargetFramework:[$(TargetFramework)] | Configuration:[$(Configuration)] : P42TargetPlatform:[$(P42TargetPlatform)] : SaveNuget:[$(P42SaveNuGet)] | PackageVersion:[$(Version)] ] ===============================" Importance="high"/>
     <Message Text="COMPILE: ($Compile)"/>
   </Target>
   
-  <Target Name="NuGetMove" AfterTargets="Pack" Condition=" $(LocalNuGet) != '' ">
+  <Target Name="NuGetMove" AfterTargets="Pack" Condition=" $(P42SaveNuGet) ">
     <Message Text=" " Importance="high"/>
     <Message Text=" " Importance="high"/>
     <Message Text=" " Importance="high"/>
-    <Message Text="=============================== NUGET PACK [$(PackageId) : $(TargetFramework) : $(Configuration) : $(P42TargetPlatform) : $(Version) ] ===============================" Importance="high"/>
+    <Message Text="=============================== NUGET PACK [ PackageId[$(PackageId)] |TargetFramework:[$(TargetFramework)] | Configuration:[$(Configuration)] : P42TargetPlatform:[$(P42TargetPlatform)] : SaveNuget:[$(P42SaveNuGet)] | PackageVersion:[$(Version)]  ] ===============================" Importance="high"/>
     <Message Importance="high" Text="NuGetPath= $([System.IO.Path]::Combine('.',bin,$(AssemblyName),$(Configuration),$(PackageId).$(Version).nupkg)) "/>
-    <Move SourceFiles="$([System.IO.Path]::Combine('.',bin,$(AssemblyName),$(Configuration),$(PackageId).$(Version).nupkg))"  DestinationFolder=" $(LocalNuGet) " />
-    <Move SourceFiles="$([System.IO.Path]::Combine('.',bin,$(AssemblyName),$(Configuration),$(PackageId).$(Version).snupkg))" DestinationFolder=" $(LocalNuGet) " />
-    <Message Importance="high" Text="PACKAGE SAVED TO:  $(LocalNuGet)) " />
+    <Move SourceFiles="$([System.IO.Path]::Combine('.',bin,$(AssemblyName),$(Configuration),$(PackageId).$(Version).nupkg))"  DestinationFolder=" $(P42LocalNuGet) " />
+    <Move SourceFiles="$([System.IO.Path]::Combine('.',bin,$(AssemblyName),$(Configuration),$(PackageId).$(Version).snupkg))" DestinationFolder=" $(P42LocalNuGet) " />
+    <Message Importance="high" Text="PACKAGE SAVED TO:  $(P42LocalNuGet) " />
   </Target>
 
 </Project>

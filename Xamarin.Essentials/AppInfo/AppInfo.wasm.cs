@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
-using Windows.ApplicationModel;
 using Microsoft.UI.Xaml;
+using Windows.ApplicationModel;
 
 namespace Xamarin.Essentials
 {

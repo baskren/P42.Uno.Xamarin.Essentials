@@ -9,7 +9,8 @@ namespace Xamarin.Essentials
         public static Microsoft.UI.Xaml.Application Application { get; private set; }
 
         static Microsoft.UI.Xaml.Window mainWindow;
-        public static Microsoft.UI.Xaml.Window MainWindow 
+
+        public static Microsoft.UI.Xaml.Window MainWindow
         {
             get
             {
@@ -20,7 +21,7 @@ namespace Xamarin.Essentials
                 Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException(message));
                 throw new InvalidOperationException(message);
             }
-            private set => mainWindow = value; 
+            private set => mainWindow = value;
         }
 
         public static Thread MainThread { get; private set; }
@@ -43,6 +44,5 @@ namespace Xamarin.Essentials
             }
 #endif
         }
-
     }
 }

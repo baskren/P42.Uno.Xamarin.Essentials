@@ -10,9 +10,9 @@ namespace Xamarin.Essentials
 
         public static DevicePlatform iOS { get; } = new DevicePlatform(nameof(iOS));
 
-        public static DevicePlatform macOS { get; } = new DevicePlatform(nameof(macOS));
+        public static DevicePlatform MacOS { get; } = new DevicePlatform(nameof(MacOS));
 
-        public static DevicePlatform macCatalyst { get; } = new DevicePlatform(nameof(macCatalyst));
+        public static DevicePlatform MacCatalyst { get; } = new DevicePlatform(nameof(MacCatalyst));
 
         public static DevicePlatform tvOS { get; } = new DevicePlatform(nameof(tvOS));
 
@@ -22,7 +22,7 @@ namespace Xamarin.Essentials
 
         public static DevicePlatform Windows { get; } = new DevicePlatform(nameof(Windows));
 
-        public static DevicePlatform watchOS { get; } = new DevicePlatform(nameof(watchOS));
+        public static DevicePlatform WatchOS { get; } = new DevicePlatform(nameof(WatchOS));
 
         public static DevicePlatform Unknown { get; } = new DevicePlatform(nameof(Unknown));
 
