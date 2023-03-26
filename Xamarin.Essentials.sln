@@ -494,12 +494,6 @@ Global
 		SolutionGuid = {E012047E-6826-4037-8D1A-5606CD7D345D}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Samples.Uno.WinUi3\Samples.Shared\Samples.Shared.projitems*{0fb5d082-4a49-43c4-ab8f-40325b45bd99}*SharedItemsImports = 5
 		Samples.Uno.WinUi3\Samples.Shared\Samples.Shared.projitems*{6279c845-92f8-4333-ab99-3d213163593c}*SharedItemsImports = 13
-		Samples.Uno.WinUi3\Samples.Shared\Samples.Shared.projitems*{652f7d33-369f-4334-8e38-dc4f832fecc1}*SharedItemsImports = 5
-		Samples.Uno.WinUi3\Samples.Shared\Samples.Shared.projitems*{7f0d06ec-7318-42e0-b5e1-d6eda9197e7c}*SharedItemsImports = 5
-		Samples.Uno.WinUi3\Samples.Shared\Samples.Shared.projitems*{93f32948-34be-4ae3-befe-f42a0cf25773}*SharedItemsImports = 5
-		Samples.Uno.WinUi3\Samples.Shared\Samples.Shared.projitems*{a7d00fdc-21c4-4505-a2d3-18f1f61d33a6}*SharedItemsImports = 5
-		Samples.Uno.WinUi3\Samples.Shared\Samples.Shared.projitems*{d3dea0ff-ae36-461b-8a89-0b7c48e856ea}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
