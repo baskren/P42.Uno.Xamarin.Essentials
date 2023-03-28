@@ -44,11 +44,11 @@
     <UseSGen>false</UseSGen>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Uno.WinUI" Version="4.7.44" />
-    <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.7.44" Condition="'$(Configuration)'=='Debug'" />
-    <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.7.44" />
+    <PackageReference Include="Uno.WinUI" Version="4.8.15" />
+    <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.8.15" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.8.15" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
-    <PackageReference Include="Uno.WinUI.Lottie" Version="4.7.44" />
+    <PackageReference Include="Uno.WinUI.Lottie" Version="4.8.15" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
   <Choose>
