@@ -69,6 +69,7 @@ namespace Xamarin.Essentials
                 catch (AEADBadTagException)
                 {
                     System.Diagnostics.Debug.WriteLine($"Unable to decrypt key, {key}, which is likely due to an app uninstall. Removing old key and returning null.");
+                    Console.WriteLine($"Unable to decrypt key, {key}, which is likely due to an app uninstall. Removing old key and returning null.");
                     Remove(key);
                 }
             }
@@ -212,14 +213,17 @@ namespace Xamarin.Essentials
                 catch (InvalidKeyException ikEx)
                 {
                     System.Diagnostics.Debug.WriteLine($"Unable to unwrap key: Invalid Key. This may be caused by system backup or upgrades. All secure storage items will now be removed. {ikEx.Message}");
+                    Console.WriteLine($"Unable to unwrap key: Invalid Key. This may be caused by system backup or upgrades. All secure storage items will now be removed. {ikEx.Message}");
                 }
                 catch (IllegalBlockSizeException ibsEx)
                 {
                     System.Diagnostics.Debug.WriteLine($"Unable to unwrap key: Illegal Block Size. This may be caused by system backup or upgrades. All secure storage items will now be removed. {ibsEx.Message}");
+                    Console.WriteLine($"Unable to unwrap key: Illegal Block Size. This may be caused by system backup or upgrades. All secure storage items will now be removed. {ibsEx.Message}");
                 }
                 catch (BadPaddingException paddingEx)
                 {
                     System.Diagnostics.Debug.WriteLine($"Unable to unwrap key: Bad Padding. This may be caused by system backup or upgrades. All secure storage items will now be removed. {paddingEx.Message}");
+                    Console.WriteLine($"Unable to unwrap key: Bad Padding. This may be caused by system backup or upgrades. All secure storage items will now be removed. {paddingEx.Message}");
                 }
                 SecureStorage.RemoveAll();
             }

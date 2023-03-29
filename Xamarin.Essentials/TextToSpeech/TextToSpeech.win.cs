@@ -62,7 +62,7 @@ namespace Xamarin.Essentials
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Unable to playback stream: " + ex);
+                //Debug.WriteLine("Unable to playback stream: " + ex);
                 tcsUtterance.TrySetException(ex);
             }
         }

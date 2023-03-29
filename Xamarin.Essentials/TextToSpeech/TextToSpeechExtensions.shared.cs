@@ -48,20 +48,20 @@ namespace Xamarin.Essentials
 
                         positionend--;
                     }
-                    Debug.WriteLine($"p             = {p}");
-                    Debug.WriteLine($"p.Length      = {p.Length}");
-                    Debug.WriteLine($"positionbegin = {positionbegin}");
-                    Debug.WriteLine($"positionend   = {positionend}");
-                    Debug.WriteLine($"position      = {position}");
+                    //Debug.WriteLine($"p             = {p}");
+                    //Debug.WriteLine($"p.Length      = {p.Length}");
+                    //Debug.WriteLine($"positionbegin = {positionbegin}");
+                    //Debug.WriteLine($"positionend   = {positionend}");
+                    //Debug.WriteLine($"position      = {position}");
 
                     positionbegin = positionbegin + p.Length + 1;
                     positionend = positionbegin + max;
                     position = positionbegin;
 
-                    Debug.WriteLine($"------------------------------");
-                    Debug.WriteLine($"positionbegin = {positionbegin}");
-                    Debug.WriteLine($"positionend   = {positionend}");
-                    Debug.WriteLine($"position      = {position}");
+                    //Debug.WriteLine($"------------------------------");
+                    //Debug.WriteLine($"positionbegin = {positionbegin}");
+                    //Debug.WriteLine($"positionend   = {positionend}");
+                    //Debug.WriteLine($"position      = {position}");
 
                     parts.Add(p);
                 }
