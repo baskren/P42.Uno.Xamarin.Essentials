@@ -69,7 +69,6 @@ namespace Xamarin.Essentials
                 catch (AEADBadTagException)
                 {
                     System.Diagnostics.Debug.WriteLine($"Unable to decrypt key, {key}, which is likely due to an app uninstall. Removing old key and returning null.");
-                    Console.WriteLine($"Unable to decrypt key, {key}, which is likely due to an app uninstall. Removing old key and returning null.");
                     Remove(key);
                 }
             }
@@ -133,13 +132,14 @@ namespace Xamarin.Essentials
 
         // While MD5 is deemed to be not secure anymore, it is not used in a security context here.
         // Here we hash a key value to ensure compatibility with the underlying platform's preferences storage (so the key was a determinate length and didn't exceed platform limits).
-        // As part as Microsoft's ongoing efforts to secure the .NET ecosystem, this usage of an insecure hashing mechanism was flagged.
+        // As part as Microsofts ongoing efforts to secure the .NET ecosystem, this usage of an insecure hashing mechanism was flagged.
         // An exception has been requested for the usage of this "unsafe" hashing mechanism.
         // More details here (internal link): https://devdiv.visualstudio.com/DevDiv/_workitems/edit/1676270
         internal static string Md5Hash(string input)
         {
             var hash = new StringBuilder();
-            var bytes = System.Security.Cryptography.MD5.HashData(Encoding.UTF8.GetBytes(input));
+            var md5provider = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            var bytes = md5provider.ComputeHash(Encoding.UTF8.GetBytes(input));
 
             for (var i = 0; i < bytes.Length; i++)
                 hash.Append(bytes[i].ToString("x2"));
@@ -213,17 +213,14 @@ namespace Xamarin.Essentials
                 catch (InvalidKeyException ikEx)
                 {
                     System.Diagnostics.Debug.WriteLine($"Unable to unwrap key: Invalid Key. This may be caused by system backup or upgrades. All secure storage items will now be removed. {ikEx.Message}");
-                    Console.WriteLine($"Unable to unwrap key: Invalid Key. This may be caused by system backup or upgrades. All secure storage items will now be removed. {ikEx.Message}");
                 }
                 catch (IllegalBlockSizeException ibsEx)
                 {
                     System.Diagnostics.Debug.WriteLine($"Unable to unwrap key: Illegal Block Size. This may be caused by system backup or upgrades. All secure storage items will now be removed. {ibsEx.Message}");
-                    Console.WriteLine($"Unable to unwrap key: Illegal Block Size. This may be caused by system backup or upgrades. All secure storage items will now be removed. {ibsEx.Message}");
                 }
                 catch (BadPaddingException paddingEx)
                 {
                     System.Diagnostics.Debug.WriteLine($"Unable to unwrap key: Bad Padding. This may be caused by system backup or upgrades. All secure storage items will now be removed. {paddingEx.Message}");
-                    Console.WriteLine($"Unable to unwrap key: Bad Padding. This may be caused by system backup or upgrades. All secure storage items will now be removed. {paddingEx.Message}");
                 }
                 SecureStorage.RemoveAll();
             }
@@ -292,15 +289,7 @@ namespace Xamarin.Essentials
                 var endDate = new Java.Util.Date(end.Year, end.Month, end.Day);
 #pragma warning restore CS0618 // Type or member is obsolete
 
-                /* POSSIBLE UPGRADE CODE
-                var builder = new KeyGenParameterSpec.Builder(asymmetricAlias, KeyStorePurpose.Sign | KeyStorePurpose.Encrypt )
-                    .SetCertificateSerialNumber(Java.Math.BigInteger.One)
-                    .SetCertificateSubject(new Javax.Security.Auth.X500.X500Principal($"CN={asymmetricAlias} CA Certificate"))
-                    .SetEncryptionPaddings(KeyProperties.EncryptionPaddingRsaPkcs1)
-                    .SetKeyValidityStart(startDate)
-                    .SetKeyValidityEnd(endDate);
-                */
-                
+#pragma warning disable CS0618
                 var builder = new KeyPairGeneratorSpec.Builder(Platform.AppContext)
                     .SetAlias(asymmetricAlias)
                     .SetSerialNumber(Java.Math.BigInteger.One)
@@ -309,6 +298,7 @@ namespace Xamarin.Essentials
                     .SetEndDate(endDate);
 
                 generator.Initialize(builder.Build());
+#pragma warning restore CS0618
 
                 return generator.GenerateKeyPair();
             }
