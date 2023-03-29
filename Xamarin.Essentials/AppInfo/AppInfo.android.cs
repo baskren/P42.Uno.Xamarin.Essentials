@@ -26,7 +26,11 @@ namespace Xamarin.Essentials
         {
             var pm = Platform.AppContext.PackageManager;
             var packageName = Platform.AppContext.PackageName;
+#if ANDROID33_0_OR_GREATER
+            using (var info = pm.GetPackageInfo(packageName, PackageManager.PackageInfoFlags.Of((long)PackageInfoFlags.MetaData)))
+#else
             using (var info = pm.GetPackageInfo(packageName, PackageInfoFlags.MetaData))
+#endif
             {
                 return info.VersionName;
             }
@@ -36,7 +40,11 @@ namespace Xamarin.Essentials
         {
             var pm = Platform.AppContext.PackageManager;
             var packageName = Platform.AppContext.PackageName;
+#if ANDROID33_0_OR_GREATER
+            using (var info = pm.GetPackageInfo(packageName, PackageManager.PackageInfoFlags.Of((long)PackageInfoFlags.MetaData)))
+#else
             using (var info = pm.GetPackageInfo(packageName, PackageInfoFlags.MetaData))
+#endif
             {
 #if __ANDROID_28__
                 return PackageInfoCompat.GetLongVersionCode(info).ToString(CultureInfo.InvariantCulture);
