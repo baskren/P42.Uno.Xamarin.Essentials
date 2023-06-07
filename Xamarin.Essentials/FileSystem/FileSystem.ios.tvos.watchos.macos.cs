@@ -46,7 +46,7 @@ namespace Xamarin.Essentials
 
         public NSUrl Url
         {
-            get => url ?? new NSUrl(FullPath);
+            get => url ?? new NSUrl(new System.Uri(FullPath).AbsoluteUri);
             private set => url = value;
         }
 

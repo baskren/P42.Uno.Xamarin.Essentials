@@ -58,7 +58,7 @@ namespace Xamarin.Essentials
         static async Task<string> PlatformExportAsync(SaveOptions options, Func<NSUrl, Task> writeAction)
         {
             var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            using (var folderUrl = new NSUrl(folderPath))
+            using (var folderUrl = new NSUrl(new System.Uri(folderPath).AbsoluteUri))
             {
                 using (var panel = new NSOpenPanel
                 {

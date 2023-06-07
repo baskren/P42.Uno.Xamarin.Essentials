@@ -97,7 +97,7 @@ namespace Xamarin.Essentials
         {
             var tmpPath = Path.Combine(GetTmpDir(), options?.SuggestedFileName ?? "data.bin");
             await File.WriteAllBytesAsync(tmpPath, bytes);
-            using (var exportUrl = new NSUrl(tmpPath))
+            using (var exportUrl = new NSUrl(new System.Uri(tmpPath).AbsoluteUri))
             {
                 var result = await PlatformExportAsync(exportUrl, options);
                 return result;
