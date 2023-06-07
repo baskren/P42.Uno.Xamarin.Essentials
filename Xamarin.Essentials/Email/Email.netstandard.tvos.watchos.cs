@@ -7,6 +7,9 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
 
+        internal static bool PlatformSupportsAttachments
+            => false;
+
         static Task PlatformComposeAsync(EmailMessage message) =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
     }

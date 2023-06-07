@@ -11,6 +11,9 @@ namespace Xamarin.Essentials
         public static bool IsAvailable
             => IsComposeSupported;
 
+        public static bool AreAttachmentsSupported
+            => PlatformSupportsAttachments;
+
         public static Task ComposeAsync()
             => ComposeAsync(null);
 

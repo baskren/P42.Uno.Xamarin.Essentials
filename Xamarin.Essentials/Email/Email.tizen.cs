@@ -8,6 +8,9 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => Platform.GetFeatureInfo<bool>("email");
 
+        internal static bool PlatformSupportsAttachments
+            => false;
+
         static async Task PlatformComposeAsync(EmailMessage message)
         {
             await Permissions.EnsureDeclaredAsync<Permissions.LaunchApp>();

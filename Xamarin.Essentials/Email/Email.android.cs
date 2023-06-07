@@ -17,6 +17,9 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => Platform.IsIntentSupported(CreateIntent(testEmail));
 
+        internal static bool PlatformSupportsAttachments
+            => true;
+
         static Task PlatformComposeAsync(EmailMessage message)
         {
             var intent = CreateIntent(message);

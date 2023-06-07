@@ -13,6 +13,9 @@ namespace Xamarin.Essentials
             MFMailComposeViewController.CanSendMail ||
             MainThread.InvokeOnMainThread(() => UIApplication.SharedApplication.CanOpenUrl(NSUrl.FromString("mailto:")));
 
+        internal static bool PlatformSupportsAttachments
+            => true;
+
         static Task PlatformComposeAsync(EmailMessage message)
         {
             if (MFMailComposeViewController.CanSendMail)

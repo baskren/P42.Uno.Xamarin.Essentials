@@ -9,6 +9,9 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported =>
             MainThread.InvokeOnMainThread(() => NSWorkspace.SharedWorkspace.UrlForApplication(NSUrl.FromString("mailto:")) != null);
 
+        internal static bool PlatformSupportsAttachments
+            => false;
+
         static Task PlatformComposeAsync(EmailMessage message)
         {
             var url = GetMailToUri(message);

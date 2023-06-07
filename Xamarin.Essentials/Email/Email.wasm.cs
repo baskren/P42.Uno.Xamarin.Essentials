@@ -11,6 +11,9 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => true;
 
+        internal static bool PlatformSupportsAttachments
+            => false;
+
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         static async Task PlatformComposeAsync(EmailMessage message)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
@@ -36,7 +39,8 @@ namespace Xamarin.Essentials
             if (message?.Attachments != null && message.Attachments.Count > 0)
                 payload += System.Web.HttpUtility.UrlEncode("\n\n ATTACHEMENTS ARE NOT SUPPORTED", System.Text.Encoding.UTF8);
 
-            WebAssemblyRuntime.InvokeJS($"location.replace('{payload}'");
+
+            WebAssemblyRuntime.InvokeJS($"location.replace('{payload}')");
         }
     }
 }

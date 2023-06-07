@@ -16,6 +16,9 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => ApiInformation.IsTypePresent("Windows.ApplicationModel.Email.EmailManager");
 
+        internal static bool PlatformSupportsAttachments
+            => true;
+
         static async Task PlatformComposeAsync(EmailMessage message)
         {
             if (message != null && message.BodyFormat != EmailBodyFormat.PlainText)
