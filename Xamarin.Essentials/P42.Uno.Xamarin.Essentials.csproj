@@ -52,7 +52,9 @@
   <!-- ANDROID -->
   <ItemGroup Condition=" $(TargetFramework.ToLower().Contains('android')) ">
     <AndroidResource Include="Resources\xml\*.xml" />
+    <!--
     <PackageReference Include="Xamarin.AndroidX.Browser" Version="[1.3.0.5,1.4.0.3)" />
+    -->
   </ItemGroup>
 
   <!-- IOS -->
