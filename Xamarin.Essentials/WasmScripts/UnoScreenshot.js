@@ -1,4 +1,4 @@
-﻿require([`${config.uno_app_base}/html2canvas.min`], c => window.html2canvas = c);
+﻿require([`${config.uno_app_base}/html2canvas`], c => window.html2canvas = c);
 
 function UnoScreenshot_GetUrlPromise() {
     return new Promise(function (resolve, reject) {

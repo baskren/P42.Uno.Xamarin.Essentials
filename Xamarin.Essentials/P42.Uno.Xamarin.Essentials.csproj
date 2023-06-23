@@ -93,9 +93,9 @@
       <LogicalName>P42.Uno.Xamarin.Essentials.xml</LogicalName>
     </EmbeddedResource>
 
-    <EmbeddedResource Include="WasmScripts\FileSaver.min.js" />
-    <EmbeddedResource Include="WasmScripts\html2canvas.min.js" />
-    <EmbeddedResource Include="WasmScripts\jquery-3.5.1.slim.min.js" />
+    <EmbeddedResource Include="WasmScripts\FileSaver.js" />
+    <EmbeddedResource Include="WasmScripts\html2canvas.js" />
+    <EmbeddedResource Include="WasmScripts\jquery-3.5.1.slim.js" />
     <EmbeddedResource Include="WasmScripts\UnoFilePicker.js" />
     <EmbeddedResource Include="WasmScripts\UnoFileSystem.js" />
     <EmbeddedResource Include="WasmScripts\UnoMimeTypes.js" />
