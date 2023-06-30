@@ -5,7 +5,6 @@
     <AssemblyName>P42.Uno.Xamarin.Essentials</AssemblyName>
     <RootNamespace>Xamarin.Essentials</RootNamespace>
     <NoWarn>Uno0001;VSX1000;CA1416</NoWarn>
-    <P42_PlatformSpecificFiles>true</P42_PlatformSpecificFiles>
   </PropertyGroup>
 
   <!-- NUGET PACKAGE GENERATION -->
@@ -13,18 +12,13 @@
    
     <Version>4.9.26</Version>
     <PackageId Condition=" $(P42_TargetOnlyThisPlatform.ToLower.Contains('wasm')) ">$(MSBuildProjectName).Wasm</PackageId>
-    <!--
-    Force all projects of this folder to use a different output
-    path to avoid intermediate output collisions
-    -->
-  	<BaseOutputPath>bin\$(MSBuildProjectName)</BaseOutputPath>
-  	<BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-  	<DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
   
   	<PublishRepositoryUrl>true</PublishRepositoryUrl>
   	<EmbedUntrackedSources>true</EmbedUntrackedSources>
   	<IncludeSymbols>true</IncludeSymbols>
   	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally> 
 
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Microsoft, 42nd Parallel</Authors>
@@ -33,7 +27,6 @@
     <PackageProjectUrl>https://github.com/baskren/P42.Uno.Xamarin.Essentials</PackageProjectUrl>
     <RepositoryUrl>https://github.com/baskren/P42.Uno.Xamarin.Essentials</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Refactor WASM into separate project</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageIcon>P42.icon.png</PackageIcon>
@@ -46,7 +39,7 @@
     <None Include="..\P42.icon.png" Pack="true" PackagePath="\" />
     <None Include="..\README.md" Pack="true" PackagePath="\" />
     <None Include="..\LICENSE" Pack="true" PackagePath="\" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <!-- ANDROID -->
@@ -75,7 +68,7 @@
 
   <!-- WinUI Windows -->
   <ItemGroup Condition=" $(TargetFramework.Contains('windows')) ">
-    <PackageReference Include="PInvoke.User32" Version="0.7.104" />
+    <PackageReference Include="PInvoke.User32" Version="0.7.124" />
   </ItemGroup>
 
   <!-- Not Windows -->
