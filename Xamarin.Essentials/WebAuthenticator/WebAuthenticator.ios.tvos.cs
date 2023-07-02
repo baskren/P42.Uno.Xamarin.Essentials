@@ -11,6 +11,7 @@ using SafariServices;
 using UIKit;
 using WebKit;
 
+#pragma warning disable CA1422 // Call site reachable on all platforms
 namespace Xamarin.Essentials
 {
     public static partial class WebAuthenticator
@@ -206,3 +207,4 @@ namespace Xamarin.Essentials
 #endif
     }
 }
+#pragma warning restore CA1422 // Call site reachable on all platforms

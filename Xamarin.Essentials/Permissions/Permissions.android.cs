@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 using Android;
 using Android.Content.PM;
 using Android.OS;
-#if __ANDROID_29__
+//#if __ANDROID_29__
 using AndroidX.Core.App;
 using AndroidX.Core.Content;
-#else
+//#else
 //using Android.Support.V4.App;
 //using Android.Support.V4.Content;
-#endif
+//#endif
 
+#pragma warning disable CA1422 // Validate platform compatibility
 namespace Xamarin.Essentials
 {
     public static partial class Permissions
@@ -20,7 +21,9 @@ namespace Xamarin.Essentials
         public static bool IsDeclaredInManifest(string permission)
         {
             var context = Platform.AppContext;
+#pragma warning disable CS0618 // Type or member is obsolete
             var packageInfo = context.PackageManager.GetPackageInfo(context.PackageName, PackageInfoFlags.Permissions);
+#pragma warning restore CS0618 // Type or member is obsolete
             var requestedPermissions = packageInfo?.RequestedPermissions;
 
             return requestedPermissions?.Any(r => r.Equals(permission, StringComparison.OrdinalIgnoreCase)) ?? false;
@@ -157,6 +160,8 @@ namespace Xamarin.Essentials
                     if (!IsDeclaredInManifest(ap))
                         throw new PermissionException($"You need to declare using the permission: `{androidPermission}` in your AndroidManifest.xml");
                 }
+
+                await Task.CompletedTask;
             }
 
             public override bool ShouldShowRationale()
@@ -468,3 +473,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Validate platform compatibility

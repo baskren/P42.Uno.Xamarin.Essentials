@@ -33,14 +33,14 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
                 return Task.FromResult(PermissionStatus.Granted);
             }
 
             public override Task<PermissionStatus> RequestAsync()
                 => CheckStatusAsync();
 
-            public override void EnsureDeclared()
+            public override void EnsureDeclaredAsync()
             {
                 foreach (var d in RequiredDeclarations())
                 {
@@ -79,7 +79,7 @@ namespace Xamarin.Essentials
 
             public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
                 var accessStatus = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
 
                 if (accessStatus == null)
@@ -96,7 +96,7 @@ namespace Xamarin.Essentials
 
             public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
                 var accessStatus = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
 
                 if (accessStatus == null)
@@ -121,7 +121,7 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
                 return RequestLocationPermissionAsync();
             }
 
@@ -147,7 +147,7 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                EnsureDeclared();
+                EnsureDeclaredAsync();
                 return LocationWhenInUse.RequestLocationPermissionAsync();
             }
         }

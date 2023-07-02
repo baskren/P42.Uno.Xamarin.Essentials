@@ -10,6 +10,7 @@ using Java.Security;
 using Javax.Crypto;
 using Javax.Crypto.Spec;
 
+#pragma warning disable CA1422 // Validate platform compatibility
 namespace Xamarin.Essentials
 {
     public static partial class SecureStorage
@@ -400,3 +401,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Validate platform compatibility

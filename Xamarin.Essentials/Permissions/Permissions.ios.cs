@@ -7,6 +7,7 @@ using AVFoundation;
 using MediaPlayer;
 using Speech;
 
+#pragma warning disable CA1422 // Call site reachable on all platforms
 namespace Xamarin.Essentials
 {
     public static partial class Permissions
@@ -317,3 +318,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Call site reachable on all platforms

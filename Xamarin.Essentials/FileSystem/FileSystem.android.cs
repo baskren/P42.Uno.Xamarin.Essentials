@@ -6,6 +6,7 @@ using Android.Provider;
 using Android.Webkit;
 using AndroidUri = Android.Net.Uri;
 
+#pragma warning disable CA1422 // Validate platform compatibility
 namespace Xamarin.Essentials
 {
     public partial class FileSystem
@@ -200,8 +201,10 @@ namespace Xamarin.Essentials
                     else if (storageType.Equals(storageTypeAudio, StringComparison.OrdinalIgnoreCase))
                         contentUri = MediaStore.Audio.Media.ExternalContentUri;
 
+#pragma warning disable CS0618 // Type or member is obsolete
                     if (contentUri != null && GetDataFilePath(contentUri, $"{MediaStore.MediaColumns.Id}=?", new[] { uriPath }) is string filePath)
                         return filePath;
+#pragma warning restore CS0618 // Type or member is obsolete
                 }
             }
 
@@ -236,8 +239,12 @@ namespace Xamarin.Essentials
             if (srcStream == null)
                 return null;
 
+#pragma warning disable CS0618 // Type or member is obsolete
+
             // resolve or generate a valid destination path
             var filename = GetColumnValue(uri, MediaStore.Files.FileColumns.DisplayName) ?? Guid.NewGuid().ToString("N");
+#pragma warning restore CS0618 // Type or member is obsolete
+
             if (!Path.HasExtension(filename) && !string.IsNullOrEmpty(extension))
                 filename = Path.ChangeExtension(filename, extension);
 
@@ -375,18 +382,9 @@ namespace Xamarin.Essentials
 
         internal virtual Task<Stream> PlatformOpenReadAsync()
         {
-            if (StorageFile != null)
-                return StorageFile.OpenStreamForReadAsync();
             var stream = File.OpenRead(FullPath);
             return Task.FromResult<Stream>(stream);
         }
     }
-
-    public partial class ReadOnlyFile
-    {
-        public ReadOnlyFile(Java.IO.File file)
-            : base(file)
-        {
-        }
-    }
 }
+#pragma warning restore CA1422 // Validate platform compatibility

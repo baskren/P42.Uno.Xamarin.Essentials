@@ -5,6 +5,7 @@ using AppKit;
 using Foundation;
 using MobileCoreServices;
 
+#pragma warning disable CA1422 // Call site reachable on all platforms
 namespace Xamarin.Essentials
 {
     public static partial class FilePicker
@@ -121,3 +122,5 @@ namespace Xamarin.Essentials
             });
     }
 }
+
+#pragma warning restore CA1422 // Call site reachable on all platforms

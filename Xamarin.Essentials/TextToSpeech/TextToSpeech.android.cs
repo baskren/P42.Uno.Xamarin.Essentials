@@ -111,21 +111,18 @@ namespace Xamarin.Essentials
 
             tcsUtterances = new TaskCompletionSource<bool>();
 
-            if (cancelToken != null)
+            cancelToken.Register(() =>
             {
-                cancelToken.Register(() =>
+                try
                 {
-                    try
-                    {
-                        tts?.Stop();
+                    tts?.Stop();
 
-                        tcsUtterances?.TrySetResult(true);
-                    }
-                    catch
-                    {
-                    }
-                });
-            }
+                    tcsUtterances?.TrySetResult(true);
+                }
+                catch
+                {
+                }
+            });
 
             if (options?.Locale?.Language != null)
             {

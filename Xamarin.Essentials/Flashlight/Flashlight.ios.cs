@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AVFoundation;
 
+#pragma warning disable CA1422 // Call site reachable on all platforms
 namespace Xamarin.Essentials
 {
     public static partial class Flashlight
@@ -51,3 +52,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Call site reachable on all platforms

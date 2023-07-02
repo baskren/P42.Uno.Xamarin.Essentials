@@ -4,6 +4,7 @@ using Android.App;
 using Android.Content;
 using Android.Preferences;
 
+#pragma warning disable CA1422 // Validate platform compatibility
 namespace Xamarin.Essentials
 {
     public static partial class Preferences
@@ -154,3 +155,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Validate platform compatibility

@@ -8,6 +8,7 @@ using Contacts;
 using ContactsUI;
 #endif
 
+#pragma warning disable CA1422 // Call site reachable on all platforms
 namespace Xamarin.Essentials
 {
     public static partial class Contacts
@@ -144,3 +145,4 @@ namespace Xamarin.Essentials
 #endif
     }
 }
+#pragma warning restore CA1422 // Call site reachable on all platforms

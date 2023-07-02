@@ -1,6 +1,7 @@
 ﻿using Foundation;
 using UIKit;
 
+#pragma warning disable CA1422 // Call site reachable on all platforms
 namespace Xamarin.Essentials
 {
     public static partial class DeviceDisplay
@@ -76,3 +77,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Call site reachable on all platforms

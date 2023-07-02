@@ -6,6 +6,7 @@ using Android.Content.PM;
 using AndroidUri = Android.Net.Uri;
 using Uri = System.Uri;
 
+#pragma warning disable CA1422 // Validate platform compatibility
 namespace Xamarin.Essentials
 {
     public static partial class Launcher
@@ -18,7 +19,9 @@ namespace Xamarin.Essentials
                 return Task.FromResult(false);
 
             var manager = Platform.AppContext.PackageManager;
+#pragma warning disable CS0618 // Type or member is obsolete
             var supportedResolvedInfos = manager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
+#pragma warning restore CS0618 // Type or member is obsolete
             return Task.FromResult(supportedResolvedInfos.Any());
         }
 
@@ -62,3 +65,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Validate platform compatibility

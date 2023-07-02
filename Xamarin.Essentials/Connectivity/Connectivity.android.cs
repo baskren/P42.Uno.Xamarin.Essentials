@@ -6,6 +6,7 @@ using Android.Net;
 using Android.OS;
 using Debug = System.Diagnostics.Debug;
 
+#pragma warning disable CA1422 // Validate platform compatibility
 namespace Xamarin.Essentials
 {
     public partial class Connectivity
@@ -19,18 +20,6 @@ namespace Xamarin.Essentials
             Permissions.EnsureDeclaredAsync<Permissions.NetworkState>();
 
             var filter = new IntentFilter();
-
-            if (Platform.HasApiLevelN)
-            {
-                RegisterNetworkCallback();
-                filter.AddAction(Platform.EssentialsConnectivityChanged);
-            }
-            else
-            {
-#pragma warning disable CS0618 // Type or member is obsolete
-                filter.AddAction(ConnectivityManager.ConnectivityAction);
-#pragma warning restore CS0618 // Type or member is obsolete
-            }
 
             if (Platform.HasApiLevelN)
             {
@@ -71,7 +60,7 @@ namespace Xamarin.Essentials
             {
                 Debug.WriteLine("Connectivity receiver already unregistered. Disposing of it.");
             }
-            conectivityReceiver.Dispose();
+
             conectivityReceiver = null;
         }
 
@@ -100,7 +89,6 @@ namespace Xamarin.Essentials
 
             manager.UnregisterNetworkCallback(networkCallback);
 
-            networkCallback?.Dispose();
             networkCallback = null;
         }
 
@@ -135,7 +123,9 @@ namespace Xamarin.Essentials
 
                     if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                     {
+#pragma warning disable CS0618 // Type or member is obsolete
                         var networks = manager.GetAllNetworks();
+#pragma warning restore CS0618 // Type or member is obsolete
 
                         // some devices running 21 and 22 only use the older api.
                         if (networks.Length == 0 && (int)Build.VERSION.SdkInt < 23)
@@ -224,9 +214,9 @@ namespace Xamarin.Essentials
                 var manager = Platform.ConnectivityManager;
                 if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                 {
+#pragma warning disable CS0618 // Type or member is obsolete
                     foreach (var network in manager.GetAllNetworks())
                     {
-#pragma warning disable CS0618 // Type or member is obsolete
                         NetworkInfo info = null;
                         try
                         {
@@ -335,3 +325,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Validate platform compatibility

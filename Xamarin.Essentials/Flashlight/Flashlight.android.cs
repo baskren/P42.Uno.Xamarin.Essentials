@@ -7,6 +7,7 @@ using Android.OS;
 
 using Camera = Android.Hardware.Camera;
 
+#pragma warning disable CA1422 // Validate platform compatibility
 namespace Xamarin.Essentials
 {
     public static partial class Flashlight
@@ -112,3 +113,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Validate platform compatibility

@@ -8,6 +8,7 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 
+#pragma warning disable CA1422 // Validate platform compatibility
 namespace Xamarin.Essentials
 {
     public static partial class DeviceDisplay
@@ -37,7 +38,9 @@ namespace Xamarin.Essentials
         {
             using var displayMetrics = new DisplayMetrics();
             var display = GetDefaultDisplay();
+#pragma warning disable CS0618 // Type or member is obsolete
             display?.GetRealMetrics(displayMetrics);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             return new DisplayInfo(
                 width: displayMetrics?.WidthPixels ?? 0,
@@ -122,3 +125,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Validate platform compatibility

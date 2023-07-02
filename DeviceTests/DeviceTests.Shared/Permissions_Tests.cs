@@ -15,13 +15,13 @@ namespace DeviceTests
             switch (permission)
             {
                 case "Battery":
-                    Permissions.EnsureDeclared<Permissions.Battery>();
+                    Permissions.EnsureDeclaredAsync<Permissions.Battery>();
                     break;
                 case "NetworkState":
-                    Permissions.EnsureDeclared<Permissions.NetworkState>();
+                    Permissions.EnsureDeclaredAsync<Permissions.NetworkState>();
                     break;
                 case "LocationWhenInUse":
-                    Permissions.EnsureDeclared<Permissions.LocationWhenInUse>();
+                    Permissions.EnsureDeclaredAsync<Permissions.LocationWhenInUse>();
                     break;
             }
         }

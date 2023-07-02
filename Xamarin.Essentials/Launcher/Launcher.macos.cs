@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AppKit;
 using Foundation;
 
+#pragma warning disable CA1422 // Call site reachable on all platforms
 namespace Xamarin.Essentials
 {
     public static partial class Launcher
@@ -29,3 +30,4 @@ namespace Xamarin.Essentials
             Task.FromResult(NSWorkspace.SharedWorkspace.OpenFile(request.File.FullPath));
     }
 }
+#pragma warning restore CA1422 // Call site reachable on all platforms

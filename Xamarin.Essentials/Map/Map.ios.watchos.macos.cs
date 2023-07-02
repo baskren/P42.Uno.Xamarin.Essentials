@@ -6,6 +6,7 @@ using CoreLocation;
 using Foundation;
 using MapKit;
 
+#pragma warning disable CA1422 // Call site reachable on all platforms
 namespace Xamarin.Essentials
 {
     public static partial class Map
@@ -147,3 +148,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning disable CA1422 // Call site reachable on all platforms

@@ -8,6 +8,7 @@ using UIKit;
 using AppKit;
 #endif
 
+#pragma warning disable CA1422 // Call site reachable on all platforms
 namespace Xamarin.Essentials
 {
     public static partial class AppInfo
@@ -131,3 +132,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Call site reachable on all platforms

@@ -4,6 +4,7 @@ using Android;
 using Android.OS;
 #endif
 
+#pragma warning disable CA1422 // Validate platform compatibility
 namespace Xamarin.Essentials
 {
     public static partial class Vibration
@@ -36,3 +37,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Validate platform compatibility

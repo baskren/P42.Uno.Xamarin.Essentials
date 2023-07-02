@@ -7,6 +7,7 @@ using Android.Text;
 using Android.Webkit;
 using Uri = Android.Net.Uri;
 
+#pragma warning disable CA1422 // Validate platform compatibility
 namespace Xamarin.Essentials
 {
     public static partial class Email
@@ -100,3 +101,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Validate platform compatibility

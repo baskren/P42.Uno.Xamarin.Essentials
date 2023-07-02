@@ -8,7 +8,7 @@ namespace Xamarin.Essentials
     {
         static Task PlatformRequestAsync(ShareTextRequest request)
         {
-            Permissions.EnsureDeclared<Permissions.LaunchApp>();
+            Permissions.EnsureDeclaredAsync<Permissions.LaunchApp>();
 
             var appControl = new AppControl
             {
@@ -31,7 +31,7 @@ namespace Xamarin.Essentials
 
         static Task PlatformRequestAsync(ShareMultipleFilesRequest request)
         {
-            Permissions.EnsureDeclared<Permissions.LaunchApp>();
+            Permissions.EnsureDeclaredAsync<Permissions.LaunchApp>();
 
             var appControl = new AppControl
             {

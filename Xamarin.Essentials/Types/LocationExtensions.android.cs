@@ -5,6 +5,7 @@ using System.Linq;
 using AndroidAddress = Android.Locations.Address;
 using AndroidLocation = Android.Locations.Location;
 
+#pragma warning disable CA1422 // Validate platform compatibility
 namespace Xamarin.Essentials
 {
     public static partial class LocationExtensions
@@ -36,7 +37,9 @@ namespace Xamarin.Essentials
 #endif
                 Course = location.HasBearing ? location.Bearing : default(double?),
                 Speed = location.HasSpeed ? location.Speed : default(double?),
+#pragma warning disable CS0618 // Type or member is obsolete
                 IsFromMockProvider = Platform.HasApiLevel(global::Android.OS.BuildVersionCodes.JellyBeanMr2) ? location.IsFromMockProvider : false,
+#pragma warning restore CS0618 // Type or member is obsolete
                 AltitudeReferenceSystem = AltitudeReferenceSystem.Ellipsoid
             };
 
@@ -55,3 +58,4 @@ namespace Xamarin.Essentials
         }
     }
 }
+#pragma warning restore CA1422 // Validate platform compatibility

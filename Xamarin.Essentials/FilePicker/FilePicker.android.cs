@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Android.Content;
 
+#pragma warning disable CA1422 // Validate platform compatibility
 namespace Xamarin.Essentials
 {
     public static partial class FilePicker
@@ -242,3 +243,4 @@ namespace Xamarin.Essentials
             });
     }
 }
+#pragma warning restore CA1422 // Validate platform compatibility

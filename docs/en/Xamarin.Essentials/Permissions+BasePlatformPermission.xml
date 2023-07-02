@@ -51,10 +51,10 @@
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
-    <Member MemberName="EnsureDeclared">
-      <MemberSignature Language="C#" Value="public override void EnsureDeclared ();" />
-      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void EnsureDeclared() cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Permissions.BasePlatformPermission.EnsureDeclared" />
+    <Member MemberName="EnsureDeclaredAsync">
+      <MemberSignature Language="C#" Value="public override void EnsureDeclaredAsync ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void EnsureDeclaredAsync() cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Permissions.BasePlatformPermission.EnsureDeclaredAsync" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
