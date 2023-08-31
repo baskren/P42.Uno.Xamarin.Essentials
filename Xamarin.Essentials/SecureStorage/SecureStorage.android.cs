@@ -139,8 +139,7 @@ namespace Xamarin.Essentials
         internal static string Md5Hash(string input)
         {
             var hash = new StringBuilder();
-            var md5provider = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            var bytes = md5provider.ComputeHash(Encoding.UTF8.GetBytes(input));
+            var bytes = System.Security.Cryptography.MD5.HashData(Encoding.UTF8.GetBytes(input));
 
             for (var i = 0; i < bytes.Length; i++)
                 hash.Append(bytes[i].ToString("x2"));
