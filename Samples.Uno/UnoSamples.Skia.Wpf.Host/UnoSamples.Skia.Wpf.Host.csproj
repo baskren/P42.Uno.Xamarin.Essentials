@@ -11,8 +11,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="P42.Uno.AsyncNavigation" Version="0.3.0" />
-    <PackageReference Include="Uno.WinUI.Skia.Wpf" Version="4.9.45" />
-    <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.9.45" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.WinUI.Skia.Wpf" Version="4.10.26" />
+    <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.10.26" Condition="'$(Configuration)'=='Debug'" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Fonts\uno-fluentui-assets.ttf" />
