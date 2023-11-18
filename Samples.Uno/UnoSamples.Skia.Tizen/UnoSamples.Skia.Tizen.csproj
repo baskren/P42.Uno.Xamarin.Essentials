@@ -22,9 +22,9 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
     <PackageReference Include="P42.Uno.AsyncNavigation" Version="0.3.0" />
-    <PackageReference Include="SkiaSharp.Views" Version="2.88.3" />
-    <PackageReference Include="Uno.WinUI.Skia.Tizen" Version="4.10.26" />
-    <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.10.26" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="SkiaSharp.Views" Version="2.88.6" />
+    <PackageReference Include="Uno.WinUI.Skia.Tizen" Version="5.0.48" />
+    <PackageReference Include="Uno.WinUI.RemoteControl" Version="5.0.48" Condition="'$(Configuration)'=='Debug'" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Xamarin.Essentials\P42.Uno.Xamarin.Essentials.Tizen.csproj" />
