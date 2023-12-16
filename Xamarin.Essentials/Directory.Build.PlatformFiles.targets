@@ -1,0 +1,91 @@
+<Project ToolsVersion="15.0">
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <!-- SHARED RESOURCES -->
+  <ItemGroup>
+    <Compile Include="**\*.shared.cs" />
+    <Compile Include="**\*.shared.*.cs" />
+  </ItemGroup>
+
+  <!-- WinUI Windows -->
+  <ItemGroup Condition=" $(TargetFramework.Contains('windows')) ">
+    <Compile Include="**\*.win.cs" />
+    <Compile Include="**\*.win.*.cs" />
+    <Compile Include="**\*.windows.cs" />
+    <Compile Include="**\*.windows.*.cs" />
+  </ItemGroup>
+
+  <!-- Not Windows -->
+  <ItemGroup Condition=" !$(TargetFramework.Contains('windows')) ">
+    <Compile Include="**\*.uno.cs" />
+  </ItemGroup>
+
+
+  <Choose>
+    <!-- WASM -->
+    <When Condition="  $(MSBuildProjectName.ToLower().Contains('wasm'))  OR  $(P42_TargetPlatform.ToLower().Contains('wasm'))  OR  $(SolutionName.ToLower().Contains('wasm')) ">
+      <ItemGroup>
+        <Compile Include="**\*.wasm.cs" />
+        <Compile Include="**\*.wasm.*.cs" />
+      </ItemGroup>
+    </When>
+    <!-- SKIA -->
+    <When Condition="  $(MSBuildProjectName.ToLower().Contains('skia'))  OR  $(P42_TargetPlatform.ToLower().Contains('skia'))  OR  $(SolutionName.ToLower().Contains('skia')) ">
+      <ItemGroup>
+        <Compile Include="**\*.skia.cs" />
+        <Compile Include="**\*.skia.*.cs" />
+      </ItemGroup>
+    </When >
+    <!-- .NET BAIT (for WASM and SKIA bait and switch) -->
+    <When Condition=" $(TargetFramework.ToLower().Equals('net7.0')) ">
+      <ItemGroup>
+        <Compile Include="**\*.net.cs" />
+        <Compile Include="**\*.net.*.cs" />
+        <Compile Include="**\*.netstandard.cs" />
+        <Compile Include="**\*.netstandard.*.cs" />
+      </ItemGroup>
+    </When>
+    <!-- ANDROID -->
+    <When Condition=" $(TargetFramework.ToLower().Contains('android')) ">
+      <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
+        <WarningLevel>5</WarningLevel>
+      </PropertyGroup>
+      <ItemGroup>
+        <Compile Include="**\*.android.cs" />
+        <Compile Include="**\*.android.*.cs" />
+        <Compile Include="**\*.droid.cs" />
+        <Compile Include="**\*.droid.*.cs" />
+      </ItemGroup>
+    </When>
+    <!-- IOS -->
+    <When Condition=" $(TargetFramework.ToLower().Contains('ios')) ">
+      <ItemGroup>
+        <Compile Include="**\*.ios.cs" />
+        <Compile Include="**\*.ios.*.cs" />
+      </ItemGroup>  
+    </When>
+    <!-- MAC CATALYST -->
+    <When Condition=" $(TargetFramework.ToLower().Contains('maccatalyst')) ">
+      <ItemGroup>
+        <Compile Include="**\*.ios.cs" />
+        <Compile Include="**\*.ios.*.cs" />
+        <Compile Include="**\*.maccatalyst.cs" />
+        <Compile Include="**\*.maccatalyst.*.cs" />
+      </ItemGroup>  
+    </When>
+    <!-- MACOS -->
+    <When Condition=" $(TargetFramework.ToLower().Contains('macos')) ">
+      <ItemGroup>
+        <Compile Include="**\*.macos.cs" />
+        <Compile Include="**\*.macos.*.cs" />
+        <Compile Include="**\*.mac.cs" />
+        <Compile Include="**\*.mac.*.cs" />
+      </ItemGroup>
+    </When>
+  </Choose>
+
+
+</Project>
