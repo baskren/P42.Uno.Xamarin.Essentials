@@ -1,6 +1,5 @@
 ﻿using System;
 using Foundation;
-using Microsoft.AppCenter.Distribute;
 using Samples.View;
 using UIKit;
 

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
-using Microsoft.AppCenter.Distribute;
 using Samples.Helpers;
 using Samples.View;
 using Xamarin.Essentials;
