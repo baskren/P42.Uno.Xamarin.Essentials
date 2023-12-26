@@ -7,20 +7,6 @@
     <AssemblyName>P42.Uno.Xamarin.Essentials</AssemblyName>
   </PropertyGroup>
 
-<!--
-  <ItemGroup>
-    <UnoRuntimeProjectReference Include="P42.Uno.Xamarin.Essentials.Skia.csproj" />
-    <UnoRuntimeProjectReference Include="P42.Uno.Xamarin.Essentials.Wasm.csproj" />
-  </ItemGroup>
--->
-
-  <ItemGroup>
-    <Content Include="buildTransitive\**">
-      <PackagePath>buildTransitive</PackagePath>
-      <Pack>true</Pack>
-    </Content>
-  </ItemGroup>
-
 
   <Import Project="Directory.Build.TargetPlatform.props" />
 
@@ -73,9 +59,10 @@
 
 
   <!-- CUSTOMIZATION THAT DOESN'T WORK IN .References.props -->
+  <!--
   <ItemGroup>
     <Compile Remove="**/*.nfloat.g.cs" />
   </ItemGroup>
-
+  -->
 
 </Project>

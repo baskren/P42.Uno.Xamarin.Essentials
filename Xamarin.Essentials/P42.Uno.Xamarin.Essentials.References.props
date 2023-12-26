@@ -1,6 +1,10 @@
 <Project ToolsVersion="15.0">
 
 
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally> 
+  </PropertyGroup>
+
   <!-- SHARED REFERENCES -->
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
