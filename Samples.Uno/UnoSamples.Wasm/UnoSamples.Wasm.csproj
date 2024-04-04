@@ -41,8 +41,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
     <PackageReference Include="Uno.Extensions.Logging.WebAssembly.Console" Version="1.7.0" />
     <PackageReference Include="P42.Uno.AsyncNavigation" Version="0.3.0" />
-    <PackageReference Include="Uno.WinUI.WebAssembly" Version="5.0.118" />
-    <PackageReference Include="Uno.WinUI.RemoteControl" Version="5.0.118" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.WinUI.WebAssembly" Version="5.1.104" />
+    <PackageReference Include="Uno.WinUI.RemoteControl" Version="5.1.104" Condition="'$(Configuration)'=='Debug'" />
     <PackageReference Include="Uno.Wasm.Bootstrap" Version="2.1.0" />
     <PackageReference Include="Uno.Wasm.Bootstrap.DevServer" Version="2.1.0" />
   </ItemGroup>
