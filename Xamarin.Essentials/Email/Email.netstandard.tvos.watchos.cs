@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
             throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 
-#if NETSTANDARD1_0 || NET7_0
+#if NETSTANDARD1_0 || NETSTANDARD2_0 || NET5_0_OR_GREATER
     public partial class EmailAttachment
     {
         string PlatformGetContentType(string extension) =>

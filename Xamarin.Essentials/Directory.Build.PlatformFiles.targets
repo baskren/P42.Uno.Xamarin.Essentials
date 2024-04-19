@@ -40,7 +40,7 @@
       </ItemGroup>
     </When >
     <!-- .NET BAIT (for WASM and SKIA bait and switch) -->
-    <When Condition=" $(TargetFramework.ToLower().Equals('net7.0')) ">
+    <When Condition=" $(TargetFramework.ToLower().Equals('$(DotNetVersion)')) ">
       <ItemGroup>
         <Compile Include="**\*.net.cs" />
         <Compile Include="**\*.net.*.cs" />
