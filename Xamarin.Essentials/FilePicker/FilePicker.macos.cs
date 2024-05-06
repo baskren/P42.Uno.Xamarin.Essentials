@@ -58,6 +58,9 @@ namespace Xamarin.Essentials
 
         static async Task<string> PlatformExportAsync(SaveOptions options, Func<NSUrl, Task> writeAction)
         {
+            if (writeAction is null)
+                return;
+
             var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             using (var folderUrl = new NSUrl(new System.Uri(folderPath).AbsoluteUri))
             {
@@ -80,7 +83,7 @@ namespace Xamarin.Essentials
 
                     if (panel.RunModal(folderUrl.Path, options?.SuggestedFileName, new string[] { options?.ContentType ?? FileSystem.MimeTypes.TextPlain }) == 1)
                     {
-                        await writeAction?.Invoke(panel.Url);
+                        await writeAction.Invoke(panel.Url);
                         return panel.Url.Path;
                     }
                 }
