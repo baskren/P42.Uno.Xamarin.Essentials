@@ -22,7 +22,7 @@
         <AndroidResource Include="Resources\xml\*.xml" />
       </ItemGroup>
     </When>
-    <When Condition="  $(MSBuildProjectName.ToLower().Contains('wasm'))  OR  $(P42_TargetPlatform.ToLower().Contains('wasm'))  OR  $(SolutionName.ToLower().Contains('wasm')) ">
+    <When Condition="  $(TargetFramework.ToLower().Contains('wasm'))  ">
       <ItemGroup>
         <EmbeddedResource Include="WasmScripts\FileSaver.js" />
         <EmbeddedResource Include="WasmScripts\html2canvas.js" />
@@ -39,10 +39,6 @@
         <EmbeddedResource Include="WasmScripts\UnoUtils.js" />
         <EmbeddedResource Include="WasmScripts\UnoUuid.js" />
         <EmbeddedResource Include="WasmScripts\UnoVibration.js" />
-      </ItemGroup>
-    </When>
-    <When Condition="  $(MSBuildProjectName.ToLower().Contains('skia'))  OR  $(P42_TargetPlatform.ToLower().Contains('skia'))  OR  $(SolutionName.ToLower().Contains('skia')) ">
-      <ItemGroup>
       </ItemGroup>
     </When>
     <Otherwise>

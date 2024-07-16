@@ -112,6 +112,7 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="UnitTests.HeadlessRunner" Version="2.0.0" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2083" />

@@ -69,6 +69,7 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
+  
   <ItemGroup>
     <Reference Include="OpenTK-1.0" />
     <Reference Include="System" />

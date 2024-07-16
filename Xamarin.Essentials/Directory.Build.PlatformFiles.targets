@@ -12,10 +12,14 @@
 
   <!-- WinUI Windows -->
   <ItemGroup Condition=" $(TargetFramework.Contains('windows')) ">
-    <Compile Include="**\*.win.cs" />
-    <Compile Include="**\*.win.*.cs" />
-    <Compile Include="**\*.windows.cs" />
-    <Compile Include="**\*.windows.*.cs" />
+    <Compile Include="**\*.winui.cs" />
+    <Compile Include="**\*.winui.*.cs" />
+  </ItemGroup>
+
+  <!-- Windows Desktop -->
+  <ItemGroup Condition=" $(TargetFramework.Contains('desktop')) ">
+    <Compile Include="**\*.desktop.cs" />
+    <Compile Include="**\*.desktop.*.cs" />
   </ItemGroup>
 
   <!-- Not Windows -->
@@ -26,26 +30,17 @@
 
   <Choose>
     <!-- WASM -->
-    <When Condition="  $(MSBuildProjectName.ToLower().Contains('wasm'))  OR  $(P42_TargetPlatform.ToLower().Contains('wasm'))  OR  $(SolutionName.ToLower().Contains('wasm')) ">
+    <When Condition="  $(TargetFramework.ToLower().Contains('wasm')) ">
       <ItemGroup>
         <Compile Include="**\*.wasm.cs" />
         <Compile Include="**\*.wasm.*.cs" />
       </ItemGroup>
     </When>
-    <!-- SKIA -->
-    <When Condition="  $(MSBuildProjectName.ToLower().Contains('skia'))  OR  $(P42_TargetPlatform.ToLower().Contains('skia'))  OR  $(SolutionName.ToLower().Contains('skia')) ">
-      <ItemGroup>
-        <Compile Include="**\*.skia.cs" />
-        <Compile Include="**\*.skia.*.cs" />
-      </ItemGroup>
-    </When >
     <!-- .NET BAIT (for WASM and SKIA bait and switch) -->
-    <When Condition=" $(TargetFramework.ToLower().Equals('$(DotNetVersion)')) ">
+    <When Condition=" $(TargetFramework.ToLower().Equals('net8.0')) ">
       <ItemGroup>
         <Compile Include="**\*.net.cs" />
         <Compile Include="**\*.net.*.cs" />
-        <Compile Include="**\*.netstandard.cs" />
-        <Compile Include="**\*.netstandard.*.cs" />
       </ItemGroup>
     </When>
     <!-- ANDROID -->
@@ -56,8 +51,6 @@
       <ItemGroup>
         <Compile Include="**\*.android.cs" />
         <Compile Include="**\*.android.*.cs" />
-        <Compile Include="**\*.droid.cs" />
-        <Compile Include="**\*.droid.*.cs" />
       </ItemGroup>
     </When>
     <!-- IOS -->
@@ -81,8 +74,6 @@
       <ItemGroup>
         <Compile Include="**\*.macos.cs" />
         <Compile Include="**\*.macos.*.cs" />
-        <Compile Include="**\*.mac.cs" />
-        <Compile Include="**\*.mac.*.cs" />
       </ItemGroup>
     </When>
   </Choose>
