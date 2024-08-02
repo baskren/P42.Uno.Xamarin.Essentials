@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Android.Provider;
 using Android.Webkit;
+using Java.Nio.FileNio.Attributes;
 using AndroidUri = Android.Net.Uri;
 
 #pragma warning disable CA1422 // Validate platform compatibility
@@ -125,6 +126,9 @@ namespace Xamarin.Essentials
 
         static string ResolveDocumentPath(AndroidUri uri)
         {
+            if (uri is null || string.IsNullOrWhiteSpace(uri.Path))
+                throw new ArgumentNullException(nameof(uri));
+
             Debug.WriteLine($"Trying to resolve document URI: '{uri}'");
 
             var docId = DocumentsContract.GetDocumentId(uri);
@@ -148,6 +152,13 @@ namespace Xamarin.Essentials
 #pragma warning disable CS0618 // Type or member is obsolete
                         var root = global::Android.OS.Environment.ExternalStorageDirectory.Path;
 #pragma warning restore CS0618 // Type or member is obsolete
+
+
+                        if (string.IsNullOrWhiteSpace(root))
+                            throw new Exception("NO VALUE PROVIDED FOR Android.OS.Environment.ExternalStorageDirectory.Path");
+                        if (string.IsNullOrWhiteSpace(uriPath))
+                            throw new Exception($"NO VALUE URI PATH FOUND IN PROVIDED URI {uri}");
+
 
                         return Path.Combine(root, uriPath);
                     }

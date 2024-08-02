@@ -27,14 +27,14 @@ namespace Xamarin.Essentials
             WebAssemblyRuntime.InvokeJS($"UnoOrientation_Start({frequency})");
         }
 
-        static void DataUpdated(string json)
+        public static void DataUpdated(string json)
         {
             var reading = JsonConvert.DeserializeObject<List<double>>(json);
             var data = new OrientationSensorData(reading[0], reading[1], reading[2], reading[3]);
             OnChanged(data);
         }
 
-        static void LegacyDataUpdated(string json)
+        public static void LegacyDataUpdated(string json)
         {
             var reading = JsonConvert.DeserializeObject(json);
 

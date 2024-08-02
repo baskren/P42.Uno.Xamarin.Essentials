@@ -86,11 +86,11 @@ namespace Xamarin.Essentials
 
         static string GetTmpDir()
         {
-            if (!System.IO.Directory.Exists(FileSystem.CacheDirectory))
-                System.IO.Directory.CreateDirectory(FileSystem.CacheDirectory);
+            if (string.IsNullOrWhiteSpace(FileSystem.CacheDirectory))
+                throw new Exception($"UNABLE TO FIND VALUE FOR XAMARIN.ESSENTAILS.FileSystem.CacheDirectory");
+            FileSystem.AssureExists(FileSystem.CacheDirectory);
             var tmpDir = Path.Combine(FileSystem.CacheDirectory, Guid.NewGuid().ToString());
-            if (!System.IO.Directory.Exists(tmpDir))
-                System.IO.Directory.CreateDirectory(tmpDir);
+            FileSystem.AssureExists(tmpDir);
             return tmpDir;
         }
 
@@ -107,6 +107,7 @@ namespace Xamarin.Essentials
 
         static async Task<string> PlatformExportAsync(string text, SaveOptions options)
         {
+            
             var tmpPath = Path.Combine(GetTmpDir(), options?.SuggestedFileName ?? "data.txt");
             await File.WriteAllTextAsync(tmpPath, text);
             using (var exportUrl = new NSUrl(new System.Uri(tmpPath).AbsoluteUri))
@@ -144,8 +145,13 @@ namespace Xamarin.Essentials
 
                 if ((await tcs.Task).FirstOrDefault() is FileResult result)
                 {
+                    if (string.IsNullOrWhiteSpace(result.Url.Path))
+                        return null;
                     var fileName = Path.GetFileNameWithoutExtension(exportUrl.Path);
+                    if (string.IsNullOrWhiteSpace(fileName))
+                        return null;
                     var extension = Path.GetExtension(exportUrl.Path);
+
                     var destFileName = Path.Combine(result.Url.Path, fileName + (string.IsNullOrWhiteSpace(extension) ? null : extension));
 
                     var attempt = 0;

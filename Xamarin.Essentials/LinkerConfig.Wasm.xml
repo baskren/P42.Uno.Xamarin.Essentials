@@ -1,17 +1,9 @@
 ﻿<linker>
     
   <assembly fullname="P42.Uno.Xamarin.Essentials" >
-    <type fullname="Xamarin.Essentials.SharingExtensions">
-      <method name="GetShareRequestJsonForHtmlElement" />
-    </type>
-    <type fullname="Xamarin.Essentials.OrientationSensor">
-      <method name="DataUpdated" />
-    </type>
-    <type fullname="Xamarin.Essentials.OrientationSensor">
-      <method name="LegacyDataUpdated" />
-    </type>
-    <type fullname="Xamarin.Essentials.FileForAssetResult">
-    </type>
+    <type fullname="Xamarin.Essentials.SharingExtensions*" />
+    <type fullname="Xamarin.Essentials.OrientationSensor*" />
+    <type fullname="Xamarin.Essentials.FileForAssetResult*" />
   </assembly>
   
 </linker>

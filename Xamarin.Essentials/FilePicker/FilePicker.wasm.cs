@@ -35,6 +35,8 @@ namespace Xamarin.Essentials
         static async Task<string> PlatformExportAsync(byte[] bytes, SaveOptions options)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
+            if (string.IsNullOrWhiteSpace(Xamarin.Essentials.FileSystem.CacheDirectory))
+                throw new Exception($"NO VALUE FOR Xamarin.Essentials.FileSystem.CacheDirectory");
             var path = Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, Guid.NewGuid().ToString());
             File.WriteAllBytes(path, bytes);
 
@@ -57,6 +59,8 @@ namespace Xamarin.Essentials
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             // System.Diagnostics.Debug.WriteLine("FilePicker. TEXT");
+            if (string.IsNullOrWhiteSpace(Xamarin.Essentials.FileSystem.CacheDirectory))
+                throw new Exception($"NO VALUE FOR Xamarin.Essentials.FileSystem.CacheDirectory");
             var path = Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, Guid.NewGuid().ToString());
             File.WriteAllText(path, text);
 

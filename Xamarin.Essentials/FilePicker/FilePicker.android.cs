@@ -191,7 +191,9 @@ namespace Xamarin.Essentials
                             if (path.Any())
                                 path.RemoveAt(path.Count - 1);
                             path.Add(name);
-                            tcs.SetResult(Path.Combine(path.ToArray()));
+                            if (path.Any(string.IsNullOrWhiteSpace))
+                                throw new Exception($"NULL ITEM FOUND IN PATH {uri.PathSegments}");
+                            tcs.SetResult(Path.Combine([.. path]));
                             return;
                         }
                     }

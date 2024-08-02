@@ -17,11 +17,14 @@ namespace Xamarin.Essentials
 
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
         {
-            if (filename == null)
+            if (string.IsNullOrWhiteSpace(filename))
                 throw new ArgumentNullException(nameof(filename));
 
             filename = filename.Replace('\\', Path.DirectorySeparatorChar);
             var root = NSBundle.MainBundle.BundlePath;
+            if (string.IsNullOrWhiteSpace(root))
+                throw new Exception("NO VALUE PROVIDED FOR NSBundle.MainBundle.BundlePath");
+
 #if __MACOS__
             root = Path.Combine(root, "Contents", "Resources");
 #endif

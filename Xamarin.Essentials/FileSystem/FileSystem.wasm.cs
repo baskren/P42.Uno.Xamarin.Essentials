@@ -15,8 +15,7 @@ namespace Xamarin.Essentials
             get
             {
                 var folder = ApplicationData.Current.LocalCacheFolder.Path;
-                if (!Directory.Exists(folder))
-                    Directory.CreateDirectory(folder);
+                FileSystem.AssureExists(folder);
                 return folder;
             }
         }
@@ -26,8 +25,7 @@ namespace Xamarin.Essentials
             get
             {
                 var folder = ApplicationData.Current.LocalFolder.Path;
-                if (!Directory.Exists(folder))
-                    Directory.CreateDirectory(folder);
+                FileSystem.AssureExists(folder);
                 return folder;
             }
         }
