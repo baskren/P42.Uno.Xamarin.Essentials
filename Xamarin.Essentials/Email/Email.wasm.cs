@@ -22,7 +22,7 @@ namespace Xamarin.Essentials
                 throw new FeatureNotSupportedException("UWP can only compose plain text email messages.");
 
             var concatUsed = 0;
-            Func<string> concatChar = () => concatUsed++ > 0 ? "&" : "?";
+            var concatChar = () => concatUsed++ > 0 ? "&" : "?";
 
             var payload = "mailto:";
             if (message?.To != null && message.To.Count > 0)
