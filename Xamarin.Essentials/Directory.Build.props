@@ -8,18 +8,10 @@
 		<NoWarn>$(NoWarn);Uno0001;VSX1000;CA1416;MSB3884;NETSDK1206</NoWarn>
     <EnableDefaultEmbeddedResourceItems>true</EnableDefaultEmbeddedResourceItems>
     <DefaultItemExcludes>$(DefaultItemExcludes);obj\**;bin\**</DefaultItemExcludes>
+    <DefineConstants Condition=" $(TargetFramework.Contains('windows')) ">WinAppSdk;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
 
-  <!-- DEBUG / RELEASE PROPERTIES -->
-  <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
-    <DebugSymbols>true</DebugSymbols>
-	  <DefineConstants>TRACE;DEBUG;$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <Optimize>true</Optimize>
-	  <DefineConstants>RELEASE;$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
 
 
   <!-- OLD STYLE EMBEDDED RESOURCES -->
@@ -45,7 +37,7 @@
     <Message Text=" " Importance="high"/>
     <Message Text=" " Importance="high"/>
     <Message Text=" " Importance="high"/>
-    <Message Text="==============================================================" Importance="high"/>
+    <Message Text="============================= $(MSBuildProjectName):$(TargetFramework) =================================" Importance="high"/>
     <Message Text="========================== WINDOWS =========================== " Condition=" $(TargetFramework.Contains('windows')) " Importance="high" />
     <Message Text="======================== NOT WINDOWS ========================= " Condition=" !$(TargetFramework.Contains('windows')) " Importance="high" />
     <Message Text="========================== DESKTOP =========================== " Condition=" $(TargetFramework.Contains('desktop')) " Importance="high" />
@@ -86,8 +78,9 @@
     <Message Text="      @(AndroidResource, '%0a      ')" Importance="high"/>
     <Message Text="  ]" Importance="high"/>
     <Message Text="  NuGetPackageRoot:[$(NuGetPackageRoot)]" Importance="high" />
-    <Message Text="  UnoVersion:[$(UnoVersion)]" Importance="high" />
-    <Message Text="==============================================================" Importance="high"/>
+    <Message Text="  DebugSymbols:[$(DebugSymbols)]" Importance="high" />
+    <Message Text="  Optimize:[$(Optimize)]" Importance="high" />
+    <Message Text="============================= $(MSBuildProjectName):$(TargetFramework) =================================" Importance="high"/>
     <Message Text=" " Importance="high"/>
     <Message Text=" " Importance="high"/>
     <Message Text=" " Importance="high"/>
