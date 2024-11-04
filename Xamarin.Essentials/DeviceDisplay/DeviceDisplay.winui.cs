@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.Intrinsics.Arm;
-using P42.Uno.Xamarin.Essentials;
 using Windows.ApplicationModel.Core;
 using Windows.Graphics.Display;
 using Windows.Graphics.Display.Core;
