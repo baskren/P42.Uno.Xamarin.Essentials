@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Microsoft.UI.Xaml.Media.Animation;
 using Windows.Security.ExchangeActiveSyncProvisioning;
 using Windows.System.Profile;
 using Windows.UI.ViewManagement;
@@ -55,28 +56,25 @@ namespace Xamarin.Essentials
         {
             switch (AnalyticsInfo.VersionInfo.DeviceFamily)
             {
+                case "Windows.Tablet":
+                    currentIdiom = DeviceIdiom.Tablet;
+                    break;
                 case "Windows.Mobile":
                     currentIdiom = DeviceIdiom.Phone;
                     break;
                 case "Windows.Universal":
                 case "Windows.Desktop":
-                    {
-                        try
-                        {
-                            var uiMode = UIViewSettings.GetForCurrentView().UserInteractionMode;
-                            currentIdiom = uiMode == UserInteractionMode.Mouse ? DeviceIdiom.Desktop : DeviceIdiom.Tablet;
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine($"Unable to get device . {ex.Message}");
-                        }
-                    }
+                    currentIdiom = DeviceIdiom.Desktop;
                     break;
                 case "Windows.Xbox":
+                    currentIdiom = DeviceIdiom.Console;
+                    break;
                 case "Windows.Team":
                     currentIdiom = DeviceIdiom.TV;
                     break;
                 case "Windows.IoT":
+                    currentIdiom = DeviceIdiom.IoT;
+                    break;
                 default:
                     currentIdiom = DeviceIdiom.Unknown;
                     break;

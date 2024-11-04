@@ -18,6 +18,10 @@ namespace Xamarin.Essentials
 
         public static DeviceIdiom Unknown { get; } = new DeviceIdiom(nameof(Unknown));
 
+        public static DeviceIdiom Console { get; } = new DeviceIdiom(nameof(Console));
+
+        public static DeviceIdiom IoT { get; } = new DeviceIdiom(nameof(IoT));
+
         DeviceIdiom(string deviceIdiom)
         {
             if (deviceIdiom == null)

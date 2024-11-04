@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Runtime.Intrinsics.Arm;
+using P42.Uno.Xamarin.Essentials;
+using Windows.ApplicationModel.Core;
 using Windows.Graphics.Display;
 using Windows.Graphics.Display.Core;
 using Windows.System.Display;
+using Windows.UI.Core;
 
 namespace Xamarin.Essentials
 {
@@ -49,12 +52,26 @@ namespace Xamarin.Essentials
         {
             try
             {
-                di = di ?? DisplayInformation.GetForCurrentView();
+                var coreWindow = CoreWindow.GetForCurrentThread();
+                Console.WriteLine($"coreWindow = {coreWindow}");
+
+                Console.WriteLine($"Views:");
+                foreach (var view in CoreApplication.Views)
+                {
+                    Console.WriteLine($"VIEW[{view}] .coreWindow:{view.CoreWindow}");
+                }
+
+                Console.WriteLine($"IsMainThread: {MainThread.IsMainThread}");
+                Console.WriteLine($"MainThread: {Platform.MainThread.Name}:{Platform.MainThread.IsAlive}:{Platform.MainThread.ManagedThreadId}");
+
+                /*
+                di ??= MainThread.InvokeOnMainThread(() => DisplayInformation.GetForCurrentView());
 
                 var rotation = CalculateRotation(di);
                 var perpendicular =
                     rotation == DisplayRotation.Rotation90 ||
                     rotation == DisplayRotation.Rotation270;
+                
 
                 var w = di.ScreenWidthInRawPixels;
                 var h = di.ScreenHeightInRawPixels;
@@ -69,6 +86,9 @@ namespace Xamarin.Essentials
                     orientation: CalculateOrientation(di),
                     rotation: rotation,
                     rate: (float)(hdm?.RefreshRate ?? 0));
+                */
+
+                return DisplayHelper.GetDisplayInfoForWindow(Platform.MainWindow);
             }
             catch (Exception e)
             {
