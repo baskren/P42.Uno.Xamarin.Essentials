@@ -2,49 +2,48 @@
 using Android.Hardware;
 using Android.Runtime;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Barometer
 {
-    public static partial class Barometer
+    internal static bool IsSupported =>
+        DefaultBarometer != null;
+
+    static Sensor DefaultBarometer => Platform.SensorManager?.GetDefaultSensor(SensorType.Pressure);
+
+    static Sensor barometer;
+
+    static BarometerListener listener;
+
+    static void PlatformStart(SensorSpeed sensorSpeed)
     {
-        internal static bool IsSupported =>
-               DefaultBarometer != null;
-
-        static Sensor DefaultBarometer => Platform.SensorManager?.GetDefaultSensor(SensorType.Pressure);
-
-        static Sensor barometer;
-
-        static BarometerListener listener;
-
-        static void PlatformStart(SensorSpeed sensorSpeed)
-        {
-            listener = new BarometerListener();
-            barometer = DefaultBarometer;
-            Platform.SensorManager.RegisterListener(listener, barometer, sensorSpeed.ToPlatform());
-        }
-
-        static void PlatformStop()
-        {
-            if (listener == null)
-                return;
-
-            Platform.SensorManager.UnregisterListener(listener, barometer);
-            listener.Dispose();
-            listener = null;
-        }
+        listener = new BarometerListener();
+        barometer = DefaultBarometer;
+        Platform.SensorManager.RegisterListener(listener, barometer, sensorSpeed.ToPlatform());
     }
 
-    class BarometerListener : Java.Lang.Object, ISensorEventListener, IDisposable
+    static void PlatformStop()
     {
-        void ISensorEventListener.OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
-        {
-        }
+        if (listener == null)
+            return;
 
-        void ISensorEventListener.OnSensorChanged(SensorEvent e)
-        {
-            if ((e?.Values?.Count ?? 0) <= 0)
-                return;
+        Platform.SensorManager.UnregisterListener(listener, barometer);
+        listener.Dispose();
+        listener = null;
+    }
+}
 
-            Barometer.OnChanged(new BarometerData(e.Values[0]));
-        }
+class BarometerListener : Java.Lang.Object, ISensorEventListener, IDisposable
+{
+    void ISensorEventListener.OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
+    {
+    }
+
+    void ISensorEventListener.OnSensorChanged(SensorEvent e)
+    {
+        if ((e?.Values?.Count ?? 0) <= 0)
+            return;
+
+        Barometer.OnChanged(new BarometerData(e.Values[0]));
     }
 }

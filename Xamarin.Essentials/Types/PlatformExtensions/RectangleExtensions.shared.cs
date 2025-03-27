@@ -2,34 +2,31 @@
 using System.Drawing;
 using Windows.Foundation;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class RectangleExtensions
 {
-    public static partial class RectangleExtensions
+    public static Rectangle ToSystemRectangle(this Rect rect)
     {
-        public static Rectangle ToSystemRectangle(this Rect rect)
-        {
-            if (rect.X > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(rect.X));
+        if (rect.X > int.MaxValue)
+            throw new ArgumentOutOfRangeException(nameof(rect.X));
 
-            if (rect.Y > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(rect.Y));
+        if (rect.Y > int.MaxValue)
+            throw new ArgumentOutOfRangeException(nameof(rect.Y));
 
-            if (rect.Width > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(rect.Width));
+        if (rect.Width > int.MaxValue)
+            throw new ArgumentOutOfRangeException(nameof(rect.Width));
 
-            if (rect.Height > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(rect.Height));
+        if (rect.Height > int.MaxValue)
+            throw new ArgumentOutOfRangeException(nameof(rect.Height));
 
-            return new Rectangle((int)rect.X, (int)rect.Y, (int)rect.Width, (int)rect.Height);
-        }
-
-        public static RectangleF ToSystemRectangleF(this Rect rect) =>
-            new RectangleF((float)rect.X, (float)rect.Y, (float)rect.Width, (float)rect.Height);
-
-        public static Rect ToWindowsRectangle(this Rectangle rect) =>
-            new Rect(rect.X, rect.Y, rect.Width, rect.Height);
-
-        public static Rect ToWindowsRectangle(this RectangleF rect) =>
-            new Rect(rect.X, rect.Y, rect.Width, rect.Height);
+        return new Rectangle((int)rect.X, (int)rect.Y, (int)rect.Width, (int)rect.Height);
     }
+
+    public static RectangleF ToSystemRectangleF(this Rect rect) =>
+        new((float)rect.X, (float)rect.Y, (float)rect.Width, (float)rect.Height);
+
+    public static Rect ToWindowsRectangle(this Rectangle rect) => new(rect.X, rect.Y, rect.Width, rect.Height);
+
+    public static Rect ToWindowsRectangle(this RectangleF rect) => new(rect.X, rect.Y, rect.Width, rect.Height);
 }

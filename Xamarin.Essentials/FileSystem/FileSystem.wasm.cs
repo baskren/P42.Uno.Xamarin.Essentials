@@ -6,84 +6,83 @@ using Uno.Foundation;
 using Windows.ApplicationModel;
 using Windows.Storage;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class FileSystem
 {
-    public static partial class FileSystem
+    static string PlatformCacheDirectory
     {
-        static string PlatformCacheDirectory
+        get
         {
-            get
-            {
-                var folder = ApplicationData.Current.LocalCacheFolder.Path;
-                FileSystem.AssureExists(folder);
-                return folder;
-            }
-        }
-
-        static string PlatformAppDataDirectory
-        {
-            get
-            {
-                var folder = ApplicationData.Current.LocalFolder.Path;
-                FileSystem.AssureExists(folder);
-                return folder;
-            }
-        }
-
-        static async Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
-        {
-            if (filename == null)
-                throw new ArgumentNullException(nameof(filename));
-
-            var json = await WebAssemblyRuntime.InvokeAsync($"UnoFileSystem_FileForAsset('{filename}')");
-            var result = JsonConvert.DeserializeObject<FileForAssetResult>(json);
-
-            if (result.Abort || !string.IsNullOrWhiteSpace(result.Error))
-                return null;
-
-            // return Package.Current.InstalledLocation.OpenStreamForReadAsync(NormalizePath(filename));
-            return File.OpenRead(result.Path);
-        }
-
-        internal static string NormalizePath(string path)
-            => path.Replace('/', Path.DirectorySeparatorChar);
-    }
-
-    public class FileForAssetResult
-    {
-        public string Error { get; set; }
-
-        public bool Abort { get; set; }
-
-        public string Path { get; set; }
-
-        public string IsText { get; set; }
-
-        [Preserve]
-        public FileForAssetResult()
-        {
+            var folder = ApplicationData.Current.LocalCacheFolder.Path;
+            AssureExists(folder);
+            return folder;
         }
     }
 
-    public partial class FileBase
+    static string PlatformAppDataDirectory
     {
-        // we can't do anything here, but Windows will take care of it
-        internal static string PlatformGetContentType(string extension) => null;
-
-        internal void PlatformInit(FileBase file)
+        get
         {
+            var folder = ApplicationData.Current.LocalFolder.Path;
+            AssureExists(folder);
+            return folder;
         }
+    }
 
-        internal virtual Task<Stream> PlatformOpenReadAsync()
-        {
-            if (StorageFile != null)
-                return StorageFile.OpenStreamForReadAsync();
-            return Task.FromResult((Stream)File.OpenRead(FullPath));
-        }
+    static async Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
+    {
+        if (filename == null)
+            throw new ArgumentNullException(nameof(filename));
 
-        public override string ToString()
-        {
-            return "{ type: " + GetType() + ", Path: " + FullPath + ", contentType: " + contentType + ", name: " + FileName + " }";
-        }
+        var json = await WebAssemblyRuntime.InvokeAsync($"UnoFileSystem_FileForAsset('{filename}')");
+        var result = JsonConvert.DeserializeObject<FileForAssetResult>(json);
+
+        if (result.Abort || !string.IsNullOrWhiteSpace(result.Error))
+            return null;
+
+        // return Package.Current.InstalledLocation.OpenStreamForReadAsync(NormalizePath(filename));
+        return File.OpenRead(result.Path);
+    }
+
+    internal static string NormalizePath(string path)
+        => path.Replace('/', Path.DirectorySeparatorChar);
+}
+
+public class FileForAssetResult
+{
+    public string Error { get; set; }
+
+    public bool Abort { get; set; }
+
+    public string Path { get; set; }
+
+    public string IsText { get; set; }
+
+    [Preserve]
+    public FileForAssetResult()
+    {
+    }
+}
+
+public partial class FileBase
+{
+    // we can't do anything here, but Windows will take care of it
+    internal static string PlatformGetContentType(string extension) => null;
+
+    internal void PlatformInit(FileBase file)
+    {
+    }
+
+    internal virtual Task<Stream> PlatformOpenReadAsync()
+    {
+        if (StorageFile != null)
+            return StorageFile.OpenStreamForReadAsync();
+        return Task.FromResult((Stream)File.OpenRead(FullPath));
+    }
+
+    public override string ToString()
+    {
+        return $"{{ type: {GetType()}, Path: {FullPath}, contentType: {contentType}, name: {FileName} }}";
     }
 }

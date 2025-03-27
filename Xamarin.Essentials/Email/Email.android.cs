@@ -8,97 +8,96 @@ using Android.Webkit;
 using Uri = Android.Net.Uri;
 
 #pragma warning disable CA1422 // Validate platform compatibility
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Email
 {
-    public static partial class Email
+    static readonly EmailMessage testEmail =
+        new("Testing Xamarin.Essentials", "This is a test email.", "Xamarin.Essentials@example.org");
+
+    internal static bool IsComposeSupported
+        => Platform.IsIntentSupported(CreateIntent(testEmail));
+
+    internal static bool PlatformSupportsAttachments
+        => true;
+
+    static Task PlatformComposeAsync(EmailMessage message)
     {
-        static readonly EmailMessage testEmail =
-            new EmailMessage("Testing Xamarin.Essentials", "This is a test email.", "Xamarin.Essentials@example.org");
+        var intent = CreateIntent(message);
+        var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
 
-        internal static bool IsComposeSupported
-            => Platform.IsIntentSupported(CreateIntent(testEmail));
+        intent.SetFlags(flags);
 
-        internal static bool PlatformSupportsAttachments
-            => true;
+        Platform.AppContext.StartActivity(intent);
 
-        static Task PlatformComposeAsync(EmailMessage message)
+        return Task.FromResult(true);
+    }
+
+    static Intent CreateIntent(EmailMessage message)
+    {
+        var action = (message?.Attachments?.Count ?? 0) switch
         {
-            var intent = CreateIntent(message);
-            var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
+            0 => Intent.ActionSendto,
+            1 => Intent.ActionSend,
+            _ => Intent.ActionSendMultiple
+        };
+        var intent = new Intent(action);
 
-            intent.SetFlags(flags);
+        if (action == Intent.ActionSendto)
+            intent.SetData(Uri.Parse("mailto:"));
+        else
+            intent.SetType(FileSystem.MimeTypes.EmailMessage);
 
-            Platform.AppContext.StartActivity(intent);
-
-            return Task.FromResult(true);
-        }
-
-        static Intent CreateIntent(EmailMessage message)
+        if (!string.IsNullOrEmpty(message?.Body))
         {
-            var action = (message?.Attachments?.Count ?? 0) switch
+            if (message.BodyFormat == EmailBodyFormat.Html)
             {
-                0 => Intent.ActionSendto,
-                1 => Intent.ActionSend,
-                _ => Intent.ActionSendMultiple
-            };
-            var intent = new Intent(action);
-
-            if (action == Intent.ActionSendto)
-                intent.SetData(Uri.Parse("mailto:"));
-            else
-                intent.SetType(FileSystem.MimeTypes.EmailMessage);
-
-            if (!string.IsNullOrEmpty(message?.Body))
-            {
-                if (message.BodyFormat == EmailBodyFormat.Html)
-                {
-                    ISpanned html;
+                ISpanned html;
 #if __ANDROID_24__
-                    if (Platform.HasApiLevelN)
-                    {
-                        html = Html.FromHtml(message.Body, FromHtmlOptions.ModeLegacy);
-                    }
-                    else
+                if (Platform.HasApiLevelN)
+                {
+                    html = Html.FromHtml(message.Body, FromHtmlOptions.ModeLegacy);
+                }
+                else
 #endif
-                    {
+                {
 #pragma warning disable CS0618 // Type or member is obsolete
-                        html = Html.FromHtml(message.Body);
+                    html = Html.FromHtml(message.Body);
 #pragma warning restore CS0618 // Type or member is obsolete
-                    }
-                    intent.PutExtra(Intent.ExtraText, html);
                 }
-                else
-                {
-                    intent.PutExtra(Intent.ExtraText, message.Body);
-                }
+                intent.PutExtra(Intent.ExtraText, html);
             }
-            if (!string.IsNullOrEmpty(message?.Subject))
-                intent.PutExtra(Intent.ExtraSubject, message.Subject);
-            if (message?.To?.Count > 0)
-                intent.PutExtra(Intent.ExtraEmail, message.To.ToArray());
-            if (message?.Cc?.Count > 0)
-                intent.PutExtra(Intent.ExtraCc, message.Cc.ToArray());
-            if (message?.Bcc?.Count > 0)
-                intent.PutExtra(Intent.ExtraBcc, message.Bcc.ToArray());
-
-            if (message?.Attachments?.Count > 0)
+            else
             {
-                var uris = new List<IParcelable>();
-                foreach (var attachment in message.Attachments)
-                {
-                    uris.Add(Platform.GetShareableFileUri(attachment));
-                }
+                intent.PutExtra(Intent.ExtraText, message.Body);
+            }
+        }
+        if (!string.IsNullOrEmpty(message?.Subject))
+            intent.PutExtra(Intent.ExtraSubject, message.Subject);
+        if (message?.To?.Count > 0)
+            intent.PutExtra(Intent.ExtraEmail, message.To.ToArray());
+        if (message?.Cc?.Count > 0)
+            intent.PutExtra(Intent.ExtraCc, message.Cc.ToArray());
+        if (message?.Bcc?.Count > 0)
+            intent.PutExtra(Intent.ExtraBcc, message.Bcc.ToArray());
 
-                if (uris.Count > 1)
-                    intent.PutParcelableArrayListExtra(Intent.ExtraStream, uris);
-                else
-                    intent.PutExtra(Intent.ExtraStream, uris[0]);
-
-                intent.AddFlags(ActivityFlags.GrantReadUriPermission);
+        if (message?.Attachments?.Count > 0)
+        {
+            var uris = new List<IParcelable>();
+            foreach (var attachment in message.Attachments)
+            {
+                uris.Add(Platform.GetShareableFileUri(attachment));
             }
 
-            return intent;
+            if (uris.Count > 1)
+                intent.PutParcelableArrayListExtra(Intent.ExtraStream, uris);
+            else
+                intent.PutExtra(Intent.ExtraStream, uris[0]);
+
+            intent.AddFlags(ActivityFlags.GrantReadUriPermission);
         }
+
+        return intent;
     }
 }
 #pragma warning restore CA1422 // Validate platform compatibility

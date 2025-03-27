@@ -5,41 +5,40 @@ using SafariServices;
 using UIKit;
 
 #pragma warning disable CA1422 // Call site reachable on all platforms
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Browser
 {
-    public static partial class Browser
+    static async Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchOptions options)
     {
-        static async Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchOptions options)
+        switch (options.LaunchMode)
         {
-            switch (options.LaunchMode)
-            {
-                case BrowserLaunchMode.SystemPreferred:
-                    var nativeUrl = new NSUrl(uri.AbsoluteUri);
-                    var sfViewController = new SFSafariViewController(nativeUrl, false);
-                    var vc = Platform.GetCurrentViewController();
+            case BrowserLaunchMode.SystemPreferred:
+                var nativeUrl = new NSUrl(uri.AbsoluteUri);
+                var sfViewController = new SFSafariViewController(nativeUrl, false);
+                var vc = Platform.GetCurrentViewController();
 
-                    if (options.PreferredToolbarColor.HasValue)
-                        sfViewController.PreferredBarTintColor = options.PreferredToolbarColor.Value.ToPlatformColor();
+                if (options.PreferredToolbarColor.HasValue)
+                    sfViewController.PreferredBarTintColor = options.PreferredToolbarColor.Value.ToPlatformColor();
 
-                    if (options.PreferredControlColor.HasValue)
-                        sfViewController.PreferredControlTintColor = options.PreferredControlColor.Value.ToPlatformColor();
+                if (options.PreferredControlColor.HasValue)
+                    sfViewController.PreferredControlTintColor = options.PreferredControlColor.Value.ToPlatformColor();
 
-                    if (sfViewController.PopoverPresentationController != null)
-                        sfViewController.PopoverPresentationController.SourceView = vc.View;
+                if (sfViewController.PopoverPresentationController != null)
+                    sfViewController.PopoverPresentationController.SourceView = vc.View;
 
-                    if (options.HasFlag(BrowserLaunchFlags.PresentAsFormSheet))
-                        sfViewController.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
-                    else if (options.HasFlag(BrowserLaunchFlags.PresentAsPageSheet))
-                        sfViewController.ModalPresentationStyle = UIModalPresentationStyle.PageSheet;
+                if (options.HasFlag(BrowserLaunchFlags.PresentAsFormSheet))
+                    sfViewController.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
+                else if (options.HasFlag(BrowserLaunchFlags.PresentAsPageSheet))
+                    sfViewController.ModalPresentationStyle = UIModalPresentationStyle.PageSheet;
 
-                    await vc.PresentViewControllerAsync(sfViewController, true);
-                    break;
-                case BrowserLaunchMode.External:
-                    return await Launcher.PlatformOpenAsync(uri);
-            }
-
-            return true;
+                await vc.PresentViewControllerAsync(sfViewController, true);
+                break;
+            case BrowserLaunchMode.External:
+                return await Launcher.PlatformOpenAsync(uri);
         }
+
+        return true;
     }
 }
 #pragma warning restore CA1422 // Call site reachable on all platforms

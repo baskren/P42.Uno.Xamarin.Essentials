@@ -1,55 +1,54 @@
 ﻿using Android.Hardware;
 using Android.Runtime;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Accelerometer
 {
-    public static partial class Accelerometer
+    internal static bool IsSupported =>
+        Platform.SensorManager?.GetDefaultSensor(SensorType.Accelerometer) != null;
+
+    static AccelerometerListener listener;
+    static Sensor accelerometer;
+
+    internal static void PlatformStart(SensorSpeed sensorSpeed)
     {
-        internal static bool IsSupported =>
-            Platform.SensorManager?.GetDefaultSensor(SensorType.Accelerometer) != null;
-
-        static AccelerometerListener listener;
-        static Sensor accelerometer;
-
-        internal static void PlatformStart(SensorSpeed sensorSpeed)
-        {
-            var delay = sensorSpeed.ToPlatform();
-            listener = new AccelerometerListener();
-            accelerometer = Platform.SensorManager.GetDefaultSensor(SensorType.Accelerometer);
-            Platform.SensorManager.RegisterListener(listener, accelerometer, delay);
-        }
-
-        internal static void PlatformStop()
-        {
-            if (listener == null || accelerometer == null)
-                return;
-
-            Platform.SensorManager.UnregisterListener(listener, accelerometer);
-            listener.Dispose();
-            listener = null;
-        }
+        var delay = sensorSpeed.ToPlatform();
+        listener = new AccelerometerListener();
+        accelerometer = Platform.SensorManager.GetDefaultSensor(SensorType.Accelerometer);
+        Platform.SensorManager.RegisterListener(listener, accelerometer, delay);
     }
 
-    class AccelerometerListener : Java.Lang.Object, ISensorEventListener
+    internal static void PlatformStop()
     {
-        // acceleration due to gravity
-        const double gravity = 9.81;
+        if (listener == null || accelerometer == null)
+            return;
 
-        internal AccelerometerListener()
-        {
-        }
+        Platform.SensorManager.UnregisterListener(listener, accelerometer);
+        listener.Dispose();
+        listener = null;
+    }
+}
 
-        void ISensorEventListener.OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
-        {
-        }
+class AccelerometerListener : Java.Lang.Object, ISensorEventListener
+{
+    // acceleration due to gravity
+    const double gravity = 9.81;
 
-        void ISensorEventListener.OnSensorChanged(SensorEvent e)
-        {
-            if ((e?.Values?.Count ?? 0) < 3)
-                return;
+    internal AccelerometerListener()
+    {
+    }
 
-            var data = new AccelerometerData(e.Values[0] / gravity, e.Values[1] / gravity, e.Values[2] / gravity);
-            Accelerometer.OnChanged(data);
-        }
+    void ISensorEventListener.OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
+    {
+    }
+
+    void ISensorEventListener.OnSensorChanged(SensorEvent e)
+    {
+        if ((e?.Values?.Count ?? 0) < 3)
+            return;
+
+        var data = new AccelerometerData(e.Values[0] / gravity, e.Values[1] / gravity, e.Values[2] / gravity);
+        Accelerometer.OnChanged(data);
     }
 }

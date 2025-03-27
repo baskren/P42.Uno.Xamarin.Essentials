@@ -1,34 +1,33 @@
 ﻿using System;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Vibration
 {
-    public static partial class Vibration
+    public static void Vibrate()
+        => Vibrate(TimeSpan.FromMilliseconds(500));
+
+    public static void Vibrate(double duration)
+        => Vibrate(TimeSpan.FromMilliseconds(duration));
+
+    public static void Vibrate(TimeSpan duration)
     {
-        public static void Vibrate()
-            => Vibrate(TimeSpan.FromMilliseconds(500));
+        if (!IsSupported)
+            throw new FeatureNotSupportedException();
 
-        public static void Vibrate(double duration)
-            => Vibrate(TimeSpan.FromMilliseconds(duration));
+        if (duration.TotalMilliseconds < 0)
+            duration = TimeSpan.Zero;
+        else if (duration.TotalSeconds > 5)
+            duration = TimeSpan.FromSeconds(5);
 
-        public static void Vibrate(TimeSpan duration)
-        {
-            if (!IsSupported)
-                throw new FeatureNotSupportedException();
+        PlatformVibrate(duration);
+    }
 
-            if (duration.TotalMilliseconds < 0)
-                duration = TimeSpan.Zero;
-            else if (duration.TotalSeconds > 5)
-                duration = TimeSpan.FromSeconds(5);
+    public static void Cancel()
+    {
+        if (!IsSupported)
+            throw new FeatureNotSupportedException();
 
-            PlatformVibrate(duration);
-        }
-
-        public static void Cancel()
-        {
-            if (!IsSupported)
-                throw new FeatureNotSupportedException();
-
-            PlatformCancel();
-        }
+        PlatformCancel();
     }
 }

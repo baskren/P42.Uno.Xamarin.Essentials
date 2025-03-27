@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
     public static partial class Email
     {
         internal static bool IsComposeSupported
-            => false; //ApiInformation.IsTypePresent("Windows.ApplicationModel.Email.EmailManager");
+            => ApiInformation.IsTypePresent("Windows.ApplicationModel.Email.EmailManager");
 
         internal static bool PlatformSupportsAttachments
             => true;

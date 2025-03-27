@@ -9,64 +9,63 @@ using UIKit;
 
 using ObjCRuntime;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class DeviceInfo
 {
-    public static partial class DeviceInfo
+    static string GetModel()
     {
-        static string GetModel()
+        try
         {
-            try
-            {
-                return Essentials.Platform.GetSystemLibraryProperty("hw.machine");
-            }
-            catch (Exception)
-            {
-                Debug.WriteLine("Unable to query hardware model, returning current device model.");
-            }
-            return UIDevice.CurrentDevice.Model;
+            return Essentials.Platform.GetSystemLibraryProperty("hw.machine");
         }
+        catch (Exception)
+        {
+            Debug.WriteLine("Unable to query hardware model, returning current device model.");
+        }
+        return UIDevice.CurrentDevice.Model;
+    }
 
-        static string GetManufacturer() => "Apple";
+    static string GetManufacturer() => "Apple";
 
-        static string GetDeviceName() => UIDevice.CurrentDevice.Name;
+    static string GetDeviceName() => UIDevice.CurrentDevice.Name;
 
-        static string GetVersionString() => UIDevice.CurrentDevice.SystemVersion;
+    static string GetVersionString() => UIDevice.CurrentDevice.SystemVersion;
 
-        static DevicePlatform GetPlatform() =>
+    static DevicePlatform GetPlatform() =>
 #if __IOS__
-            DevicePlatform.iOS;
+        DevicePlatform.iOS;
 #elif __TVOS__
             DevicePlatform.tvOS;
 #elif __WATCHOS__
             DevicePlatform.watchOS;
 #endif
 
-        static DeviceIdiom GetIdiom()
-        {
+    static DeviceIdiom GetIdiom()
+    {
 #if __WATCHOS__
             return DeviceIdiom.Watch;
 #else
-            switch (UIDevice.CurrentDevice.UserInterfaceIdiom)
-            {
-                case UIUserInterfaceIdiom.Pad:
-                    return DeviceIdiom.Tablet;
-                case UIUserInterfaceIdiom.Phone:
-                    return DeviceIdiom.Phone;
-                case UIUserInterfaceIdiom.TV:
-                    return DeviceIdiom.TV;
-                case UIUserInterfaceIdiom.CarPlay:
-                case UIUserInterfaceIdiom.Unspecified:
-                default:
-                    return DeviceIdiom.Unknown;
-            }
-#endif
+        switch (UIDevice.CurrentDevice.UserInterfaceIdiom)
+        {
+            case UIUserInterfaceIdiom.Pad:
+                return DeviceIdiom.Tablet;
+            case UIUserInterfaceIdiom.Phone:
+                return DeviceIdiom.Phone;
+            case UIUserInterfaceIdiom.TV:
+                return DeviceIdiom.TV;
+            case UIUserInterfaceIdiom.CarPlay:
+            case UIUserInterfaceIdiom.Unspecified:
+            default:
+                return DeviceIdiom.Unknown;
         }
+#endif
+    }
 
-        static DeviceType GetDeviceType()
+    static DeviceType GetDeviceType()
 #if __MACCATALYST__
-            => DeviceType.Physical;
+        => DeviceType.Physical;
 #else
             => Runtime.Arch == Arch.DEVICE ? DeviceType.Physical : DeviceType.Virtual;
 #endif
-    }
 }

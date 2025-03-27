@@ -2,28 +2,23 @@
 using System.Threading.Tasks;
 using CoreLocation;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Geocoding
 {
-    public static partial class Geocoding
+    static async Task<IEnumerable<Placemark>> PlatformGetPlacemarksAsync(double latitude, double longitude)
     {
-        static async Task<IEnumerable<Placemark>> PlatformGetPlacemarksAsync(double latitude, double longitude)
-        {
-            using (var geocoder = new CLGeocoder())
-            {
-                var addressList = await geocoder.ReverseGeocodeLocationAsync(new CLLocation(latitude, longitude));
+        using var geocoder = new CLGeocoder();
+        var addressList = await geocoder.ReverseGeocodeLocationAsync(new CLLocation(latitude, longitude));
 
-                return addressList?.ToPlacemarks();
-            }
-        }
+        return addressList?.ToPlacemarks();
+    }
 
-        static async Task<IEnumerable<Location>> PlatformGetLocationsAsync(string address)
-        {
-            using (var geocoder = new CLGeocoder())
-            {
-                var positionList = await geocoder.GeocodeAddressAsync(address);
+    static async Task<IEnumerable<Location>> PlatformGetLocationsAsync(string address)
+    {
+        using var geocoder = new CLGeocoder();
+        var positionList = await geocoder.GeocodeAddressAsync(address);
 
-                return positionList?.ToLocations();
-            }
-        }
+        return positionList?.ToLocations();
     }
 }

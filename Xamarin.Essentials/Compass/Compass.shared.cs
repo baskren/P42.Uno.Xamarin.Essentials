@@ -1,103 +1,102 @@
 ﻿using System;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Compass
 {
-    public static partial class Compass
+    static bool useSyncContext;
+
+    public static event EventHandler<CompassChangedEventArgs> ReadingChanged;
+
+    public static bool IsMonitoring { get; private set; }
+
+    public static void Start(SensorSpeed sensorSpeed) => Start(sensorSpeed, true);
+
+    public static void Start(SensorSpeed sensorSpeed, bool applyLowPassFilter)
     {
-        static bool useSyncContext;
+        if (!IsSupported)
+            throw new FeatureNotSupportedException();
 
-        public static event EventHandler<CompassChangedEventArgs> ReadingChanged;
+        if (IsMonitoring)
+            throw new InvalidOperationException("Compass has already been started.");
 
-        public static bool IsMonitoring { get; private set; }
+        IsMonitoring = true;
+        useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;
 
-        public static void Start(SensorSpeed sensorSpeed) => Start(sensorSpeed, true);
-
-        public static void Start(SensorSpeed sensorSpeed, bool applyLowPassFilter)
+        try
         {
-            if (!IsSupported)
-                throw new FeatureNotSupportedException();
-
-            if (IsMonitoring)
-                throw new InvalidOperationException("Compass has already been started.");
-
-            IsMonitoring = true;
-            useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;
-
-            try
-            {
-                PlatformStart(sensorSpeed, applyLowPassFilter);
-            }
-            catch
-            {
-                IsMonitoring = false;
-                throw;
-            }
+            PlatformStart(sensorSpeed, applyLowPassFilter);
         }
-
-        public static void Stop()
+        catch
         {
-            if (!IsSupported)
-                throw new FeatureNotSupportedException();
-
-            if (!IsMonitoring)
-                return;
-
             IsMonitoring = false;
-
-            try
-            {
-                PlatformStop();
-            }
-            catch
-            {
-                IsMonitoring = true;
-                throw;
-            }
+            throw;
         }
+    }
 
-        internal static void OnChanged(CompassData reading) =>
-            OnChanged(new CompassChangedEventArgs(reading));
+    public static void Stop()
+    {
+        if (!IsSupported)
+            throw new FeatureNotSupportedException();
 
-        internal static void OnChanged(CompassChangedEventArgs e)
+        if (!IsMonitoring)
+            return;
+
+        IsMonitoring = false;
+
+        try
         {
-            if (useSyncContext)
-                MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
-            else
-                ReadingChanged?.Invoke(null, e);
+            PlatformStop();
+        }
+        catch
+        {
+            IsMonitoring = true;
+            throw;
         }
     }
 
-    public class CompassChangedEventArgs : EventArgs
+    internal static void OnChanged(CompassData reading) =>
+        OnChanged(new CompassChangedEventArgs(reading));
+
+    internal static void OnChanged(CompassChangedEventArgs e)
     {
-        public CompassChangedEventArgs(CompassData reading) =>
-            Reading = reading;
-
-        public CompassData Reading { get; }
+        if (useSyncContext)
+            MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
+        else
+            ReadingChanged?.Invoke(null, e);
     }
+}
 
-    public readonly struct CompassData : IEquatable<CompassData>
-    {
-        public CompassData(double headingMagneticNorth) =>
-            HeadingMagneticNorth = headingMagneticNorth;
+public class CompassChangedEventArgs : EventArgs
+{
+    public CompassChangedEventArgs(CompassData reading) =>
+        Reading = reading;
 
-        public double HeadingMagneticNorth { get; }
+    public CompassData Reading { get; }
+}
 
-        public override bool Equals(object obj) =>
-            (obj is CompassData data) && Equals(data);
+public readonly struct CompassData : IEquatable<CompassData>
+{
+    public CompassData(double headingMagneticNorth) =>
+        HeadingMagneticNorth = headingMagneticNorth;
 
-        public bool Equals(CompassData other) =>
-            HeadingMagneticNorth.Equals(other.HeadingMagneticNorth);
+    public double HeadingMagneticNorth { get; }
 
-        public static bool operator ==(CompassData left, CompassData right) =>
-            left.Equals(right);
+    public override bool Equals(object obj) =>
+        obj is CompassData data && Equals(data);
 
-        public static bool operator !=(CompassData left, CompassData right) =>
-           !left.Equals(right);
+    public bool Equals(CompassData other) =>
+        HeadingMagneticNorth.Equals(other.HeadingMagneticNorth);
 
-        public override int GetHashCode() =>
-            HeadingMagneticNorth.GetHashCode();
+    public static bool operator ==(CompassData left, CompassData right) =>
+        left.Equals(right);
 
-        public override string ToString() =>
-            $"{nameof(HeadingMagneticNorth)}: {HeadingMagneticNorth}";
-    }
+    public static bool operator !=(CompassData left, CompassData right) =>
+        !left.Equals(right);
+
+    public override int GetHashCode() =>
+        HeadingMagneticNorth.GetHashCode();
+
+    public override string ToString() =>
+        $"{nameof(HeadingMagneticNorth)}: {HeadingMagneticNorth}";
 }

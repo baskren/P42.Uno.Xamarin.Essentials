@@ -4,111 +4,110 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Email
 {
-    public static partial class Email
+    public static bool IsAvailable
+        => IsComposeSupported;
+
+    public static bool AreAttachmentsSupported
+        => PlatformSupportsAttachments;
+
+    public static Task ComposeAsync()
+        => ComposeAsync(null);
+
+    public static Task ComposeAsync(string subject, string body, params string[] to)
+        => ComposeAsync(new EmailMessage(subject, body, to));
+
+    public static Task ComposeAsync(EmailMessage message)
     {
-        public static bool IsAvailable
-            => IsComposeSupported;
+        if (!IsComposeSupported)
+            throw new FeatureNotSupportedException();
 
-        public static bool AreAttachmentsSupported
-            => PlatformSupportsAttachments;
-
-        public static Task ComposeAsync()
-            => ComposeAsync(null);
-
-        public static Task ComposeAsync(string subject, string body, params string[] to)
-            => ComposeAsync(new EmailMessage(subject, body, to));
-
-        public static Task ComposeAsync(EmailMessage message)
-        {
-            if (!IsComposeSupported)
-                throw new FeatureNotSupportedException();
-
-            return PlatformComposeAsync(message);
-        }
-
-        static string GetMailToUri(EmailMessage message)
-        {
-            if (message != null && message.BodyFormat != EmailBodyFormat.PlainText)
-                throw new FeatureNotSupportedException("Only EmailBodyFormat.PlainText is supported if no email account is set up.");
-
-            var parts = new List<string>();
-            if (!string.IsNullOrEmpty(message?.Body))
-                parts.Add("body=" + Uri.EscapeDataString(message.Body));
-            if (!string.IsNullOrEmpty(message?.Subject))
-                parts.Add("subject=" + Uri.EscapeDataString(message.Subject));
-            if (message?.Cc?.Count > 0)
-                parts.Add("cc=" + Uri.EscapeDataString(string.Join(",", message.Cc)));
-            if (message?.Bcc?.Count > 0)
-                parts.Add("bcc=" + Uri.EscapeDataString(string.Join(",", message.Bcc)));
-
-            var uri = "mailto:";
-
-            if (message?.To?.Count > 0)
-                uri += Uri.EscapeDataString(string.Join(",", message.To));
-
-            if (parts.Count > 0)
-                uri += "?" + string.Join("&", parts);
-
-            return uri;
-        }
+        return PlatformComposeAsync(message);
     }
 
-    public class EmailMessage
+    static string GetMailToUri(EmailMessage message)
     {
-        public EmailMessage()
-        {
-        }
+        if (message != null && message.BodyFormat != EmailBodyFormat.PlainText)
+            throw new FeatureNotSupportedException("Only EmailBodyFormat.PlainText is supported if no email account is set up.");
 
-        public EmailMessage(string subject, string body, params string[] to)
-        {
-            Subject = subject;
-            Body = body;
-            To = to?.ToList() ?? new List<string>();
-        }
+        var parts = new List<string>();
+        if (!string.IsNullOrEmpty(message?.Body))
+            parts.Add($"body={Uri.EscapeDataString(message.Body)}");
+        if (!string.IsNullOrEmpty(message?.Subject))
+            parts.Add($"subject={Uri.EscapeDataString(message.Subject)}");
+        if (message?.Cc?.Count > 0)
+            parts.Add($"cc={Uri.EscapeDataString(string.Join(",", message.Cc))}");
+        if (message?.Bcc?.Count > 0)
+            parts.Add($"bcc={Uri.EscapeDataString(string.Join(",", message.Bcc))}");
 
-        public string Subject { get; set; }
+        var uri = "mailto:";
 
-        public string Body { get; set; }
+        if (message?.To?.Count > 0)
+            uri += Uri.EscapeDataString(string.Join(",", message.To));
 
-        public EmailBodyFormat BodyFormat { get; set; }
+        if (parts.Count > 0)
+            uri += $"?{string.Join("&", parts)}";
 
-        public List<string> To { get; set; } = new List<string>();
+        return uri;
+    }
+}
 
-        public List<string> Cc { get; set; } = new List<string>();
-
-        public List<string> Bcc { get; set; } = new List<string>();
-
-        public List<EmailAttachment> Attachments { get; set; } = new List<EmailAttachment>();
+public class EmailMessage
+{
+    public EmailMessage()
+    {
     }
 
-    public enum EmailBodyFormat
+    public EmailMessage(string subject, string body, params string[] to)
     {
-        PlainText,
-        Html
+        Subject = subject;
+        Body = body;
+        To = to?.ToList() ?? [];
     }
 
-    public partial class EmailAttachment : FileBase
+    public string Subject { get; set; }
+
+    public string Body { get; set; }
+
+    public EmailBodyFormat BodyFormat { get; set; }
+
+    public List<string> To { get; set; } = [];
+
+    public List<string> Cc { get; set; } = [];
+
+    public List<string> Bcc { get; set; } = [];
+
+    public List<EmailAttachment> Attachments { get; set; } = [];
+}
+
+public enum EmailBodyFormat
+{
+    PlainText,
+    Html
+}
+
+public partial class EmailAttachment : FileBase
+{
+    public EmailAttachment(IStorageFile storageFile)
+        : base(storageFile)
     {
-        public EmailAttachment(IStorageFile storageFile)
-            : base(storageFile)
-        {
-        }
+    }
 
-        public EmailAttachment(string fullPath)
-            : base(fullPath)
-        {
-        }
+    public EmailAttachment(string fullPath)
+        : base(fullPath)
+    {
+    }
 
-        public EmailAttachment(string fullPath, string contentType)
-            : base(fullPath, contentType)
-        {
-        }
+    public EmailAttachment(string fullPath, string contentType)
+        : base(fullPath, contentType)
+    {
+    }
 
-        public EmailAttachment(FileBase file)
-            : base(file)
-        {
-        }
+    public EmailAttachment(FileBase file)
+        : base(file)
+    {
     }
 }

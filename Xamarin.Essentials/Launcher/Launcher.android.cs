@@ -7,62 +7,61 @@ using AndroidUri = Android.Net.Uri;
 using Uri = System.Uri;
 
 #pragma warning disable CA1422 // Validate platform compatibility
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Launcher
 {
-    public static partial class Launcher
+    static Task<bool> PlatformCanOpenAsync(Uri uri)
     {
-        static Task<bool> PlatformCanOpenAsync(Uri uri)
-        {
-            var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri.OriginalString));
+        var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri.OriginalString));
 
-            if (Platform.AppContext == null)
-                return Task.FromResult(false);
+        if (Platform.AppContext == null)
+            return Task.FromResult(false);
 
-            var manager = Platform.AppContext.PackageManager;
+        var manager = Platform.AppContext.PackageManager;
 #pragma warning disable CS0618 // Type or member is obsolete
-            var supportedResolvedInfos = manager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
+        var supportedResolvedInfos = manager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
 #pragma warning restore CS0618 // Type or member is obsolete
-            return Task.FromResult(supportedResolvedInfos.Any());
-        }
+        return Task.FromResult(supportedResolvedInfos.Any());
+    }
 
-        static Task PlatformOpenAsync(Uri uri)
-        {
-            var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri.OriginalString));
-            var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
+    static Task PlatformOpenAsync(Uri uri)
+    {
+        var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri.OriginalString));
+        var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
 
-            intent.SetFlags(flags);
+        intent.SetFlags(flags);
 
-            Platform.AppContext.StartActivity(intent);
-            return Task.CompletedTask;
-        }
+        Platform.AppContext.StartActivity(intent);
+        return Task.CompletedTask;
+    }
 
-        static Task PlatformOpenAsync(OpenFileRequest request)
-        {
-            var contentUri = Platform.GetShareableFileUri(request.File);
+    static Task PlatformOpenAsync(OpenFileRequest request)
+    {
+        var contentUri = Platform.GetShareableFileUri(request.File);
 
-            var intent = new Intent(Intent.ActionView);
-            intent.SetDataAndType(contentUri, request.File.ContentType);
-            intent.SetFlags(ActivityFlags.GrantReadUriPermission);
+        var intent = new Intent(Intent.ActionView);
+        intent.SetDataAndType(contentUri, request.File.ContentType);
+        intent.SetFlags(ActivityFlags.GrantReadUriPermission);
 
-            var chooserIntent = Intent.CreateChooser(intent, request.Title ?? string.Empty);
-            var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
+        var chooserIntent = Intent.CreateChooser(intent, request.Title ?? string.Empty);
+        var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
 
-            chooserIntent.SetFlags(flags);
+        chooserIntent.SetFlags(flags);
 
-            Platform.AppContext.StartActivity(chooserIntent);
+        Platform.AppContext.StartActivity(chooserIntent);
 
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
+    }
 
-        static async Task<bool> PlatformTryOpenAsync(Uri uri)
-        {
-            var canOpen = await PlatformCanOpenAsync(uri);
+    static async Task<bool> PlatformTryOpenAsync(Uri uri)
+    {
+        var canOpen = await PlatformCanOpenAsync(uri);
 
-            if (canOpen)
-                await PlatformOpenAsync(uri);
+        if (canOpen)
+            await PlatformOpenAsync(uri);
 
-            return canOpen;
-        }
+        return canOpen;
     }
 }
 #pragma warning restore CA1422 // Validate platform compatibility

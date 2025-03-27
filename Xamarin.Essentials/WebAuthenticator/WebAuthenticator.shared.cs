@@ -4,23 +4,22 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class WebAuthenticator
 {
-    public static partial class WebAuthenticator
-    {
-        public static Task<WebAuthenticatorResult> AuthenticateAsync(Uri url, Uri callbackUrl)
-            => PlatformAuthenticateAsync(new WebAuthenticatorOptions { Url = url, CallbackUrl = callbackUrl });
+    public static Task<WebAuthenticatorResult> AuthenticateAsync(Uri url, Uri callbackUrl)
+        => PlatformAuthenticateAsync(new WebAuthenticatorOptions { Url = url, CallbackUrl = callbackUrl });
 
-        public static Task<WebAuthenticatorResult> AuthenticateAsync(WebAuthenticatorOptions webAuthenticatorOptions)
-            => PlatformAuthenticateAsync(webAuthenticatorOptions);
-    }
+    public static Task<WebAuthenticatorResult> AuthenticateAsync(WebAuthenticatorOptions webAuthenticatorOptions)
+        => PlatformAuthenticateAsync(webAuthenticatorOptions);
+}
 
-    public class WebAuthenticatorOptions
-    {
-        public Uri Url { get; set; }
+public class WebAuthenticatorOptions
+{
+    public Uri Url { get; set; }
 
-        public Uri CallbackUrl { get; set; }
+    public Uri CallbackUrl { get; set; }
 
-        public bool PrefersEphemeralWebBrowserSession { get; set; }
-    }
+    public bool PrefersEphemeralWebBrowserSession { get; set; }
 }

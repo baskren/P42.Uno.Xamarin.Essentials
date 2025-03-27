@@ -4,68 +4,67 @@ using System.Threading.Tasks;
 using Android.Graphics;
 using Android.Views;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Screenshot
 {
-    public static partial class Screenshot
+    static bool PlatformIsCaptureSupported =>
+        true;
+
+    static Task<ScreenshotResult> PlatformCaptureAsync()
     {
-        static bool PlatformIsCaptureSupported =>
-            true;
+        if (Platform.WindowManager?.DefaultDisplay?.Flags.HasFlag(DisplayFlags.Secure) == true)
+            throw new UnauthorizedAccessException("Unable to take a screenshot of a secure window.");
 
-        static Task<ScreenshotResult> PlatformCaptureAsync()
+        var view = Platform.GetCurrentActivity(true)?.Window?.DecorView?.RootView;
+        if (view == null)
+            throw new NullReferenceException("Unable to find the main window.");
+
+        var bitmap = Bitmap.CreateBitmap(view.Width, view.Height, Bitmap.Config.Argb8888);
+
+        using (var canvas = new Canvas(bitmap))
         {
-            if (Platform.WindowManager?.DefaultDisplay?.Flags.HasFlag(DisplayFlags.Secure) == true)
-                throw new UnauthorizedAccessException("Unable to take a screenshot of a secure window.");
+            var drawable = view.Background;
+            if (drawable != null)
+                drawable.Draw(canvas);
+            else
+                canvas.DrawColor(Color.White);
 
-            var view = Platform.GetCurrentActivity(true)?.Window?.DecorView?.RootView;
-            if (view == null)
-                throw new NullReferenceException("Unable to find the main window.");
-
-            var bitmap = Bitmap.CreateBitmap(view.Width, view.Height, Bitmap.Config.Argb8888);
-
-            using (var canvas = new Canvas(bitmap))
-            {
-                var drawable = view.Background;
-                if (drawable != null)
-                    drawable.Draw(canvas);
-                else
-                    canvas.DrawColor(Color.White);
-
-                view.Draw(canvas);
-            }
-
-            var result = new ScreenshotResult(bitmap);
-
-            return Task.FromResult(result);
+            view.Draw(canvas);
         }
+
+        var result = new ScreenshotResult(bitmap);
+
+        return Task.FromResult(result);
+    }
+}
+
+public partial class ScreenshotResult
+{
+    readonly Bitmap bmp;
+
+    internal ScreenshotResult(Bitmap bmp)
+        : base()
+    {
+        this.bmp = bmp;
+
+        Width = bmp.Width;
+        Height = bmp.Height;
     }
 
-    public partial class ScreenshotResult
+    internal async Task<Stream> PlatformOpenReadAsync(ScreenshotFormat format)
     {
-        readonly Bitmap bmp;
+        var stream = new MemoryStream();
 
-        internal ScreenshotResult(Bitmap bmp)
-            : base()
+        var f = format switch
         {
-            this.bmp = bmp;
+            ScreenshotFormat.Jpeg => Bitmap.CompressFormat.Jpeg,
+            _ => Bitmap.CompressFormat.Png,
+        };
 
-            Width = bmp.Width;
-            Height = bmp.Height;
-        }
+        await bmp.CompressAsync(f, 100, stream).ConfigureAwait(false);
+        stream.Position = 0;
 
-        internal async Task<Stream> PlatformOpenReadAsync(ScreenshotFormat format)
-        {
-            var stream = new MemoryStream();
-
-            var f = format switch
-            {
-                ScreenshotFormat.Jpeg => Bitmap.CompressFormat.Jpeg,
-                _ => Bitmap.CompressFormat.Png,
-            };
-
-            await bmp.CompressAsync(f, 100, stream).ConfigureAwait(false);
-            stream.Position = 0;
-
-            return stream;
-        }
+        return stream;
     }
 }

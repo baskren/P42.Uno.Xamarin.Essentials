@@ -9,24 +9,24 @@ using AppKit;
 #endif
 
 #pragma warning disable CA1422 // Call site reachable on all platforms
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class AppInfo
 {
-    public static partial class AppInfo
-    {
-        static string PlatformGetPackageName() => GetBundleValue("CFBundleIdentifier");
+    static string PlatformGetPackageName() => GetBundleValue("CFBundleIdentifier");
 
-        static string PlatformGetName() => GetBundleValue("CFBundleDisplayName") ?? GetBundleValue("CFBundleName");
+    static string PlatformGetName() => GetBundleValue("CFBundleDisplayName") ?? GetBundleValue("CFBundleName");
 
-        static string PlatformGetVersionString() => GetBundleValue("CFBundleShortVersionString");
+    static string PlatformGetVersionString() => GetBundleValue("CFBundleShortVersionString");
 
-        static string PlatformGetBuild() => GetBundleValue("CFBundleVersion");
+    static string PlatformGetBuild() => GetBundleValue("CFBundleVersion");
 
-        static string GetBundleValue(string key)
-           => NSBundle.MainBundle.ObjectForInfoDictionary(key)?.ToString();
+    static string GetBundleValue(string key)
+        => NSBundle.MainBundle.ObjectForInfoDictionary(key)?.ToString();
 
 #if __IOS__ || __TVOS__
-        static async void PlatformShowSettingsUI()
-            => await Launcher.OpenAsync(UIApplication.OpenSettingsUrlString);
+    static async void PlatformShowSettingsUI()
+        => await Launcher.OpenAsync(UIApplication.OpenSettingsUrlString);
 #elif __MACOS__
         static void PlatformShowSettingsUI()
         {
@@ -47,21 +47,21 @@ namespace Xamarin.Essentials
 #endif
 
 #if __IOS__ || __TVOS__
-        static AppTheme PlatformRequestedTheme()
+    static AppTheme PlatformRequestedTheme()
+    {
+        if (!Platform.HasOSVersion(13, 0))
+            return AppTheme.Unspecified;
+
+        var uiStyle = Platform.GetCurrentUIViewController()?.TraitCollection?.UserInterfaceStyle ??
+                      UITraitCollection.CurrentTraitCollection.UserInterfaceStyle;
+
+        return uiStyle switch
         {
-            if (!Platform.HasOSVersion(13, 0))
-                return AppTheme.Unspecified;
-
-            var uiStyle = Platform.GetCurrentUIViewController()?.TraitCollection?.UserInterfaceStyle ??
-                UITraitCollection.CurrentTraitCollection.UserInterfaceStyle;
-
-            return uiStyle switch
-            {
-                UIUserInterfaceStyle.Light => AppTheme.Light,
-                UIUserInterfaceStyle.Dark => AppTheme.Dark,
-                _ => AppTheme.Unspecified
-            };
-        }
+            UIUserInterfaceStyle.Light => AppTheme.Light,
+            UIUserInterfaceStyle.Dark => AppTheme.Dark,
+            _ => AppTheme.Unspecified
+        };
+    }
 #elif __MACOS__
         static AppTheme PlatformRequestedTheme()
         {
@@ -86,50 +86,48 @@ namespace Xamarin.Essentials
             AppTheme.Unspecified;
 #endif
 
-        internal static bool VerifyHasUrlScheme(string scheme)
-        {
-            var cleansed = scheme.Replace("://", string.Empty);
-            var schemes = GetCFBundleURLSchemes().ToList();
-            return schemes.Any(x => x != null && x.Equals(cleansed, StringComparison.InvariantCultureIgnoreCase));
-        }
+    internal static bool VerifyHasUrlScheme(string scheme)
+    {
+        var cleansed = scheme.Replace("://", string.Empty);
+        var schemes = GetCFBundleURLSchemes().ToList();
+        return schemes.Any(x => x != null && x.Equals(cleansed, StringComparison.InvariantCultureIgnoreCase));
+    }
 
-        internal static IEnumerable<string> GetCFBundleURLSchemes()
-        {
-            var schemes = new List<string>();
+    internal static IEnumerable<string> GetCFBundleURLSchemes()
+    {
+        var schemes = new List<string>();
 
-            NSObject nsobj = null;
-            if (!NSBundle.MainBundle.InfoDictionary.TryGetValue((NSString)"CFBundleURLTypes", out nsobj))
-                return schemes;
-
-            var array = nsobj as NSArray;
-
-            if (array == null)
-                return schemes;
-
-            for (nuint i = 0; i < array.Count; i++)
-            {
-                var d = array.GetItem<NSDictionary>(i);
-                if (d == null || !d.Any())
-                    continue;
-
-                if (!d.TryGetValue((NSString)"CFBundleURLSchemes", out nsobj))
-                    continue;
-
-                var a = nsobj as NSArray;
-                var urls = ConvertToIEnumerable<NSString>(a).Select(x => x.ToString()).ToArray();
-                foreach (var url in urls)
-                    schemes.Add(url);
-            }
-
+        if (!NSBundle.MainBundle.InfoDictionary.TryGetValue((NSString)"CFBundleURLTypes", out var nsobj))
             return schemes;
+
+        var array = nsobj as NSArray;
+
+        if (array == null)
+            return schemes;
+
+        for (nuint i = 0; i < array.Count; i++)
+        {
+            var d = array.GetItem<NSDictionary>(i);
+            if (d == null || !d.Any())
+                continue;
+
+            if (!d.TryGetValue((NSString)"CFBundleURLSchemes", out nsobj))
+                continue;
+
+            var a = nsobj as NSArray;
+            var urls = ConvertToIEnumerable<NSString>(a).Select(x => x.ToString()).ToArray();
+            foreach (var url in urls)
+                schemes.Add(url);
         }
 
-        static IEnumerable<T> ConvertToIEnumerable<T>(NSArray array)
-            where T : class, ObjCRuntime.INativeObject
-        {
-            for (nuint i = 0; i < array.Count; i++)
-                yield return array.GetItem<T>(i);
-        }
+        return schemes;
+    }
+
+    static IEnumerable<T> ConvertToIEnumerable<T>(NSArray array)
+        where T : class, ObjCRuntime.INativeObject
+    {
+        for (nuint i = 0; i < array.Count; i++)
+            yield return array.GetItem<T>(i);
     }
 }
 #pragma warning restore CA1422 // Call site reachable on all platforms

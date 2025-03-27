@@ -1,9 +1,8 @@
-﻿namespace Xamarin.Essentials
-{
-    public class MapLaunchOptions
-    {
-        public NavigationMode NavigationMode { get; set; } = NavigationMode.None;
+﻿namespace Xamarin.Essentials;
 
-        public string Name { get; set; } = string.Empty;
-    }
+public class MapLaunchOptions
+{
+    public NavigationMode NavigationMode { get; set; } = NavigationMode.None;
+
+    public string Name { get; set; } = string.Empty;
 }

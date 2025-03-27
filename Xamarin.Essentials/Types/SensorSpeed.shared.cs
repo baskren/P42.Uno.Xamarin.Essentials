@@ -1,10 +1,9 @@
-﻿namespace Xamarin.Essentials
+﻿namespace Xamarin.Essentials;
+
+public enum SensorSpeed
 {
-    public enum SensorSpeed
-    {
-        Default = 0,
-        UI = 1,
-        Game = 2,
-        Fastest = 3,
-    }
+    Default = 0,
+    UI = 1,
+    Game = 2,
+    Fastest = 3,
 }

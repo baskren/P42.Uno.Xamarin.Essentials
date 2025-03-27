@@ -1,9 +1,8 @@
-﻿namespace Xamarin.Essentials
+﻿namespace Xamarin.Essentials;
+
+public enum BrowserTitleMode
 {
-    public enum BrowserTitleMode
-    {
-        Default = 0,
-        Show = 1,
-        Hide = 2
-    }
+    Default = 0,
+    Show = 1,
+    Hide = 2
 }

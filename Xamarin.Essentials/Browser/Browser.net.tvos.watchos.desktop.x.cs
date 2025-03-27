@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Browser
 {
-    public static partial class Browser
-    {
-        static Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchOptions options) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
-    }
+    static Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchOptions options) =>
+        throw ExceptionUtils.NotSupportedOrImplementedException;
 }

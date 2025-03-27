@@ -5,79 +5,76 @@ using System.Threading;
 using System.Threading.Tasks;
 using AVFoundation;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class TextToSpeech
 {
-    public static partial class TextToSpeech
+    static readonly Lazy<AVSpeechSynthesizer> speechSynthesizer = new();
+
+    internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
+        Task.FromResult(AVSpeechSynthesisVoice.GetSpeechVoices()
+            .Select(v => new Locale(v.Language, null, v.Name, v.Identifier)));
+
+    internal static async Task PlatformSpeakAsync(string text, SpeechOptions options, CancellationToken cancelToken = default)
     {
-        static readonly Lazy<AVSpeechSynthesizer> speechSynthesizer = new Lazy<AVSpeechSynthesizer>();
+        using var speechUtterance = GetSpeechUtterance(text, options);
+        await SpeakUtterance(speechUtterance, cancelToken);
+    }
 
-        internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
-            Task.FromResult(AVSpeechSynthesisVoice.GetSpeechVoices()
-                .Select(v => new Locale(v.Language, null, v.Name, v.Identifier)));
+    static AVSpeechUtterance GetSpeechUtterance(string text, SpeechOptions options)
+    {
+        var speechUtterance = new AVSpeechUtterance(text);
 
-        internal static async Task PlatformSpeakAsync(string text, SpeechOptions options, CancellationToken cancelToken = default)
+        if (options != null)
         {
-            using (var speechUtterance = GetSpeechUtterance(text, options))
-            {
-                await SpeakUtterance(speechUtterance, cancelToken);
-            }
+            // null voice if fine - it is the default
+            speechUtterance.Voice =
+                AVSpeechSynthesisVoice.FromLanguage(options.Locale?.Language) ??
+                AVSpeechSynthesisVoice.FromLanguage(AVSpeechSynthesisVoice.CurrentLanguageCode);
+
+            // the platform has a range of 0.5 - 2.0
+            // anything lower than 0.5 is set to 0.5
+            if (options.Pitch.HasValue)
+                speechUtterance.PitchMultiplier = options.Pitch.Value;
+
+            if (options.Volume.HasValue)
+                speechUtterance.Volume = options.Volume.Value;
         }
 
-        static AVSpeechUtterance GetSpeechUtterance(string text, SpeechOptions options)
+        return speechUtterance;
+    }
+
+    internal static async Task SpeakUtterance(AVSpeechUtterance speechUtterance, CancellationToken cancelToken)
+    {
+        var tcsUtterance = new TaskCompletionSource<bool>();
+        try
         {
-            var speechUtterance = new AVSpeechUtterance(text);
+            // Ensures linker doesn't remove.
+            if (DateTime.UtcNow.Ticks < 0)
+                new AVSpeechSynthesizer();
 
-            if (options != null)
+            speechSynthesizer.Value.DidFinishSpeechUtterance += OnFinishedSpeechUtterance;
+            speechSynthesizer.Value.SpeakUtterance(speechUtterance);
+            using (cancelToken.Register(TryCancel))
             {
-                // null voice if fine - it is the default
-                speechUtterance.Voice =
-                    AVSpeechSynthesisVoice.FromLanguage(options.Locale?.Language) ??
-                    AVSpeechSynthesisVoice.FromLanguage(AVSpeechSynthesisVoice.CurrentLanguageCode);
-
-                // the platform has a range of 0.5 - 2.0
-                // anything lower than 0.5 is set to 0.5
-                if (options.Pitch.HasValue)
-                    speechUtterance.PitchMultiplier = options.Pitch.Value;
-
-                if (options.Volume.HasValue)
-                    speechUtterance.Volume = options.Volume.Value;
+                await tcsUtterance.Task;
             }
-
-            return speechUtterance;
+        }
+        finally
+        {
+            speechSynthesizer.Value.DidFinishSpeechUtterance -= OnFinishedSpeechUtterance;
         }
 
-        internal static async Task SpeakUtterance(AVSpeechUtterance speechUtterance, CancellationToken cancelToken)
+        void TryCancel()
         {
-            var tcsUtterance = new TaskCompletionSource<bool>();
-            try
-            {
-                // Ensures linker doesn't remove.
-                if (DateTime.UtcNow.Ticks < 0)
-                    new AVSpeechSynthesizer();
+            speechSynthesizer.Value?.StopSpeaking(AVSpeechBoundary.Immediate);
+            tcsUtterance?.TrySetResult(true);
+        }
 
-                speechSynthesizer.Value.DidFinishSpeechUtterance += OnFinishedSpeechUtterance;
-                speechSynthesizer.Value.SpeakUtterance(speechUtterance);
-                using (cancelToken.Register(TryCancel))
-                {
-                    await tcsUtterance.Task;
-                }
-            }
-            finally
-            {
-                speechSynthesizer.Value.DidFinishSpeechUtterance -= OnFinishedSpeechUtterance;
-            }
-
-            void TryCancel()
-            {
-                speechSynthesizer.Value?.StopSpeaking(AVSpeechBoundary.Immediate);
+        void OnFinishedSpeechUtterance(object sender, AVSpeechSynthesizerUteranceEventArgs args)
+        {
+            if (speechUtterance == args.Utterance)
                 tcsUtterance?.TrySetResult(true);
-            }
-
-            void OnFinishedSpeechUtterance(object sender, AVSpeechSynthesizerUteranceEventArgs args)
-            {
-                if (speechUtterance == args.Utterance)
-                    tcsUtterance?.TrySetResult(true);
-            }
         }
     }
 }

@@ -4,121 +4,119 @@ using Android.Content.Res;
 using Android.OS;
 using Android.Provider;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class DeviceInfo
 {
-    public static partial class DeviceInfo
+    const int tabletCrossover = 600;
+
+    static string GetModel() => Build.Model;
+
+    static string GetManufacturer() => Build.Manufacturer;
+
+    static string GetDeviceName()
     {
-        const int tabletCrossover = 600;
+        // DEVICE_NAME added in System.Global in API level 25
+        // https://developer.android.com/reference/android/provider/Settings.Global#DEVICE_NAME
+        var name = GetSystemSetting("device_name", true);
+        if (string.IsNullOrWhiteSpace(name))
+            name = Model;
+        return name;
+    }
 
-        static string GetModel() => Build.Model;
+    static string GetVersionString() => Build.VERSION.Release;
 
-        static string GetManufacturer() => Build.Manufacturer;
+    static DevicePlatform GetPlatform() => DevicePlatform.Android;
 
-        static string GetDeviceName()
+    static DeviceIdiom GetIdiom()
+    {
+        var currentIdiom = DeviceIdiom.Unknown;
+
+        // first try UIModeManager
+        using var uiModeManager = UiModeManager.FromContext(Essentials.Platform.AppContext);
+
+        try
         {
-            // DEVICE_NAME added in System.Global in API level 25
-            // https://developer.android.com/reference/android/provider/Settings.Global#DEVICE_NAME
-            var name = GetSystemSetting("device_name", true);
-            if (string.IsNullOrWhiteSpace(name))
-                name = Model;
-            return name;
+            var uiMode = uiModeManager?.CurrentModeType ?? UiMode.TypeUndefined;
+            currentIdiom = DetectIdiom(uiMode);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Unable to detect using UiModeManager: {ex.Message}");
         }
 
-        static string GetVersionString() => Build.VERSION.Release;
-
-        static DevicePlatform GetPlatform() => DevicePlatform.Android;
-
-        static DeviceIdiom GetIdiom()
+        // then try Configuration
+        if (currentIdiom == DeviceIdiom.Unknown)
         {
-            var currentIdiom = DeviceIdiom.Unknown;
-
-            // first try UIModeManager
-            using var uiModeManager = UiModeManager.FromContext(Essentials.Platform.AppContext);
-
-            try
+            var configuration = Essentials.Platform.AppContext.Resources?.Configuration;
+            if (configuration != null)
             {
-                var uiMode = uiModeManager?.CurrentModeType ?? UiMode.TypeUndefined;
-                currentIdiom = DetectIdiom(uiMode);
+                var minWidth = configuration.SmallestScreenWidthDp;
+                var isWide = minWidth >= tabletCrossover;
+                currentIdiom = isWide ? DeviceIdiom.Tablet : DeviceIdiom.Phone;
             }
-            catch (Exception ex)
+            else
             {
-                System.Diagnostics.Debug.WriteLine($"Unable to detect using UiModeManager: {ex.Message}");
-            }
-
-            // then try Configuration
-            if (currentIdiom == DeviceIdiom.Unknown)
-            {
-                var configuration = Essentials.Platform.AppContext.Resources?.Configuration;
-                if (configuration != null)
+                // start clutching at straws
+                using var metrics = Essentials.Platform.AppContext.Resources?.DisplayMetrics;
+                if (metrics != null)
                 {
-                    var minWidth = configuration.SmallestScreenWidthDp;
-                    var isWide = minWidth >= tabletCrossover;
+                    var minSize = Math.Min(metrics.WidthPixels, metrics.HeightPixels);
+                    var isWide = minSize * metrics.Density >= tabletCrossover;
                     currentIdiom = isWide ? DeviceIdiom.Tablet : DeviceIdiom.Phone;
                 }
-                else
-                {
-                    // start clutching at straws
-                    using var metrics = Essentials.Platform.AppContext.Resources?.DisplayMetrics;
-                    if (metrics != null)
-                    {
-                        var minSize = Math.Min(metrics.WidthPixels, metrics.HeightPixels);
-                        var isWide = minSize * metrics.Density >= tabletCrossover;
-                        currentIdiom = isWide ? DeviceIdiom.Tablet : DeviceIdiom.Phone;
-                    }
-                }
             }
-
-            // hope we got it somewhere
-            return currentIdiom;
         }
 
-        static DeviceIdiom DetectIdiom(UiMode uiMode)
-        {
-            if (uiMode == UiMode.TypeNormal)
-                return DeviceIdiom.Unknown;
-            else if (uiMode == UiMode.TypeTelevision)
-                return DeviceIdiom.TV;
-            else if (uiMode == UiMode.TypeDesk)
-                return DeviceIdiom.Desktop;
-            else if (Essentials.Platform.HasApiLevel(BuildVersionCodes.KitkatWatch) && uiMode == UiMode.TypeWatch)
-                return DeviceIdiom.Watch;
+        // hope we got it somewhere
+        return currentIdiom;
+    }
 
+    static DeviceIdiom DetectIdiom(UiMode uiMode)
+    {
+        if (uiMode == UiMode.TypeNormal)
             return DeviceIdiom.Unknown;
-        }
+        if (uiMode == UiMode.TypeTelevision)
+            return DeviceIdiom.TV;
+        if (uiMode == UiMode.TypeDesk)
+            return DeviceIdiom.Desktop;
+        if (Essentials.Platform.HasApiLevel(BuildVersionCodes.KitkatWatch) && uiMode == UiMode.TypeWatch)
+            return DeviceIdiom.Watch;
 
-        static DeviceType GetDeviceType()
-        {
-            var isEmulator =
-                (Build.Brand.StartsWith("generic", StringComparison.InvariantCulture) && Build.Device.StartsWith("generic", StringComparison.InvariantCulture)) ||
-                Build.Fingerprint.StartsWith("generic", StringComparison.InvariantCulture) ||
-                Build.Fingerprint.StartsWith("unknown", StringComparison.InvariantCulture) ||
-                Build.Hardware.Contains("goldfish") ||
-                Build.Hardware.Contains("ranchu") ||
-                Build.Model.Contains("google_sdk") ||
-                Build.Model.Contains("Emulator") ||
-                Build.Model.Contains("Android SDK built for x86") ||
-                Build.Manufacturer.Contains("Genymotion") ||
-                Build.Manufacturer.Contains("VS Emulator") ||
-                Build.Product.Contains("emulator") ||
-                Build.Product.Contains("google_sdk") ||
-                Build.Product.Contains("sdk") ||
-                Build.Product.Contains("sdk_google") ||
-                Build.Product.Contains("sdk_x86") ||
-                Build.Product.Contains("simulator") ||
-                Build.Product.Contains("vbox86p");
+        return DeviceIdiom.Unknown;
+    }
 
-            if (isEmulator)
-                return DeviceType.Virtual;
+    static DeviceType GetDeviceType()
+    {
+        var isEmulator =
+            (Build.Brand.StartsWith("generic", StringComparison.InvariantCulture) && Build.Device.StartsWith("generic", StringComparison.InvariantCulture)) ||
+            Build.Fingerprint.StartsWith("generic", StringComparison.InvariantCulture) ||
+            Build.Fingerprint.StartsWith("unknown", StringComparison.InvariantCulture) ||
+            Build.Hardware.Contains("goldfish") ||
+            Build.Hardware.Contains("ranchu") ||
+            Build.Model.Contains("google_sdk") ||
+            Build.Model.Contains("Emulator") ||
+            Build.Model.Contains("Android SDK built for x86") ||
+            Build.Manufacturer.Contains("Genymotion") ||
+            Build.Manufacturer.Contains("VS Emulator") ||
+            Build.Product.Contains("emulator") ||
+            Build.Product.Contains("google_sdk") ||
+            Build.Product.Contains("sdk") ||
+            Build.Product.Contains("sdk_google") ||
+            Build.Product.Contains("sdk_x86") ||
+            Build.Product.Contains("simulator") ||
+            Build.Product.Contains("vbox86p");
 
-            return DeviceType.Physical;
-        }
+        if (isEmulator)
+            return DeviceType.Virtual;
 
-        static string GetSystemSetting(string name, bool isGlobal = false)
-        {
-            if (isGlobal && Essentials.Platform.HasApiLevelNMr1)
-                return Settings.Global.GetString(Essentials.Platform.AppContext.ContentResolver, name);
-            else
-                return Settings.System.GetString(Essentials.Platform.AppContext.ContentResolver, name);
-        }
+        return DeviceType.Physical;
+    }
+
+    static string GetSystemSetting(string name, bool isGlobal = false)
+    {
+        if (isGlobal && Essentials.Platform.HasApiLevelNMr1)
+            return Settings.Global.GetString(Essentials.Platform.AppContext.ContentResolver, name);
+        return Settings.System.GetString(Essentials.Platform.AppContext.ContentResolver, name);
     }
 }

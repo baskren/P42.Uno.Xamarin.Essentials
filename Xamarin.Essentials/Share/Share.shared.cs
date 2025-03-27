@@ -6,189 +6,188 @@ using System.Threading.Tasks;
 using System.Drawing;
 #endif
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Share
 {
-    public static partial class Share
+    public static Task RequestAsync(string text) =>
+        RequestAsync(new ShareTextRequest(text));
+
+    public static Task RequestAsync(string text, string title) =>
+        RequestAsync(new ShareTextRequest(text, title));
+
+    public static Task RequestAsync(ShareTextRequest request)
     {
-        public static Task RequestAsync(string text) =>
-            RequestAsync(new ShareTextRequest(text));
+        if (request == null)
+            throw new ArgumentNullException(nameof(request));
 
-        public static Task RequestAsync(string text, string title) =>
-            RequestAsync(new ShareTextRequest(text, title));
+        if (string.IsNullOrEmpty(request.Text) && string.IsNullOrEmpty(request.Uri))
+            throw new ArgumentException($"Both the {nameof(request.Text)} and {nameof(request.Uri)} are invalid. Make sure to include at least one of them in the request.");
 
-        public static Task RequestAsync(ShareTextRequest request)
-        {
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            if (string.IsNullOrEmpty(request.Text) && string.IsNullOrEmpty(request.Uri))
-                throw new ArgumentException($"Both the {nameof(request.Text)} and {nameof(request.Uri)} are invalid. Make sure to include at least one of them in the request.");
-
-            return PlatformRequestAsync(request);
-        }
-
-        public static bool CanShare(ShareRequestBase request) =>
-            PlatformCanShare(request);
-
-        public static bool IsAvailable
-            => PlatformIsAvailable();
-
-        public static Task RequestAsync(ShareFileRequest request)
-        {
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            if (request.File == null)
-                throw new ArgumentException(FileNullExeption(nameof(request.File)));
-
-            return PlatformRequestAsync((ShareMultipleFilesRequest)request);
-        }
-
-        public static Task RequestAsync(ShareMultipleFilesRequest request)
-        {
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            if (!(request.Files?.Count() > 0))
-                throw new ArgumentException(FileNullExeption(nameof(request.Files)));
-
-            if (request.Files.Any(file => file == null))
-                throw new ArgumentException(FileNullExeption(nameof(request.Files)));
-
-            return PlatformRequestAsync(request);
-        }
-
-        static string FileNullExeption(string file)
-            => $"The {file} parameter in the request files is invalid";
+        return PlatformRequestAsync(request);
     }
 
-    public abstract class ShareRequestBase
+    public static bool CanShare(ShareRequestBase request) =>
+        PlatformCanShare(request);
+
+    public static bool IsAvailable
+        => PlatformIsAvailable();
+
+    public static Task RequestAsync(ShareFileRequest request)
     {
-        public string Title { get; set; }
+        if (request == null)
+            throw new ArgumentNullException(nameof(request));
+
+        if (request.File == null)
+            throw new ArgumentException(FileNullExeption(nameof(request.File)));
+
+        return PlatformRequestAsync((ShareMultipleFilesRequest)request);
+    }
+
+    public static Task RequestAsync(ShareMultipleFilesRequest request)
+    {
+        if (request == null)
+            throw new ArgumentNullException(nameof(request));
+
+        if (!(request.Files?.Count() > 0))
+            throw new ArgumentException(FileNullExeption(nameof(request.Files)));
+
+        if (request.Files.Any(file => file == null))
+            throw new ArgumentException(FileNullExeption(nameof(request.Files)));
+
+        return PlatformRequestAsync(request);
+    }
+
+    static string FileNullExeption(string file)
+        => $"The {file} parameter in the request files is invalid";
+}
+
+public abstract class ShareRequestBase
+{
+    public string Title { get; set; }
 
 #if !NETSTANDARD1_0
-        public Rectangle PresentationSourceBounds { get; set; } = Rectangle.Empty;
+    public Rectangle PresentationSourceBounds { get; set; } = Rectangle.Empty;
 #endif
+}
+
+public class ShareTextRequest : ShareRequestBase
+{
+    public ShareTextRequest()
+    {
     }
 
-    public class ShareTextRequest : ShareRequestBase
+    public ShareTextRequest(string text) => Text = text;
+
+    public ShareTextRequest(string text, string title)
+        : this(text) => Title = title;
+
+    public string Subject { get; set; }
+
+    public string Text { get; set; }
+
+    public string Uri { get; set; }
+}
+
+public class ShareFileRequest : ShareRequestBase
+{
+    public ShareFileRequest()
     {
-        public ShareTextRequest()
-        {
-        }
-
-        public ShareTextRequest(string text) => Text = text;
-
-        public ShareTextRequest(string text, string title)
-            : this(text) => Title = title;
-
-        public string Subject { get; set; }
-
-        public string Text { get; set; }
-
-        public string Uri { get; set; }
     }
 
-    public class ShareFileRequest : ShareRequestBase
+    public ShareFileRequest(string title, ShareFile file)
     {
-        public ShareFileRequest()
-        {
-        }
-
-        public ShareFileRequest(string title, ShareFile file)
-        {
-            Title = title;
-            File = file;
-        }
-
-        public ShareFileRequest(string title, FileBase file)
-        {
-            Title = title;
-            File = new ShareFile(file);
-        }
-
-        public ShareFileRequest(ShareFile file)
-            => File = file;
-
-        public ShareFileRequest(FileBase file)
-            => File = new ShareFile(file);
-
-        public ShareFile File { get; set; }
+        Title = title;
+        File = file;
     }
 
-    public class ShareMultipleFilesRequest : ShareRequestBase
+    public ShareFileRequest(string title, FileBase file)
     {
-        public ShareMultipleFilesRequest()
-        {
-        }
+        Title = title;
+        File = new ShareFile(file);
+    }
 
-        public ShareMultipleFilesRequest(IEnumerable<ShareFile> files) =>
-            Files = files.ToList();
+    public ShareFileRequest(ShareFile file)
+        => File = file;
 
-        public ShareMultipleFilesRequest(IEnumerable<FileBase> files)
-            : this(ConvertList(files))
-        {
-        }
+    public ShareFileRequest(FileBase file)
+        => File = new ShareFile(file);
 
-        public ShareMultipleFilesRequest(IEnumerable<Windows.Storage.IStorageFile> files)
-            : this(ConvertList(files))
-        {
-        }
+    public ShareFile File { get; set; }
+}
 
-        public ShareMultipleFilesRequest(string title, IEnumerable<ShareFile> files)
-            : this(files) => Title = title;
+public class ShareMultipleFilesRequest : ShareRequestBase
+{
+    public ShareMultipleFilesRequest()
+    {
+    }
 
-        public ShareMultipleFilesRequest(string title, IEnumerable<FileBase> files)
-            : this(title, ConvertList(files))
-        {
-        }
+    public ShareMultipleFilesRequest(IEnumerable<ShareFile> files) =>
+        Files = files.ToList();
 
-        public ShareMultipleFilesRequest(string title, IEnumerable<Windows.Storage.IStorageFile> files)
-            : this(title, ConvertList(files))
-        {
-        }
+    public ShareMultipleFilesRequest(IEnumerable<FileBase> files)
+        : this(ConvertList(files))
+    {
+    }
 
-        public List<ShareFile> Files { get; set; }
+    public ShareMultipleFilesRequest(IEnumerable<Windows.Storage.IStorageFile> files)
+        : this(ConvertList(files))
+    {
+    }
 
-        public static explicit operator ShareMultipleFilesRequest(ShareFileRequest request)
-        {
-            var requestFiles = new ShareMultipleFilesRequest(request.Title, new ShareFile[] { request.File });
+    public ShareMultipleFilesRequest(string title, IEnumerable<ShareFile> files)
+        : this(files) => Title = title;
+
+    public ShareMultipleFilesRequest(string title, IEnumerable<FileBase> files)
+        : this(title, ConvertList(files))
+    {
+    }
+
+    public ShareMultipleFilesRequest(string title, IEnumerable<Windows.Storage.IStorageFile> files)
+        : this(title, ConvertList(files))
+    {
+    }
+
+    public List<ShareFile> Files { get; set; }
+
+    public static explicit operator ShareMultipleFilesRequest(ShareFileRequest request)
+    {
+        var requestFiles = new ShareMultipleFilesRequest(request.Title, [request.File]);
 #if !NETSTANDARD1_0
-            requestFiles.PresentationSourceBounds = request.PresentationSourceBounds;
+        requestFiles.PresentationSourceBounds = request.PresentationSourceBounds;
 #endif
-            return requestFiles;
-        }
-
-        static IEnumerable<ShareFile> ConvertList(IEnumerable<FileBase> files)
-            => files?.Select(file => new ShareFile(file));
-
-        static IEnumerable<ShareFile> ConvertList(IEnumerable<Windows.Storage.IStorageFile> files)
-            => files?.Select(file => new ShareFile(file));
+        return requestFiles;
     }
 
-    public class ShareFile : FileBase
+    static IEnumerable<ShareFile> ConvertList(IEnumerable<FileBase> files)
+        => files?.Select(file => new ShareFile(file));
+
+    static IEnumerable<ShareFile> ConvertList(IEnumerable<Windows.Storage.IStorageFile> files)
+        => files?.Select(file => new ShareFile(file));
+}
+
+public class ShareFile : FileBase
+{
+    public ShareFile(string fullPath)
+        : base(fullPath)
     {
-        public ShareFile(string fullPath)
-            : base(fullPath)
-        {
-        }
-
-        public ShareFile(string fullPath, string contentType)
-            : base(fullPath, contentType)
-        {
-        }
-
-        public ShareFile(FileBase file)
-            : base(file)
-        {
-        }
-
-        public ShareFile(Windows.Storage.IStorageFile storageFile)
-            : base(storageFile.Path, storageFile.ContentType)
-        {
-        }
-
-        public static explicit operator ShareFile(Windows.Storage.StorageFile storageFile)
-            => new ShareFile(storageFile.Path, storageFile.ContentType);
     }
+
+    public ShareFile(string fullPath, string contentType)
+        : base(fullPath, contentType)
+    {
+    }
+
+    public ShareFile(FileBase file)
+        : base(file)
+    {
+    }
+
+    public ShareFile(Windows.Storage.IStorageFile storageFile)
+        : base(storageFile.Path, storageFile.ContentType)
+    {
+    }
+
+    public static explicit operator ShareFile(Windows.Storage.StorageFile storageFile)
+        => new(storageFile.Path, storageFile.ContentType);
 }

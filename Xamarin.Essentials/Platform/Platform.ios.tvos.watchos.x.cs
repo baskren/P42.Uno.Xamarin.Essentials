@@ -14,167 +14,166 @@ using UIDevice = WatchKit.WKInterfaceDevice;
 #endif
 
 #pragma warning disable CA1422 // Call site reachable on all platforms
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Platform
 {
-    public static partial class Platform
-    {
 #if __IOS__ || __TVOS__
-        public static bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
-            => WebAuthenticator.OpenUrl(new Uri(url.AbsoluteString));
+    public static bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
+        => WebAuthenticator.OpenUrl(new Uri(url.AbsoluteString));
 
-        public static bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
-            => WebAuthenticator.OpenUrl(new Uri(userActivity?.WebPageUrl?.AbsoluteString));
+    public static bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
+        => WebAuthenticator.OpenUrl(new Uri(userActivity?.WebPageUrl?.AbsoluteString));
 #endif
 
 #if __IOS__
-        public static void PerformActionForShortcutItem(UIApplication application, UIApplicationShortcutItem shortcutItem, UIOperationHandler completionHandler)
+    public static void PerformActionForShortcutItem(UIApplication application, UIApplicationShortcutItem shortcutItem, UIOperationHandler completionHandler)
+    {
+        if (shortcutItem.Type == AppActions.Type)
         {
-            if (shortcutItem.Type == AppActions.Type)
-            {
-                var appAction = shortcutItem.ToAppAction();
+            var appAction = shortcutItem.ToAppAction();
 
-                AppActions.InvokeOnAppAction(application, shortcutItem.ToAppAction());
-            }
+            AppActions.InvokeOnAppAction(application, shortcutItem.ToAppAction());
         }
+    }
 #endif
 
 #if __IOS__
-        [DllImport(Constants.SystemLibrary, EntryPoint = "sysctlbyname")]
+    [DllImport(Constants.SystemLibrary, EntryPoint = "sysctlbyname")]
 #else
         [DllImport(Constants.libSystemLibrary, EntryPoint = "sysctlbyname")]
 #endif
-        internal static extern int SysctlByName([MarshalAs(UnmanagedType.LPStr)] string property, IntPtr output, IntPtr oldLen, IntPtr newp, uint newlen);
+    internal static extern int SysctlByName([MarshalAs(UnmanagedType.LPStr)] string property, IntPtr output, IntPtr oldLen, IntPtr newp, uint newlen);
 
-        internal static string GetSystemLibraryProperty(string property)
+    internal static string GetSystemLibraryProperty(string property)
+    {
+        var lengthPtr = Marshal.AllocHGlobal(sizeof(int));
+        SysctlByName(property, IntPtr.Zero, lengthPtr, IntPtr.Zero, 0);
+
+        var propertyLength = Marshal.ReadInt32(lengthPtr);
+
+        if (propertyLength == 0)
         {
-            var lengthPtr = Marshal.AllocHGlobal(sizeof(int));
-            SysctlByName(property, IntPtr.Zero, lengthPtr, IntPtr.Zero, 0);
-
-            var propertyLength = Marshal.ReadInt32(lengthPtr);
-
-            if (propertyLength == 0)
-            {
-                Marshal.FreeHGlobal(lengthPtr);
-                Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Unable to read length of property."));
-                throw new InvalidOperationException("Unable to read length of property.");
-            }
-
-            var valuePtr = Marshal.AllocHGlobal(propertyLength);
-            SysctlByName(property, valuePtr, lengthPtr, IntPtr.Zero, 0);
-
-            var returnValue = Marshal.PtrToStringAnsi(valuePtr);
-
             Marshal.FreeHGlobal(lengthPtr);
-            Marshal.FreeHGlobal(valuePtr);
-
-            return returnValue;
+            Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Unable to read length of property."));
+            throw new InvalidOperationException("Unable to read length of property.");
         }
 
-        internal static bool HasOSVersion(int major, int minor) =>
-            UIDevice.CurrentDevice.CheckSystemVersion(major, minor);
+        var valuePtr = Marshal.AllocHGlobal(propertyLength);
+        SysctlByName(property, valuePtr, lengthPtr, IntPtr.Zero, 0);
+
+        var returnValue = Marshal.PtrToStringAnsi(valuePtr);
+
+        Marshal.FreeHGlobal(lengthPtr);
+        Marshal.FreeHGlobal(valuePtr);
+
+        return returnValue;
+    }
+
+    internal static bool HasOSVersion(int major, int minor) =>
+        UIDevice.CurrentDevice.CheckSystemVersion(major, minor);
 
 #if __IOS__ || __TVOS__
 
-        static Func<UIViewController> getCurrentController;
+    static Func<UIViewController> getCurrentController;
 
-        public static void Init(Func<UIViewController> getCurrentUIViewController)
-            => getCurrentController = getCurrentUIViewController;
+    public static void Init(Func<UIViewController> getCurrentUIViewController)
+        => getCurrentController = getCurrentUIViewController;
 
-        public static UIViewController GetCurrentUIViewController() =>
-            GetCurrentViewController(false);
+    public static UIViewController GetCurrentUIViewController() =>
+        GetCurrentViewController(false);
 
-        internal static UIViewController GetCurrentViewController(bool throwIfNull = true)
-        {
-            var viewController = getCurrentController?.Invoke();
+    internal static UIViewController GetCurrentViewController(bool throwIfNull = true)
+    {
+        var viewController = getCurrentController?.Invoke();
 
-            if (viewController != null)
-                return viewController;
-
-            var window = UIApplication.SharedApplication.KeyWindow;
-
-            if (window != null && window.WindowLevel == UIWindowLevel.Normal)
-                viewController = window.RootViewController;
-
-            if (viewController == null)
-            {
-                window = UIApplication.SharedApplication
-                    .Windows
-                    .OrderByDescending(w => w.WindowLevel)
-                    .FirstOrDefault(w => w.RootViewController != null && w.WindowLevel == UIWindowLevel.Normal);
-
-                if (window == null && throwIfNull)
-                {
-                    Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Could not find current UIWindow."));
-                    throw new InvalidOperationException("Could not find current UIWindow.");
-                }
-                else
-                    viewController = window?.RootViewController;
-            }
-
-            while (viewController?.PresentedViewController != null)
-                viewController = viewController.PresentedViewController;
-
-            if (throwIfNull && viewController == null)
-            {
-                Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Could not find current UIViewController."));
-                throw new InvalidOperationException("Could not find current UIViewController.");
-            }
+        if (viewController != null)
             return viewController;
-        }
 
-        internal static UIWindow GetCurrentWindow(bool throwIfNull = true)
+        var window = UIApplication.SharedApplication.KeyWindow;
+
+        if (window != null && window.WindowLevel == UIWindowLevel.Normal)
+            viewController = window.RootViewController;
+
+        if (viewController == null)
         {
-            var window = UIApplication.SharedApplication.KeyWindow;
+            window = UIApplication.SharedApplication
+                .Windows
+                .OrderByDescending(w => w.WindowLevel)
+                .FirstOrDefault(w => w.RootViewController != null && w.WindowLevel == UIWindowLevel.Normal);
 
-            if (window != null && window.WindowLevel == UIWindowLevel.Normal)
-                return window;
-
-            if (window == null)
-            {
-                window = UIApplication.SharedApplication
-                    .Windows
-                    .OrderByDescending(w => w.WindowLevel)
-                    .FirstOrDefault(w => w.RootViewController != null && w.WindowLevel == UIWindowLevel.Normal);
-            }
-
-            if (throwIfNull && window == null)
+            if (window == null && throwIfNull)
             {
                 Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Could not find current UIWindow."));
                 throw new InvalidOperationException("Could not find current UIWindow.");
             }
 
-            return window;
+            viewController = window?.RootViewController;
         }
+
+        while (viewController?.PresentedViewController != null)
+            viewController = viewController.PresentedViewController;
+
+        if (throwIfNull && viewController == null)
+        {
+            Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Could not find current UIViewController."));
+            throw new InvalidOperationException("Could not find current UIViewController.");
+        }
+        return viewController;
+    }
+
+    internal static UIWindow GetCurrentWindow(bool throwIfNull = true)
+    {
+        var window = UIApplication.SharedApplication.KeyWindow;
+
+        if (window != null && window.WindowLevel == UIWindowLevel.Normal)
+            return window;
+
+        if (window == null)
+        {
+            window = UIApplication.SharedApplication
+                .Windows
+                .OrderByDescending(w => w.WindowLevel)
+                .FirstOrDefault(w => w.RootViewController != null && w.WindowLevel == UIWindowLevel.Normal);
+        }
+
+        if (throwIfNull && window == null)
+        {
+            Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() => throw new InvalidOperationException("Could not find current UIWindow."));
+            throw new InvalidOperationException("Could not find current UIWindow.");
+        }
+
+        return window;
+    }
 #endif
 
 #if __IOS__ || __WATCHOS__
-        static CMMotionManager motionManager;
+    static CMMotionManager motionManager;
 
-        internal static CMMotionManager MotionManager =>
-            motionManager ?? (motionManager = new CMMotionManager());
+    internal static CMMotionManager MotionManager =>
+        motionManager ?? (motionManager = new CMMotionManager());
 #endif
 
-        internal static NSOperationQueue GetCurrentQueue() =>
-            NSOperationQueue.CurrentQueue ?? new NSOperationQueue();
+    internal static NSOperationQueue GetCurrentQueue() =>
+        NSOperationQueue.CurrentQueue ?? new NSOperationQueue();
 
 #if __IOS__
-        internal class UIPresentationControllerDelegate : UIAdaptivePresentationControllerDelegate
+    internal class UIPresentationControllerDelegate : UIAdaptivePresentationControllerDelegate
+    {
+        public Action DismissHandler { get; set; }
+
+        public override void DidDismiss(UIPresentationController presentationController)
         {
-            public Action DismissHandler { get; set; }
-
-            public override void DidDismiss(UIPresentationController presentationController)
-            {
-                DismissHandler?.Invoke();
-                DismissHandler = null;
-            }
-
-            protected override void Dispose(bool disposing)
-            {
-                DismissHandler?.Invoke();
-                base.Dispose(disposing);
-            }
+            DismissHandler?.Invoke();
+            DismissHandler = null;
         }
-#endif
+
+        protected override void Dispose(bool disposing)
+        {
+            DismissHandler?.Invoke();
+            base.Dispose(disposing);
+        }
     }
+#endif
 }
 #pragma warning restore CA1422 // Call site reachable on all platforms

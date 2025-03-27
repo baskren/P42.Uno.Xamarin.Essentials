@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class PlacemarkExtensions
 {
-    public static partial class PlacemarkExtensions
+    public static Task OpenMapsAsync(this Placemark placemark, MapLaunchOptions options) =>
+        Map.OpenAsync(placemark, options);
+
+    public static Task OpenMapsAsync(this Placemark placemark) =>
+        Map.OpenAsync(placemark);
+
+    internal static string GetEscapedAddress(this Placemark placemark)
     {
-        public static Task OpenMapsAsync(this Placemark placemark, MapLaunchOptions options) =>
-            Map.OpenAsync(placemark, options);
+        if (placemark == null)
+            throw new ArgumentNullException(nameof(placemark));
 
-        public static Task OpenMapsAsync(this Placemark placemark) =>
-            Map.OpenAsync(placemark);
+        var address = $"{placemark.Thoroughfare} {placemark.Locality} {placemark.AdminArea} {placemark.PostalCode} {placemark.CountryName}";
 
-        internal static string GetEscapedAddress(this Placemark placemark)
-        {
-            if (placemark == null)
-                throw new ArgumentNullException(nameof(placemark));
-
-            var address = $"{placemark.Thoroughfare} {placemark.Locality} {placemark.AdminArea} {placemark.PostalCode} {placemark.CountryName}";
-
-            return Uri.EscapeDataString(address);
-        }
+        return Uri.EscapeDataString(address);
     }
 }

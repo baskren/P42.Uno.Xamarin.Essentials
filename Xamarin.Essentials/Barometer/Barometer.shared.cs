@@ -1,100 +1,99 @@
 ﻿using System;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Barometer
 {
-    public static partial class Barometer
+    static bool useSyncContext;
+
+    public static event EventHandler<BarometerChangedEventArgs> ReadingChanged;
+
+    public static bool IsMonitoring { get; private set; }
+
+    public static void Start(SensorSpeed sensorSpeed)
     {
-        static bool useSyncContext;
+        if (!IsSupported)
+            throw new FeatureNotSupportedException();
 
-        public static event EventHandler<BarometerChangedEventArgs> ReadingChanged;
+        if (IsMonitoring)
+            throw new InvalidOperationException("Barometer has already been started.");
 
-        public static bool IsMonitoring { get; private set; }
+        IsMonitoring = true;
+        useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;
 
-        public static void Start(SensorSpeed sensorSpeed)
+        try
         {
-            if (!IsSupported)
-               throw new FeatureNotSupportedException();
-
-            if (IsMonitoring)
-                throw new InvalidOperationException("Barometer has already been started.");
-
-            IsMonitoring = true;
-            useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;
-
-            try
-            {
-                PlatformStart(sensorSpeed);
-            }
-            catch
-            {
-                IsMonitoring = false;
-                throw;
-            }
+            PlatformStart(sensorSpeed);
         }
-
-        public static void Stop()
+        catch
         {
-            if (!IsSupported)
-                throw new FeatureNotSupportedException();
-
-            if (!IsMonitoring)
-                return;
-
             IsMonitoring = false;
-
-            try
-            {
-                PlatformStop();
-            }
-            catch
-            {
-                IsMonitoring = true;
-                throw;
-            }
+            throw;
         }
+    }
 
-        internal static void OnChanged(BarometerData reading) =>
-            OnChanged(new BarometerChangedEventArgs(reading));
+    public static void Stop()
+    {
+        if (!IsSupported)
+            throw new FeatureNotSupportedException();
 
-        static void OnChanged(BarometerChangedEventArgs e)
+        if (!IsMonitoring)
+            return;
+
+        IsMonitoring = false;
+
+        try
         {
-            if (useSyncContext)
-                MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
-            else
-                ReadingChanged?.Invoke(null, e);
+            PlatformStop();
+        }
+        catch
+        {
+            IsMonitoring = true;
+            throw;
         }
     }
 
-    public class BarometerChangedEventArgs : EventArgs
+    internal static void OnChanged(BarometerData reading) =>
+        OnChanged(new BarometerChangedEventArgs(reading));
+
+    static void OnChanged(BarometerChangedEventArgs e)
     {
-        public BarometerChangedEventArgs(BarometerData reading) =>
-            Reading = reading;
-
-        public BarometerData Reading { get; }
+        if (useSyncContext)
+            MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
+        else
+            ReadingChanged?.Invoke(null, e);
     }
+}
 
-    public readonly struct BarometerData : IEquatable<BarometerData>
-    {
-        public BarometerData(double pressure) =>
-            PressureInHectopascals = pressure;
+public class BarometerChangedEventArgs : EventArgs
+{
+    public BarometerChangedEventArgs(BarometerData reading) =>
+        Reading = reading;
 
-        public double PressureInHectopascals { get; }
+    public BarometerData Reading { get; }
+}
 
-        public static bool operator ==(BarometerData left, BarometerData right) =>
-            left.Equals(right);
+public readonly struct BarometerData : IEquatable<BarometerData>
+{
+    public BarometerData(double pressure) =>
+        PressureInHectopascals = pressure;
 
-        public static bool operator !=(BarometerData left, BarometerData right) =>
-            !left.Equals(right);
+    public double PressureInHectopascals { get; }
 
-        public override bool Equals(object obj) =>
-            (obj is BarometerData data) && Equals(data);
+    public static bool operator ==(BarometerData left, BarometerData right) =>
+        left.Equals(right);
 
-        public bool Equals(BarometerData other) =>
-            PressureInHectopascals.Equals(other.PressureInHectopascals);
+    public static bool operator !=(BarometerData left, BarometerData right) =>
+        !left.Equals(right);
 
-        public override int GetHashCode() =>
-            PressureInHectopascals.GetHashCode();
+    public override bool Equals(object obj) =>
+        obj is BarometerData data && Equals(data);
 
-        public override string ToString() => $"{nameof(PressureInHectopascals)}: {PressureInHectopascals}";
-    }
+    public bool Equals(BarometerData other) =>
+        PressureInHectopascals.Equals(other.PressureInHectopascals);
+
+    public override int GetHashCode() =>
+        PressureInHectopascals.GetHashCode();
+
+    public override string ToString() => $"{nameof(PressureInHectopascals)}: {PressureInHectopascals}";
 }

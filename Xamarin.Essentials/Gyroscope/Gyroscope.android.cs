@@ -1,53 +1,52 @@
 ﻿using Android.Hardware;
 using Android.Runtime;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Gyroscope
 {
-    public static partial class Gyroscope
+    internal static bool IsSupported =>
+        Platform.SensorManager?.GetDefaultSensor(SensorType.Gyroscope) != null;
+
+    static GyroscopeListener listener;
+    static Sensor gyroscope;
+
+    internal static void PlatformStart(SensorSpeed sensorSpeed)
     {
-        internal static bool IsSupported =>
-               Platform.SensorManager?.GetDefaultSensor(SensorType.Gyroscope) != null;
+        var delay = sensorSpeed.ToPlatform();
 
-        static GyroscopeListener listener;
-        static Sensor gyroscope;
-
-        internal static void PlatformStart(SensorSpeed sensorSpeed)
-        {
-            var delay = sensorSpeed.ToPlatform();
-
-            listener = new GyroscopeListener();
-            gyroscope = Platform.SensorManager.GetDefaultSensor(SensorType.Gyroscope);
-            Platform.SensorManager.RegisterListener(listener, gyroscope, delay);
-        }
-
-        internal static void PlatformStop()
-        {
-            if (listener == null || gyroscope == null)
-                return;
-
-            Platform.SensorManager.UnregisterListener(listener, gyroscope);
-            listener.Dispose();
-            listener = null;
-        }
+        listener = new GyroscopeListener();
+        gyroscope = Platform.SensorManager.GetDefaultSensor(SensorType.Gyroscope);
+        Platform.SensorManager.RegisterListener(listener, gyroscope, delay);
     }
 
-    class GyroscopeListener : Java.Lang.Object, ISensorEventListener
+    internal static void PlatformStop()
     {
-        internal GyroscopeListener()
-        {
-        }
+        if (listener == null || gyroscope == null)
+            return;
 
-        void ISensorEventListener.OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
-        {
-        }
+        Platform.SensorManager.UnregisterListener(listener, gyroscope);
+        listener.Dispose();
+        listener = null;
+    }
+}
 
-        void ISensorEventListener.OnSensorChanged(SensorEvent e)
-        {
-            if ((e?.Values?.Count ?? 0) < 3)
-                return;
+class GyroscopeListener : Java.Lang.Object, ISensorEventListener
+{
+    internal GyroscopeListener()
+    {
+    }
 
-            var data = new GyroscopeData(e.Values[0], e.Values[1], e.Values[2]);
-            Gyroscope.OnChanged(data);
-        }
+    void ISensorEventListener.OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
+    {
+    }
+
+    void ISensorEventListener.OnSensorChanged(SensorEvent e)
+    {
+        if ((e?.Values?.Count ?? 0) < 3)
+            return;
+
+        var data = new GyroscopeData(e.Values[0], e.Values[1], e.Values[2]);
+        Gyroscope.OnChanged(data);
     }
 }

@@ -1,4 +1,4 @@
 ﻿using Android;
 
 //[assembly: LinkerSafe]
-[assembly: global::System.Reflection.AssemblyMetadata("IsTrimmable", "True")]
+[assembly: System.Reflection.AssemblyMetadata("IsTrimmable", "True")]

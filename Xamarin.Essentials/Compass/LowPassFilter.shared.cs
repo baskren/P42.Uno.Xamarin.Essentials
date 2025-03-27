@@ -1,39 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+class LowPassFilter
 {
-    class LowPassFilter
+    const int length = 10;
+
+    readonly Queue<float> history = new(length);
+    float sin;
+    float cos;
+
+    internal void Add(float radians)
     {
-        const int length = 10;
+        sin += (float)Math.Sin(radians);
 
-        readonly Queue<float> history = new Queue<float>(length);
-        float sin;
-        float cos;
+        cos += (float)Math.Cos(radians);
 
-        internal void Add(float radians)
+        history.Enqueue(radians);
+
+        if (history.Count > length)
         {
-            sin += (float)Math.Sin(radians);
+            var old = history.Dequeue();
 
-            cos += (float)Math.Cos(radians);
+            sin -= (float)Math.Sin(old);
 
-            history.Enqueue(radians);
-
-            if (history.Count > length)
-            {
-                var old = history.Dequeue();
-
-                sin -= (float)Math.Sin(old);
-
-                cos -= (float)Math.Cos(old);
-            }
+            cos -= (float)Math.Cos(old);
         }
+    }
 
-        internal float Average()
-        {
-            var size = history.Count;
+    internal float Average()
+    {
+        var size = history.Count;
 
-            return (float)Math.Atan2(sin / size, cos / size);
-        }
+        return (float)Math.Atan2(sin / size, cos / size);
     }
 }

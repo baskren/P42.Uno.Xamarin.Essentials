@@ -6,55 +6,54 @@ using AndroidAddress = Android.Locations.Address;
 using AndroidLocation = Android.Locations.Location;
 
 #pragma warning disable CA1422 // Validate platform compatibility
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class LocationExtensions
 {
-    public static partial class LocationExtensions
-    {
-        internal static Location ToLocation(this AndroidAddress address) =>
-            new Location
-            {
-                Latitude = address.Latitude,
-                Longitude = address.Longitude,
-                Timestamp = DateTimeOffset.UtcNow
-            };
+    internal static Location ToLocation(this AndroidAddress address) =>
+        new()
+        {
+            Latitude = address.Latitude,
+            Longitude = address.Longitude,
+            Timestamp = DateTimeOffset.UtcNow
+        };
 
-        internal static IEnumerable<Location> ToLocations(this IEnumerable<AndroidAddress> addresses) =>
-            addresses?.Select(a => a.ToLocation());
+    internal static IEnumerable<Location> ToLocations(this IEnumerable<AndroidAddress> addresses) =>
+        addresses?.Select(a => a.ToLocation());
 
-        internal static Location ToLocation(this AndroidLocation location) =>
-            new Location
-            {
-                Latitude = location.Latitude,
-                Longitude = location.Longitude,
-                Altitude = location.HasAltitude ? location.Altitude : default(double?),
-                Timestamp = location.GetTimestamp().ToUniversalTime(),
-                Accuracy = location.HasAccuracy ? location.Accuracy : default(float?),
-                VerticalAccuracy =
+    internal static Location ToLocation(this AndroidLocation location) =>
+        new()
+        {
+            Latitude = location.Latitude,
+            Longitude = location.Longitude,
+            Altitude = location.HasAltitude ? location.Altitude : default(double?),
+            Timestamp = location.GetTimestamp().ToUniversalTime(),
+            Accuracy = location.HasAccuracy ? location.Accuracy : default(float?),
+            VerticalAccuracy =
 #if __ANDROID_26__
-                    Platform.HasApiLevelO && location.HasVerticalAccuracy ? location.VerticalAccuracyMeters : default(float?),
+                Platform.HasApiLevelO && location.HasVerticalAccuracy ? location.VerticalAccuracyMeters : default(float?),
 #else
                     default(float?),
 #endif
-                Course = location.HasBearing ? location.Bearing : default(double?),
-                Speed = location.HasSpeed ? location.Speed : default(double?),
+            Course = location.HasBearing ? location.Bearing : default(double?),
+            Speed = location.HasSpeed ? location.Speed : default(double?),
 #pragma warning disable CS0618 // Type or member is obsolete
-                IsFromMockProvider = Platform.HasApiLevel(global::Android.OS.BuildVersionCodes.JellyBeanMr2) ? location.IsFromMockProvider : false,
+            IsFromMockProvider = Platform.HasApiLevel(global::Android.OS.BuildVersionCodes.JellyBeanMr2) ? location.IsFromMockProvider : false,
 #pragma warning restore CS0618 // Type or member is obsolete
-                AltitudeReferenceSystem = AltitudeReferenceSystem.Ellipsoid
-            };
+            AltitudeReferenceSystem = AltitudeReferenceSystem.Ellipsoid
+        };
 
-        static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    static readonly DateTime epoch = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        internal static DateTimeOffset GetTimestamp(this AndroidLocation location)
+    internal static DateTimeOffset GetTimestamp(this AndroidLocation location)
+    {
+        try
         {
-            try
-            {
-                return new DateTimeOffset(epoch.AddMilliseconds(location.Time));
-            }
-            catch (Exception)
-            {
-                return new DateTimeOffset(epoch);
-            }
+            return new DateTimeOffset(epoch.AddMilliseconds(location.Time));
+        }
+        catch (Exception)
+        {
+            return new DateTimeOffset(epoch);
         }
     }
 }
