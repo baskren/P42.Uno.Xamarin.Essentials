@@ -47,7 +47,7 @@ class ScreenshotViewModel : BaseViewModel
         var mediaFile = await Screenshot.CaptureAsync();
 
         var temp = Path.Combine(FileSystem.CacheDirectory, "screenshot.jpg");
-        using (var stream = await mediaFile.OpenReadAsync(ScreenshotFormat.Jpeg))
+        using (var stream = await mediaFile.OpenReadAsync(ScreenshotFormat.Png))
         {
             using (var file = File.Create(temp))
             {

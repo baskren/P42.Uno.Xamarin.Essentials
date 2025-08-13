@@ -136,8 +136,13 @@ namespace Xamarin.Essentials
             return false;
         }
 
-        internal static bool IsIntentSupported(AndroidIntent intent) =>
-            intent.ResolveActivity(AppContext.PackageManager) != null;
+        internal static bool IsIntentSupported(AndroidIntent intent)
+        {
+            if (AppContext == Uno.UI.ContextHelper.Current)
+                Console.WriteLine("OK");
+            var activity = intent.ResolveActivity(Uno.UI.ContextHelper.Current.PackageManager);
+            return activity is not null;
+        }
 
         internal static bool IsIntentSupported(AndroidIntent intent, string expectedPackageName) =>
             intent.ResolveActivity(AppContext.PackageManager) is ComponentName c && c.PackageName == expectedPackageName;
@@ -223,8 +228,15 @@ namespace Xamarin.Essentials
             AppContext.GetSystemService(Context.ShortcutService) as ShortcutManager;
 #endif
 
-        internal static IWindowManager WindowManager =>
-            AppContext.GetSystemService(Context.WindowService) as IWindowManager;
+        internal static IWindowManager WindowManager
+        {
+            get
+            {
+                //var context = global::Uno.UI.ContextHelper.Current; // Platform.AppContext;
+                var context = Platform.AppContext;
+                return context.GetSystemService(Context.WindowService) as IWindowManager;
+            }        
+        }
 
         internal static ContentResolver ContentResolver =>
             AppContext.ContentResolver;
