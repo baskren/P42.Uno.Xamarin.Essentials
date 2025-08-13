@@ -27,17 +27,24 @@
     <Compile Include="**\*.uno.cs" />
   </ItemGroup>
 
+  <ItemGroup Condition="  $(TargetFramework.Contains('wasm')) ">
+    <Compile Include="**\*.wasm.cs" />
+    <Compile Include="**\*.wasm.*.cs" />
+  </ItemGroup>
 
   <Choose>
+    
     <!-- WASM -->
-    <When Condition="  $(TargetFramework.ToLower().Contains('wasm')) ">
+    <!--
+    <When Condition="  $(TargetFramework.Contains('wasm')) ">
       <ItemGroup>
         <Compile Include="**\*.wasm.cs" />
         <Compile Include="**\*.wasm.*.cs" />
       </ItemGroup>
     </When>
+    -->
     <!-- .NET BAIT (for WASM and SKIA bait and switch) -->
-    <When Condition=" $(TargetFramework.ToLower().Equals('net8.0')) ">
+    <When Condition=" $(TargetFramework.ToLower().Equals('net9.0')) ">
       <ItemGroup>
         <Compile Include="**\*.net.cs" />
         <Compile Include="**\*.net.*.cs" />
@@ -58,15 +65,6 @@
       <ItemGroup>
         <Compile Include="**\*.ios.cs" />
         <Compile Include="**\*.ios.*.cs" />
-      </ItemGroup>  
-    </When>
-    <!-- MAC CATALYST -->
-    <When Condition=" $(TargetFramework.ToLower().Contains('maccatalyst')) ">
-      <ItemGroup>
-        <Compile Include="**\*.ios.cs" />
-        <Compile Include="**\*.ios.*.cs" />
-        <Compile Include="**\*.maccatalyst.cs" />
-        <Compile Include="**\*.maccatalyst.*.cs" />
       </ItemGroup>  
     </When>
     <!-- MACOS -->

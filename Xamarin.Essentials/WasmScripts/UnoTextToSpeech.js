@@ -28,7 +28,7 @@ function UnoTextToSpeech_GetVoices() {
     return result;
 }
 
-function UnoTextToSpeech_PerformSpeekPromise(text, name, lang, volume, pitch) {
+function UnoTextToSpeech_PerformSpeakPromise(text, name, lang, volume, pitch) {
     return new Promise(
         function (resolve, reject) {
             if ('speechSynthesis' in window) {

@@ -5,8 +5,10 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.Foundation;
 
+/*
 namespace Xamarin.Essentials
 {
+    
     public static partial class SharingExtensions
     {
         public static readonly DependencyProperty ShareRequestPayloadProperty = DependencyProperty.RegisterAttached(
@@ -82,3 +84,4 @@ namespace Xamarin.Essentials
 #endif
     }
 }
+*/

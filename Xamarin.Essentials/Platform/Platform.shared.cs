@@ -36,12 +36,19 @@ namespace Xamarin.Essentials
             MainThreadDispatchQueue = DispatcherQueue.GetForCurrentThread();
 
 #if __ANDROID__
+            /*
             var propertyInfo = typeof(Microsoft.UI.Xaml.ApplicationActivity).GetProperty("Instance", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
             var obj = propertyInfo.GetValue(null, null);
             if (obj is Microsoft.UI.Xaml.ApplicationActivity activity) 
             {
                 Xamarin.Essentials.Platform.Init(activity, null);
             }
+            */
+            var activity = global::Uno.UI.ContextHelper.Current as global::Android.App.Activity;
+            if (activity is null)
+                throw new NullReferenceException("Uno.UI.ContextHelper.Current is not Android.App.Activity");
+
+            Xamarin.Essentials.Platform.Init(activity, null);
 #endif
         }
     }

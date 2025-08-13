@@ -15,7 +15,7 @@ namespace Xamarin.Essentials
         }
 
         public static Task<IEnumerable<Placemark>> GetPlacemarksAsync(double latitude, double longitude)
-            => PlatformGetPlacemarksAsync(latitude, longitude);
+            =>  PlatformGetPlacemarksAsync(latitude, longitude);
 
         public static Task<IEnumerable<Location>> GetLocationsAsync(string address)
             => PlatformGetLocationsAsync(address);

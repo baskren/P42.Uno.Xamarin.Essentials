@@ -1,0 +1,88 @@
+﻿<Page
+    x:Class="Samples.View.PermissionsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:Samples.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:Samples.ViewModel"
+    xmlns:views="using:Samples.View"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    xmlns:utu="using:Uno.Toolkit.UI"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <viewmodels:PermissionsViewModel x:Name="viewModel" />
+    </Page.DataContext>
+
+    <Grid utu:SafeArea.Insets="Left,Top,Right,Bottom">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="Test App Permissions" />
+        <ScrollViewer Grid.Row="1">
+            <StackPanel>
+                <ListView ItemsSource="{Binding PermissionItems}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="8,0,8,0" RowSpacing="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            FontWeight="Bold"
+                            Text="{Binding Title}" />
+                                <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Text="{Binding Status, Mode=OneWay}" />
+                                <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Text="{Binding Rationale, Mode=OneWay}" />
+
+                                <Button
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Command="{Binding CheckStatusCommand}"
+                            Content="Check" />
+                                <Button
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="2"
+                            VerticalAlignment="Center"
+                            Command="{Binding RequestCommand}"
+                            Content="Request" />
+
+                                <Button
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            VerticalAlignment="Center"
+                            Command="{Binding ShouldShowRationaleCommand}"
+                            Content="Show Rationale" />
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
