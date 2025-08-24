@@ -83,8 +83,9 @@
     <Message Text="  DebugSymbols:[$(DebugSymbols)]" Importance="high" />
     <Message Text="  Optimize:[$(Optimize)]" Importance="high" />
     <Message Text="  WindowsSdkPackageVersion:[$(WindowsSdkPackageVersion)]" Importance="high" />
-    <Message Text="  AppIdentifierPrefix:[$(AppIdentifierPrefix)]" />
-    <Message Text="  CFBundleIdentifier:[$(CFBundleIdentifier)]" />
+    <Message Text="  AppIdentifierPrefix:[$(AppIdentifierPrefix)]"  Importance="high" />
+    <Message Text="  CFBundleIdentifier:[$(CFBundleIdentifier)]"  Importance="high" />
+    <Message Text="  [Sytem.OperatiingSystem]::IsOSPlatform('macos')]:[$([MSBuild]::IsOSPlatform('macos'))]" Importance="high"  />
     <Message Text="============================= $(MSBuildProjectName):$(TargetFramework) =================================" Importance="high"/>
     <Message Text=" " Importance="high"/>
     <Message Text=" " Importance="high"/>
