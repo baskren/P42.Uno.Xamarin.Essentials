@@ -397,8 +397,8 @@ namespace Xamarin.Essentials
                     if (IsDeclaredInManifest(Manifest.Permission.ProcessOutgoingCalls))
                     {
 #if __ANDROID_29__
-                        if (Platform.HasApiLevel(BuildVersionCodes.Q))
-                            System.Diagnostics.Debug.WriteLine($"{Manifest.Permission.ProcessOutgoingCalls} is deprecated in Android 10");
+                        //if (Platform.HasApiLevel(BuildVersionCodes.Q))
+                        //    System.Diagnostics.Debug.WriteLine($"{Manifest.Permission.ProcessOutgoingCalls} is deprecated in Android 10");
 #endif
                         permissions.Add((Manifest.Permission.ProcessOutgoingCalls, true));
                     }
