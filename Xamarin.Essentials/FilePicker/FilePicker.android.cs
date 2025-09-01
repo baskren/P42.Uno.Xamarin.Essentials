@@ -61,10 +61,13 @@ namespace Xamarin.Essentials
         }
 
         static async Task<string> PlatformExportAsync(byte[] bytes, SaveOptions options)
-            => await PlatformExportAsync(options, (stream) => stream.Write(bytes, 0, bytes.Length));
+            => await PlatformExportAsync(options, stream =>
+            {
+                stream.Write(bytes, 0, bytes.Length);
+            });
 
         static async Task<string> PlatformExportAsync(string text, SaveOptions options)
-            => await PlatformExportAsync(options, (stream) =>
+            => await PlatformExportAsync(options, stream =>
             {
                 using (var writer = new StreamWriter(stream))
                 {
@@ -176,8 +179,6 @@ namespace Xamarin.Essentials
                         using (var fileOutputStream = global::Android.App.Application.Context.ContentResolver.OpenOutputStream(uri))
                         {
                             writeAction?.Invoke(fileOutputStream);
-                            fileOutputStream.Flush();
-                            fileOutputStream.Close();
 
                             // var x = global::Android.App.Application.Context.ContentResolver.OpenFileDescriptor(uri, "r");
                             var cursor = global::Android.App.Application.Context.ContentResolver.Query(uri, null, null, null, null);
