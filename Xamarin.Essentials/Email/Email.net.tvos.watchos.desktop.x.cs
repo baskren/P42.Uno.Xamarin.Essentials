@@ -5,7 +5,7 @@ namespace Xamarin.Essentials
     public static partial class Email
     {
         internal static bool IsComposeSupported =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            false;
 
         internal static bool PlatformSupportsAttachments
             => false;
