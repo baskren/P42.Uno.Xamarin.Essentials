@@ -36,7 +36,6 @@
       Lottie;
       Toolkit;
       MVUX;
-      SkiaRenderer;
     </UnoFeatures>
 
   </PropertyGroup>
