@@ -30,7 +30,9 @@
         <EmbeddedResource Include="WasmScripts\UnoFilePicker.js" />
         <EmbeddedResource Include="WasmScripts\UnoFileSystem.js" />
         <EmbeddedResource Include="WasmScripts\UnoMimeTypes.js" />
+        <!--
         <EmbeddedResource Include="WasmScripts\UnoOrientation.js" />
+        -->
         <EmbeddedResource Include="WasmScripts\UnoPathExtentions.js" />
         <EmbeddedResource Include="WasmScripts\UnoScreenshot.js" />
         <EmbeddedResource Include="WasmScripts\UnoShare.js" />
