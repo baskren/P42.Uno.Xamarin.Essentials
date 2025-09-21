@@ -30,14 +30,15 @@
     <UnoFeatures>
     </UnoFeatures>
 
-
+    <!--
     <UnoFeatures Condition="  $(TargetFramework.Contains('android'))">
       SkiaRenderer;
       $(UnoFeatures)
     </UnoFeatures>
-    
+    -->
+
     <BuildInParallel>false</BuildInParallel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks> 
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
 
   </PropertyGroup>
@@ -62,5 +63,5 @@
     <FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" TargetingPackVersion="10.0.22621.28" /> -->
   </ItemGroup>
 
-  
+
 </Project>
