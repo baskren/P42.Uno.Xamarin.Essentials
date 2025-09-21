@@ -24,23 +24,7 @@
     </When>
     <When Condition="  $(TargetFramework.ToLower().Contains('wasm'))  ">
       <ItemGroup>
-        <EmbeddedResource Include="WasmScripts\FileSaver.js" />
-        <EmbeddedResource Include="WasmScripts\html2canvas.js" />
-        <EmbeddedResource Include="WasmScripts\jquery-3.5.1.slim.js" />
-        <EmbeddedResource Include="WasmScripts\UnoFilePicker.js" />
-        <EmbeddedResource Include="WasmScripts\UnoFileSystem.js" />
-        <EmbeddedResource Include="WasmScripts\UnoMimeTypes.js" />
-        <!--
-        <EmbeddedResource Include="WasmScripts\UnoOrientation.js" />
-        -->
-        <EmbeddedResource Include="WasmScripts\UnoPathExtentions.js" />
-        <EmbeddedResource Include="WasmScripts\UnoScreenshot.js" />
-        <EmbeddedResource Include="WasmScripts\UnoShare.js" />
-        <EmbeddedResource Include="WasmScripts\UnoSms.js" />
-        <EmbeddedResource Include="WasmScripts\UnoTextToSpeech.js" />
-        <EmbeddedResource Include="WasmScripts\UnoUtils.js" />
-        <EmbeddedResource Include="WasmScripts\UnoUuid.js" />
-        <EmbeddedResource Include="WasmScripts\UnoVibration.js" />
+        <EmbeddedResource Include="WasmScripts\**\*.*" />
       </ItemGroup>
     </When>
     <Otherwise>

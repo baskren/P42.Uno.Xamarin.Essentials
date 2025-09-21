@@ -39,7 +39,7 @@ namespace Xamarin.Essentials.JavaScripts.Uno
     public static partial class Orientation
     {
         [JSImport("globalThis.UnoOrientation_IsAvailable")]
-        public static partial string IsAvailable();
+        public static partial bool IsAvailable();
 
         [JSImport("globalThis.UnoOrientation_Start")]
         public static partial string Start(int frequency);
@@ -58,10 +58,10 @@ namespace Xamarin.Essentials.JavaScripts.Uno
     public static partial class JsonShare
     {
         [JSImport("globalThis.UnoShare_IsAvailable")]
-        public static partial string IsAvailable();
+        public static partial bool IsAvailable();
 
         [JSImport("globalThis.UnoShare_CanShare")]
-        public static partial string CanShare(string json);
+        public static partial bool CanShare(string json);
 
         [JSImport("globalThis.UnoShare_Share")]
         public static partial string Share(string json);

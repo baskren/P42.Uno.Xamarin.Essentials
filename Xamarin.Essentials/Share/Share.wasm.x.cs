@@ -33,13 +33,13 @@ namespace Xamarin.Essentials
             var json = JsonConvert.SerializeObject(request);
             //var result = WebAssemblyRuntime.InvokeJS($"UnoShare_CanShare('{json}')");
             var result = JavaScripts.Uno.JsonShare.CanShare(json);
-            return result == "true";
+            return result;
         }
 
         static bool PlatformIsAvailable()
         {
             //return WebAssemblyRuntime.InvokeJS("UnoShare_IsAvailable()") == "true";
-            return JavaScripts.Uno.JsonShare.IsAvailable() == "true";
+            return JavaScripts.Uno.JsonShare.IsAvailable();
         }
     }
 }
