@@ -30,7 +30,7 @@
     <UnoFeatures>
     </UnoFeatures>
 
-    <BuildInParallel>false</BuildInParallel>
+    <BuildInParallel>true</BuildInParallel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks> 
 
 
