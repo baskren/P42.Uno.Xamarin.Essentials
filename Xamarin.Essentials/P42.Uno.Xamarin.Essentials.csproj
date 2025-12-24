@@ -40,7 +40,6 @@
     <BuildInParallel>true</BuildInParallel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
-
   </PropertyGroup>
 
 
