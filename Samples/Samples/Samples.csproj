@@ -1,12 +1,12 @@
 <Project Sdk="Uno.Sdk">
   <PropertyGroup>
     <TargetFrameworks>
-      net9.0-android;
-      net9.0-ios;
-      net9.0-maccatalyst;
-      net9.0-windows10.0.19041;
-      net9.0-desktop;
-      net9.0-browserwasm;
+      net10.0-android;
+      net10.0-ios;
+      net10.0-maccatalyst;
+      net10.0-windows10.0.19041;
+      net10.0-desktop;
+      net10.0-browserwasm;
     </TargetFrameworks>
 
     <OutputType>Exe</OutputType>
@@ -44,8 +44,10 @@
 
 
   <ItemGroup>
-    <ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="../../Xamarin.Essentials/P42.Uno.Xamarin.Essentials.csproj "  />
-    <PackageReference Condition=" '$(Configuration)' == 'Release' " Include="P42.Uno.Xamarin.Essentials"  />
+    <ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="../../Xamarin.Essentials/P42.Uno.Xamarin.Essentials.csproj " />
+    <PackageReference Condition=" '$(Configuration)' == 'Release' " Include="P42.Uno.Xamarin.Essentials" />
+    <PackageReference Include="System.Security.Cryptography.Xml" />
+    <PackageReference Include="Tmds.DBus.Protocol" />
   </ItemGroup>
 
 
