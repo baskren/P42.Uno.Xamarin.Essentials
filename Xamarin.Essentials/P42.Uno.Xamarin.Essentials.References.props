@@ -20,6 +20,12 @@
     <When Condition="  $(TargetFramework.ToLower().Contains('android'))  ">
       <ItemGroup>
         <AndroidResource Include="Resources\xml\*.xml" />
+        <!-- Uno.Sdk references Uno.WinUI.Runtime.Android with IncludeAssets="Build", so its
+             transitive AndroidX packages are not compile-visible; reference them directly.
+             Added as Uno.Sdk implicit references so their versions come from Uno.Sdk's package
+             manifest (the same versions Uno's runtime uses). AppCompat brings in Xamarin.AndroidX.Core. -->
+        <_UnoProjectSystemPackageReference Include="Xamarin.AndroidX.AppCompat" ProjectSystem="true" />
+        <_UnoProjectSystemPackageReference Include="Xamarin.AndroidX.Browser" ProjectSystem="true" />
       </ItemGroup>
     </When>
     <When Condition="  $(TargetFramework.ToLower().Contains('wasm'))  ">

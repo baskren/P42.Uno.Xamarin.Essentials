@@ -1,8 +1,7 @@
-﻿namespace Xamarin.Essentials
+﻿namespace Xamarin.Essentials;
+
+public enum BrowserLaunchMode
 {
-    public enum BrowserLaunchMode
-    {
-        SystemPreferred = 0,
-        External = 1
-    }
+    SystemPreferred = 0,
+    External = 1
 }

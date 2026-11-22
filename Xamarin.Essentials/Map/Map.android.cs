@@ -3,69 +3,68 @@ using System.Threading.Tasks;
 using Android.Content;
 using AndroidUri = Android.Net.Uri;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Map
 {
-    public static partial class Map
+    internal static Task PlatformOpenMapsAsync(double latitude, double longitude, MapLaunchOptions options)
     {
-        internal static Task PlatformOpenMapsAsync(double latitude, double longitude, MapLaunchOptions options)
+        var uri = string.Empty;
+        var lat = latitude.ToString(CultureInfo.InvariantCulture);
+        var lng = longitude.ToString(CultureInfo.InvariantCulture);
+
+        if (options.NavigationMode == NavigationMode.None)
         {
-            var uri = string.Empty;
-            var lat = latitude.ToString(CultureInfo.InvariantCulture);
-            var lng = longitude.ToString(CultureInfo.InvariantCulture);
+            uri = $"geo:{lat},{lng}?q={lat},{lng}";
 
-            if (options.NavigationMode == NavigationMode.None)
-            {
-                uri = $"geo:{lat},{lng}?q={lat},{lng}";
-
-                if (!string.IsNullOrWhiteSpace(options.Name))
-                    uri += $"({AndroidUri.Encode(options.Name)})";
-            }
-            else
-            {
-                uri = $"google.navigation:q={lat},{lng}{GetMode(options.NavigationMode)}";
-            }
-
-            StartIntent(uri);
-            return Task.CompletedTask;
+            if (!string.IsNullOrWhiteSpace(options.Name))
+                uri += $"({AndroidUri.Encode(options.Name)})";
+        }
+        else
+        {
+            uri = $"google.navigation:q={lat},{lng}{GetMode(options.NavigationMode)}";
         }
 
-        internal static string GetMode(NavigationMode mode)
+        StartIntent(uri);
+        return Task.CompletedTask;
+    }
+
+    internal static string GetMode(NavigationMode mode)
+    {
+        switch (mode)
         {
-            switch (mode)
-            {
-                case NavigationMode.Bicycling: return "&mode=b";
-                case NavigationMode.Driving: return "&mode=d";
-                case NavigationMode.Walking: return "&mode=w";
-            }
-            return string.Empty;
+            case NavigationMode.Bicycling: return "&mode=b";
+            case NavigationMode.Driving: return "&mode=d";
+            case NavigationMode.Walking: return "&mode=w";
+        }
+        return string.Empty;
+    }
+
+    internal static Task PlatformOpenMapsAsync(Placemark placemark, MapLaunchOptions options)
+    {
+        var uri = string.Empty;
+        if (options.NavigationMode == NavigationMode.None)
+        {
+            uri = $"geo:0,0?q={placemark.GetEscapedAddress()}";
+            if (!string.IsNullOrWhiteSpace(options.Name))
+                uri += $"({AndroidUri.Encode(options.Name)})";
+        }
+        else
+        {
+            uri = $"google.navigation:q={placemark.GetEscapedAddress()}{GetMode(options.NavigationMode)}";
         }
 
-        internal static Task PlatformOpenMapsAsync(Placemark placemark, MapLaunchOptions options)
-        {
-            var uri = string.Empty;
-            if (options.NavigationMode == NavigationMode.None)
-            {
-                uri = $"geo:0,0?q={placemark.GetEscapedAddress()}";
-                if (!string.IsNullOrWhiteSpace(options.Name))
-                    uri += $"({AndroidUri.Encode(options.Name)})";
-            }
-            else
-            {
-                uri = $"google.navigation:q={placemark.GetEscapedAddress()}{GetMode(options.NavigationMode)}";
-            }
+        StartIntent(uri);
+        return Task.CompletedTask;
+    }
 
-            StartIntent(uri);
-            return Task.CompletedTask;
-        }
+    static void StartIntent(string uri)
+    {
+        var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri));
+        var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
 
-        static void StartIntent(string uri)
-        {
-            var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri));
-            var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
+        intent.SetFlags(flags);
 
-            intent.SetFlags(flags);
-
-            Platform.AppContext.StartActivity(intent);
-        }
+        Platform.AppContext.StartActivity(intent);
     }
 }

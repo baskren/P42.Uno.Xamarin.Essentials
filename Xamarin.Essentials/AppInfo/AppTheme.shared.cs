@@ -1,9 +1,8 @@
-﻿namespace Xamarin.Essentials
+﻿namespace Xamarin.Essentials;
+
+public enum AppTheme
 {
-    public enum AppTheme
-    {
-        Unspecified,
-        Light,
-        Dark
-    }
+    Unspecified,
+    Light,
+    Dark
 }

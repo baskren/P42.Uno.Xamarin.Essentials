@@ -1,46 +1,45 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Clipboard
 {
-    public static partial class Clipboard
+    public static Task SetTextAsync(string text)
+        => PlatformSetTextAsync(text ?? string.Empty);
+
+    public static bool HasText
+        => PlatformHasText;
+
+    public static Task<string> GetTextAsync()
+        => PlatformGetTextAsync();
+
+    public static event EventHandler<EventArgs> ClipboardContentChanged
     {
-        public static Task SetTextAsync(string text)
-            => PlatformSetTextAsync(text ?? string.Empty);
-
-        public static bool HasText
-            => PlatformHasText;
-
-        public static Task<string> GetTextAsync()
-            => PlatformGetTextAsync();
-
-        public static event EventHandler<EventArgs> ClipboardContentChanged
+        add
         {
-            add
+            var wasRunning = ClipboardContentChangedInternal != null;
+
+            ClipboardContentChangedInternal += value;
+
+            if (!wasRunning && ClipboardContentChangedInternal != null)
             {
-                var wasRunning = ClipboardContentChangedInternal != null;
-
-                ClipboardContentChangedInternal += value;
-
-                if (!wasRunning && ClipboardContentChangedInternal != null)
-                {
-                    StartClipboardListeners();
-                }
-            }
-
-            remove
-            {
-                var wasRunning = ClipboardContentChangedInternal != null;
-
-                ClipboardContentChangedInternal -= value;
-
-                if (wasRunning && ClipboardContentChangedInternal == null)
-                    StopClipboardListeners();
+                StartClipboardListeners();
             }
         }
 
-        static event EventHandler<EventArgs> ClipboardContentChangedInternal;
+        remove
+        {
+            var wasRunning = ClipboardContentChangedInternal != null;
 
-        internal static void ClipboardChangedInternal() => ClipboardContentChangedInternal?.Invoke(null, EventArgs.Empty);
+            ClipboardContentChangedInternal -= value;
+
+            if (wasRunning && ClipboardContentChangedInternal == null)
+                StopClipboardListeners();
+        }
     }
+
+    static event EventHandler<EventArgs> ClipboardContentChangedInternal;
+
+    internal static void ClipboardChangedInternal() => ClipboardContentChangedInternal?.Invoke(null, EventArgs.Empty);
 }

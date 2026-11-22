@@ -1,53 +1,52 @@
 ﻿using Android.Hardware;
 using Android.Runtime;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Magnetometer
 {
-    public static partial class Magnetometer
+    internal static bool IsSupported =>
+        Platform.SensorManager?.GetDefaultSensor(SensorType.MagneticField) != null;
+
+    static MagnetometerListener listener;
+    static Sensor magnetometer;
+
+    internal static void PlatformStart(SensorSpeed sensorSpeed)
     {
-        internal static bool IsSupported =>
-               Platform.SensorManager?.GetDefaultSensor(SensorType.MagneticField) != null;
+        var delay = sensorSpeed.ToPlatform();
 
-        static MagnetometerListener listener;
-        static Sensor magnetometer;
-
-        internal static void PlatformStart(SensorSpeed sensorSpeed)
-        {
-            var delay = sensorSpeed.ToPlatform();
-
-            listener = new MagnetometerListener();
-            magnetometer = Platform.SensorManager.GetDefaultSensor(SensorType.MagneticField);
-            Platform.SensorManager.RegisterListener(listener, magnetometer, delay);
-        }
-
-        internal static void PlatformStop()
-        {
-            if (listener == null || magnetometer == null)
-                return;
-
-            Platform.SensorManager.UnregisterListener(listener, magnetometer);
-            listener.Dispose();
-            listener = null;
-        }
+        listener = new MagnetometerListener();
+        magnetometer = Platform.SensorManager.GetDefaultSensor(SensorType.MagneticField);
+        Platform.SensorManager.RegisterListener(listener, magnetometer, delay);
     }
 
-    class MagnetometerListener : Java.Lang.Object, ISensorEventListener
+    internal static void PlatformStop()
     {
-        internal MagnetometerListener()
-        {
-        }
+        if (listener == null || magnetometer == null)
+            return;
 
-        void ISensorEventListener.OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
-        {
-        }
+        Platform.SensorManager.UnregisterListener(listener, magnetometer);
+        listener.Dispose();
+        listener = null;
+    }
+}
 
-        void ISensorEventListener.OnSensorChanged(SensorEvent e)
-        {
-            if ((e?.Values?.Count ?? 0) < 3)
-                return;
+class MagnetometerListener : Java.Lang.Object, ISensorEventListener
+{
+    internal MagnetometerListener()
+    {
+    }
 
-            var data = new MagnetometerData(e.Values[0], e.Values[1], e.Values[2]);
-            Magnetometer.OnChanged(data);
-        }
+    void ISensorEventListener.OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
+    {
+    }
+
+    void ISensorEventListener.OnSensorChanged(SensorEvent e)
+    {
+        if ((e?.Values?.Count ?? 0) < 3)
+            return;
+
+        var data = new MagnetometerData(e.Values[0], e.Values[1], e.Values[2]);
+        Magnetometer.OnChanged(data);
     }
 }

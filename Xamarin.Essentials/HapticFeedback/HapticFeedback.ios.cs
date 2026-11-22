@@ -2,45 +2,44 @@
 using System.Threading.Tasks;
 using UIKit;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class HapticFeedback
 {
-    public static partial class HapticFeedback
+    internal static bool IsSupported => true;
+
+    static void PlatformPerform(HapticFeedbackType type)
     {
-        internal static bool IsSupported => true;
-
-        static void PlatformPerform(HapticFeedbackType type)
+        switch (type)
         {
-            switch (type)
-            {
-                case HapticFeedbackType.LongPress:
-                    PlatformLongPress();
-                    break;
-                default:
-                    PlatformClick();
-                    break;
-            }
+            case HapticFeedbackType.LongPress:
+                PlatformLongPress();
+                break;
+            default:
+                PlatformClick();
+                break;
         }
+    }
 
-        static void PlatformClick()
+    static void PlatformClick()
+    {
+        if (Platform.HasOSVersion(10, 0))
         {
-            if (Platform.HasOSVersion(10, 0))
-            {
-                var impact = new UIImpactFeedbackGenerator(UIImpactFeedbackStyle.Light);
-                impact.Prepare();
-                impact.ImpactOccurred();
-                impact.Dispose();
-            }
+            var impact = new UIImpactFeedbackGenerator(UIImpactFeedbackStyle.Light);
+            impact.Prepare();
+            impact.ImpactOccurred();
+            impact.Dispose();
         }
+    }
 
-        static void PlatformLongPress()
+    static void PlatformLongPress()
+    {
+        if (Platform.HasOSVersion(10, 0))
         {
-            if (Platform.HasOSVersion(10, 0))
-            {
-                var impact = new UIImpactFeedbackGenerator(UIImpactFeedbackStyle.Medium);
-                impact.Prepare();
-                impact.ImpactOccurred();
-                impact.Dispose();
-            }
+            var impact = new UIImpactFeedbackGenerator(UIImpactFeedbackStyle.Medium);
+            impact.Prepare();
+            impact.ImpactOccurred();
+            impact.Dispose();
         }
     }
 }

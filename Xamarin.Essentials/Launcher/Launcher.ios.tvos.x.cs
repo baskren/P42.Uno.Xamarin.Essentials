@@ -7,66 +7,65 @@ using Foundation;
 using UIKit;
 
 #pragma warning disable CA1422 // Call site reachable on all platforms
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Launcher
 {
-    public static partial class Launcher
+    static Task<bool> PlatformCanOpenAsync(Uri uri) =>
+        Task.FromResult(UIApplication.SharedApplication.CanOpenUrl(WebUtils.GetNativeUrl(uri)));
+
+    static Task PlatformOpenAsync(Uri uri) =>
+        PlatformOpenAsync(WebUtils.GetNativeUrl(uri));
+
+    internal static Task<bool> PlatformOpenAsync(NSUrl nativeUrl) =>
+        Platform.HasOSVersion(10, 0)
+            ? UIApplication.SharedApplication.OpenUrlAsync(nativeUrl, new UIApplicationOpenUrlOptions())
+            : Task.FromResult(UIApplication.SharedApplication.OpenUrl(nativeUrl));
+
+    static Task<bool> PlatformTryOpenAsync(Uri uri)
     {
-        static Task<bool> PlatformCanOpenAsync(Uri uri) =>
-            Task.FromResult(UIApplication.SharedApplication.CanOpenUrl(WebUtils.GetNativeUrl(uri)));
+        var nativeUrl = WebUtils.GetNativeUrl(uri);
 
-        static Task PlatformOpenAsync(Uri uri) =>
-            PlatformOpenAsync(WebUtils.GetNativeUrl(uri));
+        if (UIApplication.SharedApplication.CanOpenUrl(nativeUrl))
+            return PlatformOpenAsync(nativeUrl);
 
-        internal static Task<bool> PlatformOpenAsync(NSUrl nativeUrl) =>
-            Platform.HasOSVersion(10, 0)
-                ? UIApplication.SharedApplication.OpenUrlAsync(nativeUrl, new UIApplicationOpenUrlOptions())
-                : Task.FromResult(UIApplication.SharedApplication.OpenUrl(nativeUrl));
-
-        static Task<bool> PlatformTryOpenAsync(Uri uri)
-        {
-            var nativeUrl = WebUtils.GetNativeUrl(uri);
-
-            if (UIApplication.SharedApplication.CanOpenUrl(nativeUrl))
-                return PlatformOpenAsync(nativeUrl);
-
-            return Task.FromResult(false);
-        }
+        return Task.FromResult(false);
+    }
 
 #if __IOS__
-        static UIDocumentInteractionController documentController;
+    static UIDocumentInteractionController documentController;
 
-        static Task PlatformOpenAsync(OpenFileRequest request)
+    static Task PlatformOpenAsync(OpenFileRequest request)
+    {
+        documentController = new UIDocumentInteractionController()
         {
-            documentController = new UIDocumentInteractionController()
-            {
-                Name = request.File.FileName,
-                Url = NSUrl.FromFilename(request.File.FullPath),
-                Uti = request.File.ContentType
-            };
+            Name = request.File.FileName,
+            Url = NSUrl.FromFilename(request.File.FullPath),
+            Uti = request.File.ContentType
+        };
 
-            var view = Platform.GetCurrentUIViewController().View;
+        var view = Platform.GetCurrentUIViewController().View;
 
-            CGRect rect;
+        CGRect rect;
 
-            if (request.PresentationSourceBounds != Rectangle.Empty)
-            {
-                rect = request.PresentationSourceBounds.ToPlatformRectangle();
-            }
-            else
-            {
-                rect = DeviceInfo.Idiom == DeviceIdiom.Tablet
-                    ? new CGRect(new CGPoint(view.Bounds.Width / 2, view.Bounds.Height), CGRect.Empty.Size)
-                    : view.Bounds;
-            }
-
-            documentController.PresentOpenInMenu(rect, view, true);
-            return Task.CompletedTask;
+        if (request.PresentationSourceBounds != Rectangle.Empty)
+        {
+            rect = request.PresentationSourceBounds.ToPlatformRectangle();
         }
+        else
+        {
+            rect = DeviceInfo.Idiom == DeviceIdiom.Tablet
+                ? new CGRect(new CGPoint(view.Bounds.Width / 2, view.Bounds.Height), CGRect.Empty.Size)
+                : view.Bounds;
+        }
+
+        documentController.PresentOpenInMenu(rect, view, true);
+        return Task.CompletedTask;
+    }
 
 #else
         static Task PlatformOpenAsync(OpenFileRequest request) =>
             throw new FeatureNotSupportedException();
 #endif
-    }
 }
 #pragma warning restore CA1422 // Call site reachable on all platforms

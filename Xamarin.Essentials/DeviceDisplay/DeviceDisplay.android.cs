@@ -9,120 +9,119 @@ using Android.Util;
 using Android.Views;
 
 #pragma warning disable CA1422 // Validate platform compatibility
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class DeviceDisplay
 {
-    public static partial class DeviceDisplay
+    static OrientationEventListener orientationListener;
+
+    static bool PlatformKeepScreenOn
     {
-        static OrientationEventListener orientationListener;
-
-        static bool PlatformKeepScreenOn
+        get
         {
-            get
-            {
-                var window = Platform.GetCurrentActivity(true)?.Window;
-                var flags = window?.Attributes?.Flags ?? 0;
-                return flags.HasFlag(WindowManagerFlags.KeepScreenOn);
-            }
-
-            set
-            {
-                var window = Platform.GetCurrentActivity(true)?.Window;
-                if (value)
-                    window?.AddFlags(WindowManagerFlags.KeepScreenOn);
-                else
-                    window?.ClearFlags(WindowManagerFlags.KeepScreenOn);
-            }
+            var window = Platform.GetCurrentActivity(true)?.Window;
+            var flags = window?.Attributes?.Flags ?? 0;
+            return flags.HasFlag(WindowManagerFlags.KeepScreenOn);
         }
 
-        static DisplayInfo GetMainDisplayInfo()
+        set
         {
-            using var displayMetrics = new DisplayMetrics();
-            var display = GetDefaultDisplay();
-#pragma warning disable CS0618 // Type or member is obsolete
-            display?.GetRealMetrics(displayMetrics);
-#pragma warning restore CS0618 // Type or member is obsolete
-
-            return new DisplayInfo(
-                width: displayMetrics?.WidthPixels ?? 0,
-                height: displayMetrics?.HeightPixels ?? 0,
-                density: displayMetrics?.Density ?? 0,
-                orientation: CalculateOrientation(),
-                rotation: CalculateRotation(),
-                rate: display?.RefreshRate ?? 0);
-        }
-
-        static void StartScreenMetricsListeners()
-        {
-            orientationListener = new Listener(Platform.AppContext, OnScreenMetricsChanged);
-            orientationListener.Enable();
-        }
-
-        static void StopScreenMetricsListeners()
-        {
-            orientationListener?.Disable();
-            orientationListener?.Dispose();
-            orientationListener = null;
-        }
-
-        static void OnScreenMetricsChanged()
-        {
-            var metrics = GetMainDisplayInfo();
-            OnMainDisplayInfoChanged(metrics);
-        }
-
-        static DisplayRotation CalculateRotation()
-        {
-            var display = GetDefaultDisplay();
-
-            return display?.Rotation switch
-            {
-                SurfaceOrientation.Rotation270 => DisplayRotation.Rotation270,
-                SurfaceOrientation.Rotation180 => DisplayRotation.Rotation180,
-                SurfaceOrientation.Rotation90 => DisplayRotation.Rotation90,
-                SurfaceOrientation.Rotation0 => DisplayRotation.Rotation0,
-                _ => DisplayRotation.Unknown,
-            };
-        }
-
-        static DisplayOrientation CalculateOrientation()
-        {
-            return Platform.AppContext.Resources?.Configuration?.Orientation switch
-            {
-                Orientation.Landscape => DisplayOrientation.Landscape,
-                Orientation.Portrait => DisplayOrientation.Portrait,
-                Orientation.Square => DisplayOrientation.Portrait,
-                _ => DisplayOrientation.Unknown
-            };
-        }
-
-        static Display GetDefaultDisplay()
-        {
-            try
-            {
-                using var service = Platform.AppContext.GetSystemService(Context.WindowService);
-                using var windowManager = service?.JavaCast<IWindowManager>();
-                return windowManager?.DefaultDisplay;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Unable to get default display: {ex}");
-                return null;
-            }
+            var window = Platform.GetCurrentActivity(true)?.Window;
+            if (value)
+                window?.AddFlags(WindowManagerFlags.KeepScreenOn);
+            else
+                window?.ClearFlags(WindowManagerFlags.KeepScreenOn);
         }
     }
 
-    class Listener : OrientationEventListener
+    static DisplayInfo GetMainDisplayInfo()
     {
-        readonly Action onChanged;
+        using var displayMetrics = new DisplayMetrics();
+        var display = GetDefaultDisplay();
+#pragma warning disable CS0618 // Type or member is obsolete
+        display?.GetRealMetrics(displayMetrics);
+#pragma warning restore CS0618 // Type or member is obsolete
 
-        internal Listener(Context context, Action handler)
-            : base(context) => onChanged = handler;
+        return new DisplayInfo(
+            width: displayMetrics?.WidthPixels ?? 0,
+            height: displayMetrics?.HeightPixels ?? 0,
+            density: displayMetrics?.Density ?? 0,
+            orientation: CalculateOrientation(),
+            rotation: CalculateRotation(),
+            rate: display?.RefreshRate ?? 0);
+    }
 
-        public override async void OnOrientationChanged(int orientation)
+    static void StartScreenMetricsListeners()
+    {
+        orientationListener = new Listener(Platform.AppContext, OnScreenMetricsChanged);
+        orientationListener.Enable();
+    }
+
+    static void StopScreenMetricsListeners()
+    {
+        orientationListener?.Disable();
+        orientationListener?.Dispose();
+        orientationListener = null;
+    }
+
+    static void OnScreenMetricsChanged()
+    {
+        var metrics = GetMainDisplayInfo();
+        OnMainDisplayInfoChanged(metrics);
+    }
+
+    static DisplayRotation CalculateRotation()
+    {
+        var display = GetDefaultDisplay();
+
+        return display?.Rotation switch
         {
-            await Task.Delay(500);
-            onChanged();
+            SurfaceOrientation.Rotation270 => DisplayRotation.Rotation270,
+            SurfaceOrientation.Rotation180 => DisplayRotation.Rotation180,
+            SurfaceOrientation.Rotation90 => DisplayRotation.Rotation90,
+            SurfaceOrientation.Rotation0 => DisplayRotation.Rotation0,
+            _ => DisplayRotation.Unknown,
+        };
+    }
+
+    static DisplayOrientation CalculateOrientation()
+    {
+        return Platform.AppContext.Resources?.Configuration?.Orientation switch
+        {
+            Orientation.Landscape => DisplayOrientation.Landscape,
+            Orientation.Portrait => DisplayOrientation.Portrait,
+            Orientation.Square => DisplayOrientation.Portrait,
+            _ => DisplayOrientation.Unknown
+        };
+    }
+
+    static Display GetDefaultDisplay()
+    {
+        try
+        {
+            using var service = Platform.AppContext.GetSystemService(Context.WindowService);
+            using var windowManager = service?.JavaCast<IWindowManager>();
+            return windowManager?.DefaultDisplay;
         }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Unable to get default display: {ex}");
+            return null;
+        }
+    }
+}
+
+class Listener : OrientationEventListener
+{
+    readonly Action onChanged;
+
+    internal Listener(Context context, Action handler)
+        : base(context) => onChanged = handler;
+
+    public override async void OnOrientationChanged(int orientation)
+    {
+        await Task.Delay(500);
+        onChanged();
     }
 }
 #pragma warning restore CA1422 // Validate platform compatibility

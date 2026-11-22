@@ -1,8 +1,7 @@
-﻿namespace Xamarin.Essentials
+﻿namespace Xamarin.Essentials;
+
+public enum HapticFeedbackType
 {
-    public enum HapticFeedbackType
-    {
-        Click,
-        LongPress
-    }
+    Click,
+    LongPress
 }

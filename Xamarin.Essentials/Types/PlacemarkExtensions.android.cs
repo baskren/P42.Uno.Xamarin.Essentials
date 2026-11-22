@@ -3,26 +3,25 @@ using System.Linq;
 
 using AndroidAddress = Android.Locations.Address;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class PlacemarkExtensions
 {
-    public static partial class PlacemarkExtensions
+    internal static IEnumerable<Placemark> ToPlacemarks(this IEnumerable<AndroidAddress> addresses)
     {
-        internal static IEnumerable<Placemark> ToPlacemarks(this IEnumerable<AndroidAddress> addresses)
+        return addresses.Select(address => new Placemark
         {
-            return addresses.Select(address => new Placemark
-            {
-                Location = address.ToLocation(),
-                FeatureName = address.FeatureName,
-                PostalCode = address.PostalCode,
-                SubLocality = address.SubLocality,
-                CountryCode = address.CountryCode,
-                CountryName = address.CountryName,
-                Thoroughfare = address.Thoroughfare,
-                SubThoroughfare = address.SubThoroughfare,
-                Locality = address.Locality,
-                AdminArea = address.AdminArea,
-                SubAdminArea = address.SubAdminArea
-            });
-        }
+            Location = address.ToLocation(),
+            FeatureName = address.FeatureName,
+            PostalCode = address.PostalCode,
+            SubLocality = address.SubLocality,
+            CountryCode = address.CountryCode,
+            CountryName = address.CountryName,
+            Thoroughfare = address.Thoroughfare,
+            SubThoroughfare = address.SubThoroughfare,
+            Locality = address.Locality,
+            AdminArea = address.AdminArea,
+            SubAdminArea = address.SubAdminArea
+        });
     }
 }

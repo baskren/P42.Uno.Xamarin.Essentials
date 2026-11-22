@@ -3,31 +3,30 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Android.Views;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class HapticFeedback
 {
-    public static partial class HapticFeedback
+    internal static bool IsSupported => true;
+
+    static void PlatformPerform(HapticFeedbackType type)
     {
-        internal static bool IsSupported => true;
+        Permissions.EnsureDeclaredAsync<Permissions.Vibrate>();
 
-        static void PlatformPerform(HapticFeedbackType type)
+        try
         {
-            Permissions.EnsureDeclaredAsync<Permissions.Vibrate>();
-
-            try
-            {
-                Platform.CurrentActivity?.Window?.DecorView?.PerformHapticFeedback(ConvertType(type));
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"HapticFeedback Exception: {ex.Message}");
-            }
+            Platform.CurrentActivity?.Window?.DecorView?.PerformHapticFeedback(ConvertType(type));
         }
-
-        static FeedbackConstants ConvertType(HapticFeedbackType type) =>
-            type switch
-            {
-                HapticFeedbackType.LongPress => FeedbackConstants.LongPress,
-                _ => FeedbackConstants.ContextClick
-            };
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"HapticFeedback Exception: {ex.Message}");
+        }
     }
+
+    static FeedbackConstants ConvertType(HapticFeedbackType type) =>
+        type switch
+        {
+            HapticFeedbackType.LongPress => FeedbackConstants.LongPress,
+            _ => FeedbackConstants.ContextClick
+        };
 }

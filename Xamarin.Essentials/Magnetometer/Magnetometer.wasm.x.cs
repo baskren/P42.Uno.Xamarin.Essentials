@@ -2,40 +2,39 @@
 using Windows.Devices.Sensors;
 using WindowsMagnetometer = Windows.Devices.Sensors.Magnetometer;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Magnetometer
 {
-    public static partial class Magnetometer
+    // keep around a reference so we can stop this same instance
+    static WindowsMagnetometer sensor;
+
+    internal static WindowsMagnetometer DefaultSensor =>
+        WindowsMagnetometer.GetDefault();
+
+    internal static bool IsSupported =>
+        DefaultSensor != null;
+
+    internal static void PlatformStart(SensorSpeed sensorSpeed)
     {
-        // keep around a reference so we can stop this same instance
-        static WindowsMagnetometer sensor;
+        sensor = DefaultSensor;
 
-        internal static WindowsMagnetometer DefaultSensor =>
-            WindowsMagnetometer.GetDefault();
+        var interval = sensorSpeed.ToPlatform();
+        sensor.ReportInterval = sensor.MinimumReportInterval >= interval ? sensor.MinimumReportInterval : interval;
 
-        internal static bool IsSupported =>
-            DefaultSensor != null;
+        sensor.ReadingChanged += DataUpdated;
+    }
 
-        internal static void PlatformStart(SensorSpeed sensorSpeed)
-        {
-            sensor = DefaultSensor;
+    static void DataUpdated(object sender, MagnetometerReadingChangedEventArgs e)
+    {
+        var reading = e.Reading;
+        var data = new MagnetometerData(reading.MagneticFieldX, reading.MagneticFieldY, reading.MagneticFieldZ);
+        OnChanged(data);
+    }
 
-            var interval = sensorSpeed.ToPlatform();
-            sensor.ReportInterval = sensor.MinimumReportInterval >= interval ? sensor.MinimumReportInterval : interval;
-
-            sensor.ReadingChanged += DataUpdated;
-        }
-
-        static void DataUpdated(object sender, MagnetometerReadingChangedEventArgs e)
-        {
-            var reading = e.Reading;
-            var data = new MagnetometerData(reading.MagneticFieldX, reading.MagneticFieldY, reading.MagneticFieldZ);
-            OnChanged(data);
-        }
-
-        internal static void PlatformStop()
-        {
-            sensor.ReadingChanged -= DataUpdated;
-            sensor.ReportInterval = 0;
-        }
+    internal static void PlatformStop()
+    {
+        sensor.ReadingChanged -= DataUpdated;
+        sensor.ReportInterval = 0;
     }
 }

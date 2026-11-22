@@ -1,9 +1,8 @@
-﻿namespace Xamarin.Essentials
+﻿namespace Xamarin.Essentials;
+
+public enum DisplayOrientation
 {
-    public enum DisplayOrientation
-    {
-        Unknown = 0,
-        Portrait = 1,
-        Landscape = 2
-    }
+    Unknown = 0,
+    Portrait = 1,
+    Landscape = 2
 }

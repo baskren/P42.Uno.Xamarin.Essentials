@@ -3,18 +3,18 @@
 
   <PropertyGroup>
      <TargetFrameworks>
-       net10.0-ios;
-       net10.0-android
+       net11.0-ios;
+       net11.0-android
      </TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows')) or '$(EnableWindowsTargeting)' == 'true'">
       $(TargetFrameworks);
-      net10.0-windows10.0.26100
+      net11.0-windows10.0.26100
     </TargetFrameworks>
     <TargetFrameworks>
       $(TargetFrameworks);
-      net10.0-browserwasm;
-      net10.0-desktop;
-      net10.0;
+      net11.0-browserwasm;
+      net11.0-desktop;
+      net11.0;
     </TargetFrameworks>
     <UnoSingleProject>true</UnoSingleProject>
     <OutputType>Library</OutputType>
@@ -27,10 +27,6 @@
       UnoFeatures let's you quickly add and manage implicit package references based on the features you want to use.
       https://aka.platform.uno/singleproject-features
     -->
-    <UnoFeatures>
-      SkiaRenderer;
-      $(UnoFeatures)
-    </UnoFeatures>
 
     <BuildInParallel>true</BuildInParallel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -55,6 +51,11 @@
     -->
     <!-- <FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" RuntimeFrameworkVersion="10.0.22621.28" />
     <FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" TargetingPackVersion="10.0.22621.28" /> -->
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="11.0.100" />
   </ItemGroup>
 
 

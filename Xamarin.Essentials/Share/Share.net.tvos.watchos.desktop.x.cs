@@ -1,21 +1,19 @@
 ﻿using System.Threading.Tasks;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Share
 {
-    public static partial class Share
-    {
-        static Task PlatformRequestAsync(ShareTextRequest request) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+    static Task PlatformRequestAsync(ShareTextRequest request) =>
+        throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static Task PlatformRequestAsync(ShareMultipleFilesRequest request) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+    static Task PlatformRequestAsync(ShareMultipleFilesRequest request) =>
+        throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static Task<bool> PlatformCanShareAsync(ShareRequestBase request) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+    static Task<bool> PlatformCanShareAsync(ShareRequestBase request) =>
+        throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static bool PlatformCanShare(ShareRequestBase request) => false;
+    static bool PlatformCanShare(ShareRequestBase request) => false;
 
-        static bool PlatformIsAvailable() => false;
-    }
+    static bool PlatformIsAvailable() => false;
 }
-

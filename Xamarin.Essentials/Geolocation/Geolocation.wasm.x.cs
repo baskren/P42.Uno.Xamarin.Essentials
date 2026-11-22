@@ -3,51 +3,50 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class Geolocation
 {
-    public static partial class Geolocation
+    static async Task<Location> PlatformLastKnownLocationAsync()
     {
-        static async Task<Location> PlatformLastKnownLocationAsync()
+        // no need for permissions as AllowFallbackToConsentlessPositions
+        // will allow the device to return a location regardless
+
+        var geolocator = new Geolocator
         {
-            // no need for permissions as AllowFallbackToConsentlessPositions
-            // will allow the device to return a location regardless
+            DesiredAccuracy = PositionAccuracy.Default,
+        };
+        geolocator.AllowFallbackToConsentlessPositions();
 
-            var geolocator = new Geolocator
-            {
-                DesiredAccuracy = PositionAccuracy.Default,
-            };
-            geolocator.AllowFallbackToConsentlessPositions();
+        var location = await geolocator.GetGeopositionAsync().AsTask();
 
-            var location = await geolocator.GetGeopositionAsync().AsTask();
+        return location?.Coordinate?.ToLocation();
+    }
 
-            return location?.Coordinate?.ToLocation();
-        }
+    static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
+    {
+        await Permissions.EnsureGrantedAsync<Permissions.LocationWhenInUse>();
 
-        static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
+        var geolocator = new Geolocator
         {
-            await Permissions.EnsureGrantedAsync<Permissions.LocationWhenInUse>();
+            DesiredAccuracyInMeters = request.PlatformDesiredAccuracy
+        };
 
-            var geolocator = new Geolocator
+        CheckStatus(geolocator.LocationStatus);
+
+        cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
+
+        var location = await geolocator.GetGeopositionAsync().AsTask(cancellationToken);
+
+        return location?.Coordinate?.ToLocation();
+
+        void CheckStatus(PositionStatus status)
+        {
+            switch (status)
             {
-                DesiredAccuracyInMeters = request.PlatformDesiredAccuracy
-            };
-
-            CheckStatus(geolocator.LocationStatus);
-
-            cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
-
-            var location = await geolocator.GetGeopositionAsync().AsTask(cancellationToken);
-
-            return location?.Coordinate?.ToLocation();
-
-            void CheckStatus(PositionStatus status)
-            {
-                switch (status)
-                {
-                    case PositionStatus.Disabled:
-                    case PositionStatus.NotAvailable:
-                        throw new FeatureNotEnabledException("Location services are not enabled on device.");
-                }
+                case PositionStatus.Disabled:
+                case PositionStatus.NotAvailable:
+                    throw new FeatureNotEnabledException("Location services are not enabled on device.");
             }
         }
     }

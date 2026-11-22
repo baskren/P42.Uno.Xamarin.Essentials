@@ -2,30 +2,29 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public partial class GeolocationRequest
 {
-    public partial class GeolocationRequest
+    internal uint PlatformDesiredAccuracy
     {
-        internal uint PlatformDesiredAccuracy
+        get
         {
-            get
+            switch (DesiredAccuracy)
             {
-                switch (DesiredAccuracy)
-                {
-                    case GeolocationAccuracy.Lowest:
-                        return 3000;
-                    case GeolocationAccuracy.Low:
-                        return 1000;
-                    case GeolocationAccuracy.Default:
-                    case GeolocationAccuracy.Medium:
-                        return 100;
-                    case GeolocationAccuracy.High:
-                        return 10; // Equivalent to PositionAccuracy.High
-                    case GeolocationAccuracy.Best:
-                        return 1;
-                    default:
-                        return 500; // Equivalent to PositionAccuracy.Default
-                }
+                case GeolocationAccuracy.Lowest:
+                    return 3000;
+                case GeolocationAccuracy.Low:
+                    return 1000;
+                case GeolocationAccuracy.Default:
+                case GeolocationAccuracy.Medium:
+                    return 100;
+                case GeolocationAccuracy.High:
+                    return 10; // Equivalent to PositionAccuracy.High
+                case GeolocationAccuracy.Best:
+                    return 1;
+                default:
+                    return 500; // Equivalent to PositionAccuracy.Default
             }
         }
     }

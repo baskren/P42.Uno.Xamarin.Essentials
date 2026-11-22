@@ -4,73 +4,72 @@ using Android.Content.PM;
 using Android.OS;
 
 #pragma warning disable CA1422 // Validate platform compatibility
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+[Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
+class WebAuthenticatorIntermediateActivity : Activity
 {
-    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
-    class WebAuthenticatorIntermediateActivity : Activity
+    const string launchedExtra = "launched";
+    const string actualIntentExtra = "actual_intent";
+
+    bool launched;
+    Intent actualIntent;
+
+    protected override void OnCreate(Bundle savedInstanceState)
     {
-        const string launchedExtra = "launched";
-        const string actualIntentExtra = "actual_intent";
+        base.OnCreate(savedInstanceState);
 
-        bool launched;
-        Intent actualIntent;
+        var extras = savedInstanceState ?? Intent.Extras;
 
-        protected override void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
-
-            var extras = savedInstanceState ?? Intent.Extras;
-
-            // read the values
-            launched = extras?.GetBoolean(launchedExtra, false) ?? false;
+        // read the values
+        launched = extras?.GetBoolean(launchedExtra, false) ?? false;
 #pragma warning disable CS0618 // Type or member is obsolete
-            actualIntent = extras?.GetParcelable(actualIntentExtra) as Intent;
+        actualIntent = extras?.GetParcelable(actualIntentExtra) as Intent;
 #pragma warning restore CS0618 // Type or member is obsolete
-        }
+    }
 
-        protected override void OnResume()
+    protected override void OnResume()
+    {
+        base.OnResume();
+
+        if (actualIntent != null && !launched)
         {
-            base.OnResume();
+            // if this is the first time, start the authentication flow
+            StartActivity(actualIntent);
 
-            if (actualIntent != null && !launched)
-            {
-                // if this is the first time, start the authentication flow
-                StartActivity(actualIntent);
-
-                launched = true;
-            }
-            else
-            {
-                // otherwise, resume the auth flow and finish this activity
-                WebAuthenticator.OnResume(Intent);
-
-                Finish();
-            }
+            launched = true;
         }
-
-        protected override void OnNewIntent(Intent intent)
+        else
         {
-            base.OnNewIntent(intent);
+            // otherwise, resume the auth flow and finish this activity
+            WebAuthenticator.OnResume(Intent);
 
-            Intent = intent;
+            Finish();
         }
+    }
 
-        protected override void OnSaveInstanceState(Bundle outState)
-        {
-            // save the values
-            outState.PutBoolean(launchedExtra, launched);
-            outState.PutParcelable(actualIntentExtra, actualIntent);
+    protected override void OnNewIntent(Intent intent)
+    {
+        base.OnNewIntent(intent);
 
-            base.OnSaveInstanceState(outState);
-        }
+        Intent = intent;
+    }
 
-        public static void StartActivity(Activity activity, Intent intent)
-        {
-            var intermediateIntent = new Intent(activity, typeof(WebAuthenticatorIntermediateActivity));
-            intermediateIntent.PutExtra(actualIntentExtra, intent);
+    protected override void OnSaveInstanceState(Bundle outState)
+    {
+        // save the values
+        outState.PutBoolean(launchedExtra, launched);
+        outState.PutParcelable(actualIntentExtra, actualIntent);
 
-            activity.StartActivity(intermediateIntent);
-        }
+        base.OnSaveInstanceState(outState);
+    }
+
+    public static void StartActivity(Activity activity, Intent intent)
+    {
+        var intermediateIntent = new Intent(activity, typeof(WebAuthenticatorIntermediateActivity));
+        intermediateIntent.PutExtra(actualIntentExtra, intent);
+
+        activity.StartActivity(intermediateIntent);
     }
 }
 #pragma warning restore CA1422 // Validate platform compatibility

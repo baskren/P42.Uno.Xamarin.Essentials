@@ -1,8 +1,8 @@
-<Project ToolsVersion="15.0" Condition="  $(P42_LocalNuGetFolderPath) != ''  AND   $(Configuration) == 'Release'">
+<Project ToolsVersion="15.0">
 
 
 	<!-- NUGET PACKAGE GENERATION -->
-  <PropertyGroup>  
+  <PropertyGroup Condition=" '$(P42_LocalNuGetFolderPath)' != '' AND '$(Configuration)' == 'Release' ">  
     
     <Version>$(UnoVersion)</Version>
     <PackageOutputPath>$(P42_LocalNuGetFolderPath)</PackageOutputPath>
@@ -27,11 +27,11 @@
 
   </PropertyGroup>
   
-  <ItemGroup>
+  <ItemGroup Condition=" '$(P42_LocalNuGetFolderPath)' != '' AND '$(Configuration)' == 'Release' ">
 	  <None Include="..\icon.png" Pack="true" PackagePath="\" />
 	  <None Include="..\README.md" Pack="true" PackagePath="\" />
 	  <None Include="..\LICENSE" Pack="true" PackagePath="\" />
-  	<PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.402" PrivateAssets="All"/>
+  	<PackageReference Include="Microsoft.SourceLink.GitHub" Version="11.0.100" PrivateAssets="All"/>
   </ItemGroup>
   
 

@@ -3,56 +3,55 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.Devices.Haptics;
 
-namespace Xamarin.Essentials
+namespace Xamarin.Essentials;
+
+public static partial class HapticFeedback
 {
-    public static partial class HapticFeedback
+    const string vibrationDeviceApiType = "Windows.Devices.Haptics.VibrationDevice";
+
+    internal static bool IsSupported => true;
+
+    static async void PlatformPerform(HapticFeedbackType type)
     {
-        const string vibrationDeviceApiType = "Windows.Devices.Haptics.VibrationDevice";
-
-        internal static bool IsSupported => true;
-
-        static async void PlatformPerform(HapticFeedbackType type)
+        try
         {
-            try
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(vibrationDeviceApiType)
+                && await VibrationDevice.RequestAccessAsync() == VibrationAccessStatus.Allowed)
             {
-                if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(vibrationDeviceApiType)
-                    && await VibrationDevice.RequestAccessAsync() == VibrationAccessStatus.Allowed)
-                {
-                    var controller = (await VibrationDevice.GetDefaultAsync())?.SimpleHapticsController;
+                var controller = (await VibrationDevice.GetDefaultAsync())?.SimpleHapticsController;
 
-                    if (controller != null)
-                    {
-                        var feedback = FindFeedback(controller, ConvertType(type));
-                        if (feedback != null)
-                            controller.SendHapticFeedback(feedback);
-                    }
+                if (controller != null)
+                {
+                    var feedback = FindFeedback(controller, ConvertType(type));
+                    if (feedback != null)
+                        controller.SendHapticFeedback(feedback);
                 }
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"HapticFeedback Exception: {ex.Message}");
-            }
         }
-
-        static SimpleHapticsControllerFeedback FindFeedback(SimpleHapticsController controller, ushort type)
+        catch (Exception ex)
         {
-            foreach (var feedback in controller.SupportedFeedback)
-            {
-                if (feedback.Waveform == type)
-                    return feedback;
-            }
-            return null;
+            Debug.WriteLine($"HapticFeedback Exception: {ex.Message}");
         }
+    }
 
-        static ushort ConvertType(HapticFeedbackType type)
+    static SimpleHapticsControllerFeedback FindFeedback(SimpleHapticsController controller, ushort type)
+    {
+        foreach (var feedback in controller.SupportedFeedback)
         {
-            switch (type)
-            {
-                case HapticFeedbackType.LongPress:
-                    return KnownSimpleHapticsControllerWaveforms.Press;
-                default:
-                    return KnownSimpleHapticsControllerWaveforms.Click;
-            }
+            if (feedback.Waveform == type)
+                return feedback;
+        }
+        return null;
+    }
+
+    static ushort ConvertType(HapticFeedbackType type)
+    {
+        switch (type)
+        {
+            case HapticFeedbackType.LongPress:
+                return KnownSimpleHapticsControllerWaveforms.Press;
+            default:
+                return KnownSimpleHapticsControllerWaveforms.Click;
         }
     }
 }
